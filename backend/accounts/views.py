@@ -7,7 +7,7 @@ from .models import User
 
 # Create your views here.
 @api_view(['POST'])
-def signup_view(request):
+def signup(request):
     serializer = UserSerializer(data=request.data)
     if serializer.is_valid():
         password1 = serializer.validated_data['password1']
@@ -25,7 +25,7 @@ def signup_view(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 @api_view(['POST'])
-def login_view(request):
+def login(request):
     username = request.data.get('username')
     password = request.data.get('password')
     user = authenticate(request, username=username, password=password)
@@ -37,6 +37,6 @@ def login_view(request):
         return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 @api_view(['POST'])
-def logout_view(request):
+def logout(request):
     logout(request)
     return Response(status=status.HTTP_204_NO_CONTENT)
