@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'accounts',
     'articles',
     'rest_framework',
+    'rest_framework_simplejwt',
     'imagekit',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -139,3 +140,19 @@ MEDIA_URL = '/media/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'accounts.User'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
+
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(hours=2),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
+    'TOKEN_USER_CLASS': 'accounts.User',
+#     "ROTATE_REFRESH_TOKENS": False,
+#     "BLACKLIST_AFTER_ROTATION": False,
+}
