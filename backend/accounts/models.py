@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.base_user import BaseUserManager
 from django.utils.translation import ugettext_lazy as _
+from django.conf import settings
+from articles.models import Article
 # Create your models here.
 
 class CustomUserManager(BaseUserManager):
@@ -46,3 +48,13 @@ class User(AbstractUser):
     def __str__(self):
         return f'<User {self.email}'
 
+
+class Bookmark(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    article = models.ForeignKey(Article, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        # 특정 모델에서 여러 필드를 결합한 유일성을 보장하기 위해 사용
+        # 하나의 유저가 같은 게시글을 중복해서 북마크할 수 없도록 제한하는 역할
+        unique_together = ('user', 'article',)
