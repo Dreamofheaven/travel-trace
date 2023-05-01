@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from .models import User
+from .models import Bookmark
 # from articles.serializers import ArticleListSerialize
 
 User = get_user_model()
@@ -32,4 +33,9 @@ class UserProfileSerializer(serializers.ModelSerializer):
         model = User
         # 추후, 게시글, 북마크도 추가
         fields = (['username', 'email', 'profile_img', 'followings', 'followers'])
-    
+
+
+class BookmarkSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Bookmark
+        fields = '__all__'

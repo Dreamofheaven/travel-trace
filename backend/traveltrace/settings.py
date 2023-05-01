@@ -36,15 +36,29 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'accounts',
     'articles',
+
     'rest_framework',
     'rest_framework_simplejwt',
+    'rest_framework.authtoken',
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
+
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    # 추후 추가적으로 네이버, 카카오도 추가(상기 구글과 동일 양식으로)
+
     'imagekit',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'django.contrib.sites',
 ]
 
 MIDDLEWARE = [
@@ -144,8 +158,17 @@ AUTH_USER_MODEL = 'accounts.User'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    ),
+    # 'DEFAULT_PERMISSION_CLASSES': (
+    #     'rest_framework.permissions.IsAuthenticated', # 인증된 사용자만 접근
+    #     # 'rest_framework.permissions.IsAdminUser', # 관리자만 접근
+    #     'rest_framework.permissions.AllowAny', # 누구나 접근
+    # ),    
 }
+
+# 소셜 로그인 관련 설정추가
+
+REST_USE_JWT = True
 
 from datetime import timedelta
 
@@ -153,6 +176,14 @@ SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(hours=2),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
     'TOKEN_USER_CLASS': 'accounts.User',
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': SECRET_KEY,
 #     "ROTATE_REFRESH_TOKENS": False,
 #     "BLACKLIST_AFTER_ROTATION": False,
 }
+
+SITE_ID = 1
+
+ACCOUNT_EMAIL_REQUIRED = True 
+ACCOUNT_AUTHENTICATION_METHOD = 'email'

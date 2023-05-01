@@ -22,6 +22,11 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/',include('accounts.urls')),
+    
+    # 소셜로그인 때문에 추가
+    path('accounts/', include('allauth.urls')),
+    path('accounts/', include('dj_rest_auth.urls')),
+
     path('articles/',include('articles.urls')),
     path('',views.index),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
