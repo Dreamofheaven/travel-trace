@@ -9,6 +9,11 @@ urlpatterns = [
     path('comments/', views.comment_list),
     path('comments/<int:comment_pk>/', views.comment_detail),
     path('<int:article_pk>/comments/', views.comment_create),
+
     path('<int:article_pk>/likes/',views.like_article),
+
     path('comments/<int:comment_pk>/likes/',views.like_comment),
+
+    # path('<int:article_pk>/routes/', views.routes),
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
