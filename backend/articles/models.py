@@ -3,7 +3,7 @@ from django.conf import settings
 
 # Create your models here.
 class Article(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='articles')
     title = models.CharField(max_length=100)
     updated_at = models.DateTimeField(auto_now=True)
     image = models.ImageField(blank=True, upload_to='%Y/%m/%d/')

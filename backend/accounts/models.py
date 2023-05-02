@@ -39,6 +39,7 @@ class User(AbstractUser):
     email = models.EmailField(max_length=80, unique=True)
     profile_img = models.ImageField(upload_to='users/%Y/%m/%d/', null=True, blank=True)
     followings = models.ManyToManyField('self', symmetrical=False, related_name='followers', blank=True)
+    info = models.CharField(max_length=200, blank=True)
     
     # 유저id로 email을 쓰겠다.
     USERNAME_FIELD = 'email'
@@ -50,7 +51,7 @@ class User(AbstractUser):
 
 
 class Bookmark(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='bookmarks')
     article = models.ForeignKey(Article, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
