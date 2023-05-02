@@ -1,8 +1,34 @@
-import React from 'react';
+import React, {useState} from 'react';
+import Form from 'react-bootstrap/Form';
+import Card from 'react-bootstrap/Card';
+import DatePicker from '../components/DatePicker';
 
 function Post() {
+  
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+  };
+
   return (
-    <h1>게시글 작성입니다.</h1>
+    <div className='container'> 
+      <Card className='h-100'>
+        <Card.Body>
+          <p>제목</p>
+          {/* <DatePicker /> */}
+          <div>
+            <DatePicker selectedDate={selectedDate} onDateChange={handleDateChange} />
+          </div>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+            <Form.Label>내용</Form.Label>
+            <Form.Control as="textarea" rows={3} />
+          </Form.Group>
+          <p>경로</p>
+        </Card.Body>
+      </Card>
+    </div>
+    
   );
 }
 

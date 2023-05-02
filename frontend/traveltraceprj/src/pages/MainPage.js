@@ -2,10 +2,15 @@ import React from "react";
 
 function MainPage() {
   return (
-    <div>
-      <h1>메인 페이지</h1>
-      <p>여기는 메인 페이지 입니다.</p>
-      <img src={process.env.PUBLIC_URL + '/adult.jpg'} /> 
+    <div className="d-flex justify-content-center">
+      <div style={{flexDirection: 'column'}}> 
+        <img src={process.env.PUBLIC_URL + '/img/location.png'} 
+          style={{width: "30%", marginTop: "100px", marginBottom: "100px"}}
+          />
+        <span>현위치를 확인하세요!</span>
+        <span>당신과 가까운 여행지를 소개해드릴게요!</span>
+        {/* <img src={process.env.PUBLIC_URL + '/img/adult.jpg'} />  */}
+      </div>
     </div>
   );
 }
