@@ -1,17 +1,20 @@
 import jwt
 import os
-from rest_framework import status
+from rest_framework import status, generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import authentication_classes, permission_classes
+from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer
 from django.shortcuts import redirect
 from django.contrib.auth import authenticate
 from django.shortcuts import get_object_or_404
 from .serializers import *
-from .models import User, Bookmark
+from .models import Bookmark
 from articles.models import Article
 from traveltrace.settings import SECRET_KEY
+from django.contrib.auth import get_user_model
 
 # 소셜로그인 관련
 from json import JSONDecodeError
@@ -22,7 +25,7 @@ from dj_rest_auth.registration.views import SocialLoginView
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from allauth.socialaccount.providers.google import views as google_view
 
-
+User = get_user_model()
 class SignUpView(APIView):
     # permission_classes = [IsAuthenticated]
     def post(self, request):
@@ -151,6 +154,7 @@ class ProfileView(APIView):
     
 
 class BookmarkListView(APIView):
+    permission_classes = [IsAuthenticated]
     # 북마크 리스트 조회
     def get(self, request):
         bookmarks = Bookmark.objects.filter(user=request.user)
@@ -158,11 +162,12 @@ class BookmarkListView(APIView):
         return Response(serializer.data)
     
 
-class BookmarkView(APIView):   
+class BookmarkView(APIView):
+    permission_classes = [IsAuthenticated]   
     # 북마크 생성
     def post(self, request, article_pk):
         # 북마크를 할 게시글을 조회한다.
-        article = Article.object.get(pk=article_pk)
+        article = Article.objects.get(pk=article_pk)
 
         # 게시글에 해당 유저의 북마크가 있는지 없는지 확인한다.
         # get_or_create: 장고 쿼리셋 api 중 하나. 이미 있는 객체라면 가져오고 없으면 생성하라.
@@ -186,7 +191,48 @@ class BookmarkView(APIView):
         # 해당 게시글 & 해당 유저의 북마크 지우기
         Bookmark.objects.filter(user=request.user, article=article).delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
 
+class FollowView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, user_pk):
+        user = request.user
+        if user.pk == int(user_pk):
+            return Response({'message': 'You cannot follow yourself.'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        target_user = get_object_or_404(User, pk=user_pk)
+
+        if user.followings.filter(pk=user_pk).exists():
+            return Response({
+                'message': 'You are already following this user.'
+                },
+                status=status.HTTP_400_BAD_REQUEST)
+        user.followings.add(target_user)
+
+        return Response({
+            'message': f'You are now following {target_user.username}'
+            },
+            status=status.HTTP_201_CREATED)
+
+    def delete(self, request, user_pk):
+        user = request.user
+        if user.pk == int(user_pk):
+            return Response({'message': 'You cannot unfollow yourself.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        target_user = get_object_or_404(User, pk=user_pk)
+
+        # 이미 언팔로우한 상태인 경우 에러 처리
+        if not user.followings.filter(pk=user_pk).exists():
+            return Response({
+                'message': 'You are not following this user.'},
+                status=status.HTTP_400_BAD_REQUEST)
+
+        user.followings.remove(target_user)
+
+        return Response({
+            'message': f'You have unfollowed {target_user.username}.'},
+            status=status.HTTP_200_OK)
 
 
 
