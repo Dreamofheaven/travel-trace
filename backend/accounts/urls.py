@@ -16,7 +16,7 @@ urlpatterns = [
     path('google/login/finish/', views.GoogleLogin.as_view(), name='google_login_todjango'),
 
     # 프로필 및 북마크
-    path('profile/<str:username>/', views.ProfileView.as_view()),
+    path('profile/<int:user_pk>/', views.ProfileView.as_view()),
     path('bookmark/my_bookmark/', views.BookmarkListView.as_view()),
     path('bookmark/<int:article_pk>/', views.BookmarkView.as_view()),
     path('follow/<int:user_pk>/', views.FollowView.as_view()),

@@ -139,18 +139,22 @@ class GoogleLogin(SocialLoginView):
 
 
 class ProfileView(APIView):
+    permission_classes = [IsAuthenticated]
     # 조회
-    def get(self, request, username):
-        user = get_object_or_404(User, username=username)
+    def get(self, request, user_pk):
+        user = get_object_or_404(User, pk=user_pk)
         serializer = UserProfileSerializer(user)
         return Response(serializer.data)
 
     # 수정
-    def put(self, request, username):
-        user = get_object_or_404(User, username=request.user.username)
-        serializers = UserProfileSerializer(user, data=request.user)
-        serializers.save()
-        return Response(serializers.data)
+    def put(self, request, user_pk):
+        user = get_object_or_404(User, pk=user_pk)
+        if user != request.user:
+            return Response({'detail': 'You do not have permission to perform this action.'}, status=status.HTTP_403_FORBIDDEN)
+        serializer = UserProfileSerializer(user, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
     
 
 class BookmarkListView(APIView):
@@ -209,9 +213,11 @@ class FollowView(APIView):
                 },
                 status=status.HTTP_400_BAD_REQUEST)
         user.followings.add(target_user)
+        is_followed = True
 
         return Response({
-            'message': f'You are now following {target_user.username}'
+            'message': f'You are now following {target_user.username}',
+            'is_followed': is_followed,
             },
             status=status.HTTP_201_CREATED)
 
@@ -229,9 +235,11 @@ class FollowView(APIView):
                 status=status.HTTP_400_BAD_REQUEST)
 
         user.followings.remove(target_user)
-
+        is_followed = False
         return Response({
-            'message': f'You have unfollowed {target_user.username}.'},
+            'message': f'You have unfollowed {target_user.username}.',
+            'is_followed': is_followed,
+            },
             status=status.HTTP_200_OK)
 
 
