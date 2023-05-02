@@ -1,10 +1,11 @@
 import jwt
 import os
-from rest_framework import status, generics
+import json
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import authentication_classes, permission_classes
+from rest_framework.decorators import authentication_classes, permission_classes, api_view
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer
 from django.shortcuts import redirect
@@ -29,7 +30,6 @@ from allauth.socialaccount.providers.naver import views as naver_view
 
 User = get_user_model()
 class SignUpView(APIView):
-    # permission_classes = [IsAuthenticated]
     def post(self, request):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
@@ -243,6 +243,41 @@ class FollowView(APIView):
             'is_followed': is_followed,
             },
             status=status.HTTP_200_OK)
+
+
+class UserLocationView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        client_id = os.environ.get('SOCIAL_AUTH_KAKAO_CLIENT_ID')
+        user = request.user
+        latitude = request.data.get('latitude')
+        longitude = request.data.get('longitude')
+        
+        if not all([latitude, longitude]):
+            return Response({"error": "latitude and longitude should be provided"}, status=status.HTTP_400_BAD_REQUEST)
+
+        # 카카오 API를 이용해 현재 위치 정보를 받아옴
+        headers = {'Authorization': f'KakaoAK {client_id}'}
+        url = f'https://dapi.kakao.com/v2/local/geo/coord2regioncode.json?x={longitude}&y={latitude}'
+        response = requests.get(url, headers=headers)
+        if response.status_code != 200:
+            return Response({
+                'error': 'failed to retrieve location information from Kakao API'
+                },
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        # 위치 정보 중 시/도 정보를 추출하여 유저 모델에 저장
+        location = response.json().get('documents')[0].get('region_1depth_name')
+        user.location = location
+        user.save()
+
+        return Response({'message': 'location saved successfully.',
+                        'location': location,
+                        'user_id': user.pk,
+                        'username': user.username
+                        },
+                        status=status.HTTP_200_OK)
 
 
 KAKAO_CALLBACK_URI = BASE_URL + 'accounts/kakao/callback/'

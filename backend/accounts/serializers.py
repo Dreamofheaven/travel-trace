@@ -13,7 +13,7 @@ class UserSerializer(serializers.ModelSerializer):
     )
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'password', 'profile_img', 'info']
+        fields = ['id', 'username', 'email', 'password', 'profile_img', 'info', 'location']
 
     def create(self, validated_data):
         user = User.objects.create_user(
@@ -48,3 +48,4 @@ class BookmarkSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bookmark
         fields = '__all__'
+
