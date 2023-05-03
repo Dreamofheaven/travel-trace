@@ -19,6 +19,26 @@ from django.db.models import Count
 import os
 import requests
 from rest_framework.views import APIView
+from django.db.models import Q
+from rest_framework import generics
+
+class NearbArticleListView(APIView):
+    def get(self, request):
+        user_latitude = request.query_params.get('latitude')
+        user_longitude = request.query_params.get('longitude')
+        # 유저 위치에서 가까운 게시글 순으로 정렬
+        articles = Article.objects.filter(
+            Q(latitude__isnull=False) &
+            Q(longitude__isnull=False)
+        ).annotate(
+            distance=(
+                ((float(user_latitude) - float('latitude')) ** 2) +
+                ((float(user_longitude) - float('longitude')) ** 2)
+            ) ** 0.5
+        ).order_by('distance')
+        serializer = ArticleListSerializer(articles, many=True)
+        return Response(serializer.data)    
+
 
 @api_view(['GET', 'POST'])
 # @authentication_classes([SessionAuthentication, BasicAuthentication])

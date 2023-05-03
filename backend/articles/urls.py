@@ -15,6 +15,7 @@ urlpatterns = [
     path('comments/<int:comment_pk>/likes/',views.like_comment),
 
     # path('<int:article_pk>/routes/', views.routes),
-    path('location/', views.ArticleLocationView.as_view()),    
+    path('location/', views.ArticleLocationView.as_view()),
+    path('nearby/', views.NearbArticleListView.as_view()), 
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
