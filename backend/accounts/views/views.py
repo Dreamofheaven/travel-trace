@@ -11,14 +11,14 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, Toke
 from django.contrib.auth import authenticate
 from django.shortcuts import get_object_or_404
 from accounts.serializers import *
-from accounts.models import Bookmark
+from accounts.models import Bookmark, Notification
 from articles.models import Article
 from traveltrace.settings import SECRET_KEY
 from django.contrib.auth import get_user_model
 
 
-
 User = get_user_model()
+
 class SignUpView(APIView):
     def post(self, request):
         serializer = UserSerializer(data=request.data)
@@ -43,6 +43,7 @@ class SignUpView(APIView):
             res.set_cookie('refresh', refresh_token, httponly=True)
             
             return res
+
 
 class UserView(APIView):
     # 유저 정보 확인
@@ -116,8 +117,6 @@ class UserView(APIView):
         response.delete_cookie('access')
         response.delete_cookie('refresh')
         return response
-
-
 
 
 class ProfileView(APIView):
@@ -225,6 +224,53 @@ class FollowView(APIView):
             status=status.HTTP_200_OK)
 
 
+class NotificationView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        followings = user.followings.values_list('id', flat=True)
+        notifications = Notification.objects.filter(from_user__in=followings, article__user=user)
+        serializer = NotificationSerializer(notifications, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        user = request.user
+        # 유저의 팔로워를 모두 조회한다.
+        followings = user.followings.all()
+        for following in followings:
+            notifications = Notification.objects.filter(from_user=following, article__user=following)
+            for notification in notifications:
+                serializer = NotificationSerializer(data={
+                    'to_user': request.user.id,
+                    'from_user': notification.from_user.id,
+                    'article': notification.article.id,
+                })
+                if serializer.is_valid(raise_exception=True):
+                    saved_notification = serializer.save()
+                    serialized_data = NotificationSerializer(saved_notification).data
+                    return Response(serialized_data, status=status.HTTP_201_CREATED)
+        return Response(status=status.HTTP_201_CREATED)            
+
+
+# class NotificationDetailView(APIView):
+#     def get(self, request, pk):
+#         try:
+#             notification = Notification.objects.get(pk=pk)
+#         except Notification.DoesNotExist:
+#             return Response(status=status.HTTP_404_NOT_FOUND)
+#         serializer = NotificationDetailSerializer(notification)
+#         return Response(serializer.data)
+
+#     def delete(self, request, pk):
+#         try:
+#             notification = Notification.objects.get(pk=pk)
+#         except Notification.DoesNotExist:
+#             return Response(status=status.HTTP_404_NOT_FOUND)
+#         notification.delete()
+#         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
 class UserLocationView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -258,5 +304,4 @@ class UserLocationView(APIView):
                         'username': user.username
                         },
                         status=status.HTTP_200_OK)
-
 

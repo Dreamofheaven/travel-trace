@@ -1,9 +1,9 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from .models import Bookmark
-# from articles.serializers import ArticleListSerialize
-
+from .models import Bookmark, Notification
+from articles.models import Article
 User = get_user_model()
+
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(
@@ -34,6 +34,7 @@ class FollowSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'email', 'profile_img', 'followings', 'following']
         read_only_fields = ['id']
 
+
 class UserProfileSerializer(serializers.ModelSerializer):
     followers = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     followings = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
@@ -44,8 +45,23 @@ class UserProfileSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'email', 'profile_img', 'followings', 'followers', 'info', 'articles', 'bookmarks']
         read_only_fields = ['id', 'username', 'email']
 
+
 class BookmarkSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bookmark
         fields = '__all__'
 
+
+class NotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notification
+        fields = '__all__'
+
+
+class NotificationDetailSerializer(serializers.ModelSerializer):
+    follower = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    article = serializers.PrimaryKeyRelatedField(queryset=Article.objects.all())
+
+    class Meta:
+        model = Notification
+        fields = '__all__'
