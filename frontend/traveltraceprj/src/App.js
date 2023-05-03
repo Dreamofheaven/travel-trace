@@ -1,6 +1,8 @@
 import './App.css';
+import React, { useState, useEffect } from 'react';
 import { Routes, Route, Link } from "react-router-dom";
 import AppNavbar from './components/AppNavbar';
+import LogedNav from './components/LogedNav';
 import Footer from './components/Footer';
 import MainPage from './pages/MainPage';
 import Profile from './pages/Profile';
@@ -14,9 +16,34 @@ import Bookmark from './pages/Bookmark';
 import PersonalAll from './pages/PersonalAll';
 
 function App() {
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const access_token = localStorage.getItem('access');
+    console.log(access_token)
+    if (access_token) {
+      setLoggedIn(true);
+    } else {
+      setLoggedIn(false);
+    }
+  }, []);
+
   return (
     <div>
-      <AppNavbar />
+      <div>
+        {loggedIn ? (
+          <div>
+            <LogedNav />
+            <p>Welcome, you are logged in!</p>
+          </div>
+          ) : (
+            <div>
+              <AppNavbar />
+              <p>Please log in to continue.</p>
+            </div>
+          )}
+      </div>
+
       <Routes>
         <Route path="/" element={<MainPage />} />
         <Route path="/profile" element={<Profile />} />
