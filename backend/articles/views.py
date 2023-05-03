@@ -1,14 +1,20 @@
 from .serializers import ArticleSerializer, ArticleListSerializer, CommentSerializer
-from .models import Article, Comment
+from .models import Article, Comment, Tag, Route
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from rest_framework.decorators import authentication_classes, permission_classes
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+# from rest_framework.decorators import authentication_classes, permission_classes
+# from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
+from django.shortcuts import get_object_or_404
+
+from rest_framework import viewsets
+from django.db.models import Count
 
 
 @api_view(['GET', 'POST'])
+# @authentication_classes([SessionAuthentication, BasicAuthentication])
+# @permission_classes([IsAuthenticated])
 def article_list(request):
     if request.method == 'GET':
         articles = Article.objects.all()
@@ -18,11 +24,31 @@ def article_list(request):
     elif request.method == 'POST':
         serializer = ArticleSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
-            serializer.save()
+            # 게시글 저장
+            article = serializer.save(user=request.user)
+
+            # 태그 추출 및 저장
+            tags_input = request.data.get('tags', '')
+            tags_list = tags_input.split()
+            for tag_name in tags_list:
+                tag, created = Tag.objects.get_or_create(name=tag_name)
+                article.tags.add(tag)
+            routes_input = request.data.get('routes', [])
+            routes_str = ",".join(routes_input)  # 지역 목록을 문자열로 변환
+            article.routes = routes_str  # routes 필드에 문자열로 저장
+            article.save()  # article 저장
+
+            routes_list = routes_input  # 문자열로 변환된 지역 목록을 사용
+            for route_name in routes_list:
+                route, created = Route.objects.get_or_create(name=route_name)
+                article.routes.add(route)
+
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 @api_view(['GET', 'DELETE', 'PUT'])
+# @authentication_classes([SessionAuthentication, BasicAuthentication])
+# @permission_classes([IsAuthenticated])
 def article_detail(request, article_pk):
     article = Article.objects.get(pk=article_pk)
 
@@ -55,6 +81,8 @@ def comment_list(request):
 
 
 @api_view(['POST'])
+# @authentication_classes([SessionAuthentication, BasicAuthentication])
+# @permission_classes([IsAuthenticated])
 def comment_create(request, article_pk):
     article = Article.objects.get(pk=article_pk)
     serializer = CommentSerializer(data=request.data)
@@ -64,6 +92,8 @@ def comment_create(request, article_pk):
 
 
 @api_view(['GET', 'DELETE', 'PUT'])
+# @authentication_classes([SessionAuthentication, BasicAuthentication])
+# @permission_classes([IsAuthenticated])
 def comment_detail(request, comment_pk):
     comment = Comment.objects.get(pk=comment_pk)
     if request.method == 'GET':
@@ -79,24 +109,21 @@ def comment_detail(request, comment_pk):
             return Response(serializer.data)
 
 @api_view(['POST'])
-# @authentication_classes([SessionAuthentication, BasicAuthentication])
 # @permission_classes([IsAuthenticated])
 def like_article(request, article_pk):
-    # 게시글 조회
     article = Article.objects.get(pk=article_pk)
-    user = request.user # 요청을 보낸 사용자를 가져옴
-    if user in article.like_users.all(): # 사용자가 이미 게시글에 좋아요를 한 경우
-        article.like_users.remove(user) # 좋아요 제거
-        is_liked = False # 좋아요 상태를 False 로
-    else: # 반대의 경우 
-        article.like_users.add(user) # 좋아요 추가
-        is_liked = True # 좋아요 상태를 True 로
+    user = request.user
+    if user in article.like_users.all():
+        article.like_users.remove(user)
+        is_liked = False
+    else:
+        article.like_users.add(user)
+        is_liked = True
     serializer = ArticleSerializer(article)
-    return Response({'is_liked':is_liked, 'article':serializer.data})
+    return Response({'is_liked': is_liked, 'article': serializer.data})
 
 @api_view(['POST'])
-@authentication_classes([SessionAuthentication, BasicAuthentication])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def like_comment(request, comment_pk):
     comment = Comment.objects.get(pk=comment_pk)
     user = request.user
@@ -107,4 +134,37 @@ def like_comment(request, comment_pk):
         comment.like_users.add(user)
         is_liked = True
     serializer = CommentSerializer(comment)
-    return Response({'is_liked':is_liked,'comment':serializer.data})
+    return Response({'is_liked': is_liked, 'comment': serializer.data})
+
+# 정렬 ( 좋아요 순, 최신순, 조회순 )
+class ArticleViewSet(viewsets.ModelViewSet):
+    serializer_class = ArticleSerializer
+
+    def get_queryset(self):
+        # 요청하는 쿼리 파라미터에서 sort 값을 가져옴
+        sort = self.request.query_params.get('sort')
+        # Article 모델 전체 쿼리셋을 변수에 저장
+        queryset = Article.objects.all()
+
+        # 정렬 기준에 따라 
+        if sort == 'likes':
+            queryset = queryset.annotate(like_count=Count('like_users')).order_by('-like_count')
+        elif sort == 'newest':
+            queryset = queryset.order_by('-created_at')
+        elif sort == 'views':
+            queryset = queryset.order_by('-views')
+        return queryset
+
+#
+
+@api_view(['POST'])
+def routes(request, article_pk):
+    article = get_object_or_404(Article, pk=article_pk)
+    route_names = request.data.get('routes', [])  # 지역 이름 리스트를 받음
+
+    for route_name in route_names:
+        if route_name:
+            route, created = Route.objects.get_or_create(name=route_name)
+            article.routes.add(route)
+
+    return Response({'message': 'Routes added successfully.'}, status=status.HTTP_200_OK)

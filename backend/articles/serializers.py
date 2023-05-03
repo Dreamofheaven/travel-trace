@@ -4,7 +4,7 @@ from .models import Comment, Article
 class ArticleListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Article
-        fields = ('id', 'title', 'image',)
+        fields = ('user', 'title', 'image',)
         read_only_fields = ('user',)
 
 
@@ -13,7 +13,7 @@ class ArticleSerializer(serializers.ModelSerializer):
     class CommentInArticleSerializer(serializers.ModelSerializer):
         class Meta:
             model = Comment
-            fields = ('id', 'content',)
+            fields = ('user', 'content',)
             read_only_fields = ('user',)
 
     comment_set = CommentInArticleSerializer(many=True, read_only=True)
@@ -22,7 +22,7 @@ class ArticleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Article
         fields = '__all__'
-        read_only_fields = ('like_users',)
+        read_only_fields = ('like_users','tags')
 
     # 게시글 좋아요 횟수 반환
     def get_like_count(self,instance):
@@ -33,6 +33,7 @@ class CommentSerializer(serializers.ModelSerializer):
         model = Comment
         fields = '__all__'
         read_only_fields = ('article','like_users',)
+
     # 댓글 좋아요 횟수 반환
     def get_like_count(self,instance):
         return instance.like_users.count()
