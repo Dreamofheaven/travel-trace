@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
-    # 추후 추가적으로 네이버, 카카오도 추가(상기 구글과 동일 양식으로)
+    'allauth.socialaccount.providers.kakao',
+    'allauth.socialaccount.providers.naver',
 
     # 필터기능 (정렬기능)
     'django_filters',
