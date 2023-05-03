@@ -42,6 +42,8 @@ class User(AbstractUser):
     followings = models.ManyToManyField('self', symmetrical=False, related_name='followers', blank=True)
     info = models.CharField(max_length=200, blank=True)
     location = models.CharField(max_length=255, null=True, blank=True)
+    user_latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True)
+    user_longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True)
     
     # 유저id로 email을 쓰겠다.
     USERNAME_FIELD = 'email'

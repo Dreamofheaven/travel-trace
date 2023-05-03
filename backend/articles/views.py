@@ -16,9 +16,9 @@ from django.db.models import Count
 # from rest_framework.exceptions import AuthenticationFailed
 
 # 장소 GPS 연동
+import os
 import requests
 from rest_framework.views import APIView
-from django.conf import settings
 
 @api_view(['GET', 'POST'])
 # @authentication_classes([SessionAuthentication, BasicAuthentication])
@@ -188,7 +188,8 @@ class ArticleLocationView(APIView):
             return Response({"error":"장소를 입력해주세요."},status=status.HTTP_400_BAD_REQUEST)
         
         # 카카오 API 를 이용해 입력받은 장소의 좌표 정보를 받아옴
-        headers = {'Authorization':f'KakaoAK {settings.KAKAO_API_KEY}'}
+        client_id = os.environ.get('SOCIAL_AUTH_KAKAO_CLIENT_ID')
+        headers = {'Authorization':f'KakaoAK {client_id}'}
         url = f'https://dapi.kakao.com/v2/local/search/address.json?query={location}'
         response = requests.get(url, headers=headers)
 
@@ -197,7 +198,7 @@ class ArticleLocationView(APIView):
                 'error': '좌표를 가져오지 못했습니다.'
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
-         # 좌표 정보 중에서 위도(latitude)와 경도(longitude)를 추출하여 게시글 모델에 저장
+        # 좌표 정보 중에서 위도(latitude)와 경도(longitude)를 추출하여 게시글 모델에 저장
         data = response.json().get('documents')
         if data:
             latitude = data[0].get('y')
@@ -214,6 +215,7 @@ class ArticleLocationView(APIView):
                 'message': '장소 저장에 성공하였습니다',
                 'latitude': latitude,
                 'longitude': longitude,
+                'location': location,
                 'article_id': article.pk,
                 'user_id': user.pk,
                 'username': user.username
@@ -223,4 +225,3 @@ class ArticleLocationView(APIView):
                 'error': '제공된 입력에 대한 위치 데이터를 찾을 수 없습니다.'
             }, status=status.HTTP_404_NOT_FOUND)
         
-       

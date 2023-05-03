@@ -253,6 +253,7 @@ class NotificationView(APIView):
         return Response(status=status.HTTP_201_CREATED)            
 
 
+## 쓸일이 있을지 미지수라 우선 주석처리함
 # class NotificationDetailView(APIView):
 #     def get(self, request, pk):
 #         try:
@@ -273,35 +274,75 @@ class NotificationView(APIView):
 
 class UserLocationView(APIView):
     permission_classes = [IsAuthenticated]
-
     def post(self, request):
-        client_id = os.environ.get('SOCIAL_AUTH_KAKAO_CLIENT_ID')
         user = request.user
-        latitude = request.data.get('latitude')
-        longitude = request.data.get('longitude')
+        location = request.data.get('location')
+        if not location:
+            return Response({"error":"장소를 입력해주세요."},status=status.HTTP_400_BAD_REQUEST)
         
-        if not all([latitude, longitude]):
-            return Response({"error": "latitude and longitude should be provided"}, status=status.HTTP_400_BAD_REQUEST)
-
-        # 카카오 API를 이용해 현재 위치 정보를 받아옴
-        headers = {'Authorization': f'KakaoAK {client_id}'}
-        url = f'https://dapi.kakao.com/v2/local/geo/coord2regioncode.json?x={longitude}&y={latitude}'
+        # 카카오 API 를 이용해 입력받은 장소의 좌표 정보를 받아옴
+        client_id = os.environ.get('SOCIAL_AUTH_KAKAO_CLIENT_ID')
+        headers = {'Authorization':f'KakaoAK {client_id}'}
+        url = f'https://dapi.kakao.com/v2/local/search/address.json?query={location}'
         response = requests.get(url, headers=headers)
+
         if response.status_code != 200:
             return Response({
-                'error': 'failed to retrieve location information from Kakao API'
-                },
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                'error': '좌표를 가져오지 못했습니다.'
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+        # 좌표 정보 중에서 위도(latitude)와 경도(longitude)를 추출하여 게시글 모델에 저장
+        data = response.json().get('documents')
+        if data:
+            latitude = data[0].get('y')
+            longitude = data[0].get('x')
 
-        # 위치 정보 중 시/도 정보를 추출하여 유저 모델에 저장
-        location = response.json().get('documents')[0].get('region_1depth_name')
-        user.location = location
-        user.save()
+            user.location = location
+            user.user_latitude = latitude
+            user.user_longitude = longitude
+            user.save()
 
-        return Response({'message': 'location saved successfully.',
-                        'location': location,
-                        'user_id': user.pk,
-                        'username': user.username
-                        },
-                        status=status.HTTP_200_OK)
+            return Response({
+                'message': '장소 저장에 성공하였습니다',
+                'user_latitude': latitude,
+                'user_longitude': longitude,
+                'location': location,
+                'user_id': user.pk,
+                'username': user.username
+            }, status=status.HTTP_200_OK)
+        else:
+            return Response({
+                'error': '제공된 입력에 대한 위치 데이터를 찾을 수 없습니다.'
+            }, status=status.HTTP_404_NOT_FOUND)
+
+    # def post(self, request):
+    #     client_id = os.environ.get('SOCIAL_AUTH_KAKAO_CLIENT_ID')
+    #     user = request.user
+    #     latitude = request.data.get('latitude')
+    #     longitude = request.data.get('longitude')
+        
+    #     if not all([latitude, longitude]):
+    #         return Response({"error": "latitude and longitude should be provided"}, status=status.HTTP_400_BAD_REQUEST)
+
+    #     # 카카오 API를 이용해 현재 위치 정보를 받아옴
+    #     headers = {'Authorization': f'KakaoAK {client_id}'}
+    #     url = f'https://dapi.kakao.com/v2/local/geo/coord2regioncode.json?x={longitude}&y={latitude}'
+    #     response = requests.get(url, headers=headers)
+    #     if response.status_code != 200:
+    #         return Response({
+    #             'error': 'failed to retrieve location information from Kakao API'
+    #             },
+    #             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    #     # 위치 정보 중 시/도 정보를 추출하여 유저 모델에 저장
+    #     location = response.json().get('documents')[0].get('region_1depth_name')
+    #     user.location = location
+    #     user.save()
+
+    #     return Response({'message': 'location saved successfully.',
+    #                     'location': location,
+    #                     'user_id': user.pk,
+    #                     'username': user.username
+    #                     },
+    #                     status=status.HTTP_200_OK)
 
