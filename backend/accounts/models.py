@@ -52,6 +52,16 @@ class User(AbstractUser):
 
     def __str__(self):
         return f'<User {self.email}'
+    
+
+class Notification(models.Model):
+    to_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='receiving_notifications')
+    from_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='sending_notifications')
+    article = models.ForeignKey(Article, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
 
 
 class Bookmark(models.Model):
