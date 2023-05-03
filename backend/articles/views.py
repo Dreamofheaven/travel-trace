@@ -44,6 +44,65 @@ class NearbArticleListView(APIView):
 # @authentication_classes([SessionAuthentication, BasicAuthentication])
 # @permission_classes([IsAuthenticated])
 def article_list(request):
+    class ArticleLocationView(APIView):
+        permission_classes = [IsAuthenticated]
+
+        def get_article(self, article_pk):
+            try:
+                article = Article.objects.get(pk=article_pk)
+                return article
+            except Article.DoesNotExist:
+                return None
+
+        def post(self, request, article_pk):
+            user = request.user
+            location = request.data.get('location')
+
+            if not location:
+                article = self.get_article(article_pk)
+                if article:
+                    location = article.location
+                else:
+                    return Response({"error": "장소를 입력해주세요."}, status=status.HTTP_400_BAD_REQUEST)
+
+            # 카카오 API를 이용해 입력받은 장소의 좌표 정보를 받아옴
+            client_id = os.environ.get('SOCIAL_AUTH_KAKAO_CLIENT_ID')
+            headers = {"Authorization": f"KakaoAK {client_id}"}
+            url = f'https://dapi.kakao.com/v2/local/search/address.json?query={location}'
+            response = requests.get(url, headers=headers)
+
+            if response.status_code != 200:
+                return Response({
+                    'error': '좌표를 가져오지 못했습니다.'
+                }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+            # 좌표 정보 중에서 위도(latitude)와 경도(longitude)를 추출하여 게시글 모델에 저장
+            data = response.json().get('documents')
+            if data:
+                latitude = data[0].get('y')
+                longitude = data[0].get('x')
+
+                article = Article.objects.get(pk=article_pk)
+                article.user = user
+                article.location = location
+                article.latitude = latitude
+                article.longitude = longitude
+                article.save()
+
+                return Response({
+                    'message': '장소 저장에 성공하였습니다',
+                    'latitude': latitude,
+                    'longitude': longitude,
+                    'location': location,
+                    'article_id': article.pk,
+                    'user_id': user.pk,
+                    'username': user.username
+                }, status=status.HTTP_200_OK)
+            else:
+                return Response({
+                    'error': '제공된 입력에 대한 위치 데이터를 찾을 수 없습니다.'
+                }, status=status.HTTP_404_NOT_FOUND)
+
     if request.method == 'GET':
         articles = Article.objects.all()
         serializer = ArticleListSerializer(articles, many=True)
@@ -62,18 +121,17 @@ def article_list(request):
             #     tag, created = Tag.objects.get_or_create(name=tag_name)
             #     article.tags.add(tag)
             routes_input = request.data.get('routes', [])
-            routes_str = ",".join(routes_input)  # 지역 목록을 문자열로 변환
-            article.routes = routes_str  # routes 필드에 문자열로 저장
-            article.save()  # article 저장
+            routes_str = ",".join(routes_input)
+            article.routes = routes_str
+            article.save()
 
-            routes_list = routes_input  # 문자열로 변환된 지역 목록을 사용
-            for route_name in routes_list:
-                route, created = Route.objects.get_or_create(name=route_name)
-                article.routes.add(route)
+            # ArticleLocationView를 사용하여 경도와 위도 정보를 업데이트
+            location_view = ArticleLocationView()
+            response = location_view.post(request, article.pk)
+            return response
 
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                                  
 @api_view(['GET', 'DELETE', 'PUT'])
 # @authentication_classes([SessionAuthentication, BasicAuthentication])
 # @permission_classes([IsAuthenticated])
@@ -197,51 +255,3 @@ def routes(request, article_pk):
 
     return Response({'message': 'Routes added successfully.'}, status=status.HTTP_200_OK)
 
-class ArticleLocationView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def post(self, request):
-        user = request.user
-        location = request.data.get('location')
-
-        if not location:
-            return Response({"error":"장소를 입력해주세요."},status=status.HTTP_400_BAD_REQUEST)
-        
-        # 카카오 API 를 이용해 입력받은 장소의 좌표 정보를 받아옴
-        client_id = os.environ.get('SOCIAL_AUTH_KAKAO_CLIENT_ID')
-        headers = {'Authorization':f'KakaoAK {client_id}'}
-        url = f'https://dapi.kakao.com/v2/local/search/address.json?query={location}'
-        response = requests.get(url, headers=headers)
-
-        if response.status_code != 200:
-            return Response({
-                'error': '좌표를 가져오지 못했습니다.'
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        
-        # 좌표 정보 중에서 위도(latitude)와 경도(longitude)를 추출하여 게시글 모델에 저장
-        data = response.json().get('documents')
-        if data:
-            latitude = data[0].get('y')
-            longitude = data[0].get('x')
-
-            article = Article()
-            article.user = user
-            article.location = location
-            article.latitude = latitude
-            article.longitude = longitude
-            article.save()
-
-            return Response({
-                'message': '장소 저장에 성공하였습니다',
-                'latitude': latitude,
-                'longitude': longitude,
-                'location': location,
-                'article_id': article.pk,
-                'user_id': user.pk,
-                'username': user.username
-            }, status=status.HTTP_200_OK)
-        else:
-            return Response({
-                'error': '제공된 입력에 대한 위치 데이터를 찾을 수 없습니다.'
-            }, status=status.HTTP_404_NOT_FOUND)
-        
