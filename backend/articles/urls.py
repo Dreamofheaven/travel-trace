@@ -20,6 +20,6 @@ urlpatterns = [
     # path('<int:article_pk>/routes/', views.routes),
     # path('<int:article_pk>/location/', views.ArticleLocationView.as_view()),
     path('nearby/', views.NearbArticleListView.as_view()), 
- 
+
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

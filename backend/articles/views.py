@@ -10,6 +10,7 @@ from django.shortcuts import get_object_or_404
 
 from rest_framework import viewsets
 from django.db.models import Count
+from django.db import models
 
 # # 로그인한 유저 토큰
 # from rest_framework.authtoken.models import Token
@@ -19,25 +20,56 @@ from django.db.models import Count
 import os
 import requests
 from rest_framework.views import APIView
-from django.db.models import Q
 from rest_framework import generics
+from django.db.models.functions import Sqrt, Cast
+from django.db.models import F
+
 
 class NearbArticleListView(APIView):
     def get(self, request):
-        user_latitude = request.query_params.get('latitude')
-        user_longitude = request.query_params.get('longitude')
-        # 유저 위치에서 가까운 게시글 순으로 정렬
-        articles = Article.objects.filter(
-            Q(latitude__isnull=False) &
-            Q(longitude__isnull=False)
-        ).annotate(
-            distance=(
-                ((float(user_latitude) - float('latitude')) ** 2) +
-                ((float(user_longitude) - float('longitude')) ** 2)
-            ) ** 0.5
+        # 로그인한 사용자를 가져옵니다.
+        user = request.user
+
+        # 사용자가 위치 정보를 등록하지 않았을 경우 예외 처리합니다.
+        if not user.user_latitude or not user.user_longitude:
+            return Response({'detail': 'User location is not available.'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        user_latitude = user.user_latitude
+        user_longitude = user.user_longitude
+        # 게시글 중 위도와 경도가 모두 null이 아닌 것을 필터링해서 가져옵니다.
+        articles = Article.objects.exclude(latitude=None).exclude(longitude=None)
+        
+        # 현재 유저의 위치를 기준으로 각 게시글과의 거리를 계산합니다.
+        # Cast() 함수는 첫 번째 인자인 식을 두 번째 인자인 output_field 타입으로 형변환해줍니다.
+        articles = articles.annotate(
+            distance=Cast(Sqrt(
+                (F('latitude') - float(user_latitude)) ** 2 +
+                (F('longitude') - float(user_longitude)) ** 2
+            ), output_field=models.DecimalField())
         ).order_by('distance')
+        
         serializer = ArticleListSerializer(articles, many=True)
-        return Response(serializer.data)    
+        return Response(serializer.data)
+
+
+
+
+# class NearbArticleListView(APIView):
+#     def get(self, request):
+#         user_latitude = request.query_params.get('user_latitude')
+#         user_longitude = request.query_params.get('user_longitude')
+#         # 유저 위치에서 가까운 게시글 순으로 정렬
+#         articles = Article.objects.filter(
+#             Q(latitude__isnull=False) &
+#             Q(longitude__isnull=False)
+#         ).annotate(
+#             distance=(
+#                 ((float(user_latitude) - float(latitude)) ** 2) +
+#                 ((float(user_longitude) - float(longitude)) ** 2)
+#             ) ** 0.5
+#         ).order_by('distance')  
+#         serializer = ArticleListSerializer(articles, many=True)
+#         return Response(serializer.data)    
 
 
 class ArticeListView(APIView):

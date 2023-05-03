@@ -4,8 +4,8 @@ from .models import Comment, Article
 class ArticleListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Article
-        fields = ('id', 'title', 'image','content', 'locaition')
-        read_only_fields = ('user',)
+        fields = ('user', 'id', 'title', 'image', 'location', 'rating')
+        read_only_fields = ('user', 'location', 'latitude', 'logitude')
 
 
 class ArticleSerializer(serializers.ModelSerializer):
