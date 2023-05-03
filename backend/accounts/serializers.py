@@ -11,6 +11,7 @@ class UserSerializer(serializers.ModelSerializer):
         write_only=True,
         style={'input_type': 'password'}
     )
+
     class Meta:
         model = User
         fields = ['id', 'username', 'email', 'password', 'profile_img', 'info', 'location']

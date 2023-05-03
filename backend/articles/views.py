@@ -40,31 +40,29 @@ class NearbArticleListView(APIView):
         return Response(serializer.data)    
 
 
-@api_view(['GET', 'POST'])
-# @authentication_classes([SessionAuthentication, BasicAuthentication])
-# @permission_classes([IsAuthenticated])
-def article_list(request):
-    class ArticleLocationView(APIView):
-        permission_classes = [IsAuthenticated]
+class ArticeListView(APIView):
+    permission_classes = [IsAuthenticated]
 
-        def get_article(self, article_pk):
-            try:
-                article = Article.objects.get(pk=article_pk)
-                return article
-            except Article.DoesNotExist:
-                return None
+    def get(self, request):
+        articles = Article.objects.all()
+        serializer = ArticleListSerializer(articles, many=True)
+        return Response(serializer.data)
 
-        def post(self, request, article_pk):
-            user = request.user
+    def post(self, request):
+        serializer = ArticleSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            # 게시글 저장
+            article = serializer.save(user=request.user)
+            # 태그 추출 및 저장
+            # tags_input = request.data.get('tags', '')
+            # tags_list = tags_input.split()
+            # for tag_name in tags_list:
+            #     tag, created = Tag.objects.get_or_create(name=tag_name)
+            #     article.tags.add(tag)
+            routes_input = request.data.get('routes', [])
+            routes_str = ",".join(routes_input)
+            article.routes = routes_str
             location = request.data.get('location')
-
-            if not location:
-                article = self.get_article(article_pk)
-                if article:
-                    location = article.location
-                else:
-                    return Response({"error": "장소를 입력해주세요."}, status=status.HTTP_400_BAD_REQUEST)
-
             # 카카오 API를 이용해 입력받은 장소의 좌표 정보를 받아옴
             client_id = os.environ.get('SOCIAL_AUTH_KAKAO_CLIENT_ID')
             headers = {"Authorization": f"KakaoAK {client_id}"}
@@ -81,57 +79,13 @@ def article_list(request):
             if data:
                 latitude = data[0].get('y')
                 longitude = data[0].get('x')
-
-                article = Article.objects.get(pk=article_pk)
-                article.user = user
-                article.location = location
                 article.latitude = latitude
                 article.longitude = longitude
                 article.save()
 
-                return Response({
-                    'message': '장소 저장에 성공하였습니다',
-                    'latitude': latitude,
-                    'longitude': longitude,
-                    'location': location,
-                    'article_id': article.pk,
-                    'user_id': user.pk,
-                    'username': user.username
-                }, status=status.HTTP_200_OK)
-            else:
-                return Response({
-                    'error': '제공된 입력에 대한 위치 데이터를 찾을 수 없습니다.'
-                }, status=status.HTTP_404_NOT_FOUND)
+            return Response(serializer.data, status=status.HTTP_200_OK)
 
-    if request.method == 'GET':
-        articles = Article.objects.all()
-        serializer = ArticleListSerializer(articles, many=True)
-        return Response(serializer.data)
-    
-    elif request.method == 'POST':
-        serializer = ArticleSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            # 게시글 저장
-            article = serializer.save(user=request.user)
 
-            # 태그 추출 및 저장
-            # tags_input = request.data.get('tags', '')
-            # tags_list = tags_input.split()
-            # for tag_name in tags_list:
-            #     tag, created = Tag.objects.get_or_create(name=tag_name)
-            #     article.tags.add(tag)
-            routes_input = request.data.get('routes', [])
-            routes_str = ",".join(routes_input)
-            article.routes = routes_str
-            article.save()
-
-            # ArticleLocationView를 사용하여 경도와 위도 정보를 업데이트
-            location_view = ArticleLocationView()
-            response = location_view.post(request, article.pk)
-            return response
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-                                  
 @api_view(['GET', 'DELETE', 'PUT'])
 # @authentication_classes([SessionAuthentication, BasicAuthentication])
 # @permission_classes([IsAuthenticated])
