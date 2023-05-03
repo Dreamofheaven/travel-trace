@@ -18,6 +18,9 @@ function All() {
       {articles.map(article => (
         <div key={article.id}>
           <h2>{article.title}</h2>
+          <h2>{article.user}</h2>
+          <h2>{article.image}</h2>
+          <img src={article.image} />
         </div>
       ))}
     </div>
