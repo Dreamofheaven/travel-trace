@@ -1,5 +1,5 @@
 from .serializers import ArticleSerializer, ArticleListSerializer, CommentSerializer
-from .models import Article, Comment, Tag, Route
+from .models import Article, Comment, Route
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -28,11 +28,11 @@ def article_list(request):
             article = serializer.save(user=request.user)
 
             # 태그 추출 및 저장
-            tags_input = request.data.get('tags', '')
-            tags_list = tags_input.split()
-            for tag_name in tags_list:
-                tag, created = Tag.objects.get_or_create(name=tag_name)
-                article.tags.add(tag)
+            # tags_input = request.data.get('tags', '')
+            # tags_list = tags_input.split()
+            # for tag_name in tags_list:
+            #     tag, created = Tag.objects.get_or_create(name=tag_name)
+            #     article.tags.add(tag)
             routes_input = request.data.get('routes', [])
             routes_str = ",".join(routes_input)  # 지역 목록을 문자열로 변환
             article.routes = routes_str  # routes 필드에 문자열로 저장

@@ -22,7 +22,7 @@ class Article(models.Model):
     # 평점 (1점 단위로 5점까지부여) 
     rating = models.DecimalField(max_digits=1, decimal_places=0, default=0)
     # 태그 
-    tags = models.ManyToManyField('articles.Tag')
+    # tags = models.ManyToManyField('articles.Tag')
     routes = models.TextField(default='')
 
 

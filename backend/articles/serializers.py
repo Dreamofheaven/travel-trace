@@ -22,7 +22,7 @@ class ArticleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Article
         fields = '__all__'
-        read_only_fields = ('like_users','tags')
+        read_only_fields = ('like_users',)
 
     # 게시글 좋아요 횟수 반환
     def get_like_count(self,instance):
