@@ -23,10 +23,7 @@ class Article(models.Model):
     rating = models.DecimalField(max_digits=1, decimal_places=0, default=0)
     # 태그 
     # tags = models.ManyToManyField('articles.Tag')
-    # routes = models.TextField(default='')
-    location = models.CharField(max_length=255, null=True, blank=True)
-    latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True)
-    longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True)
+
 
 
 class Comment(models.Model):

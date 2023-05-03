@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import Form from 'react-bootstrap/Form';
 import Card from 'react-bootstrap/Card';
 import DatePicker from '../components/DatePicker';
+import { Button } from 'react-bootstrap';
 
 function Post() {
   
@@ -25,6 +26,7 @@ function Post() {
             <Form.Control as="textarea" rows={3} />
           </Form.Group>
           <p>경로</p>
+          <Button type="submit">입력</Button>
         </Card.Body>
       </Card>
     </div>

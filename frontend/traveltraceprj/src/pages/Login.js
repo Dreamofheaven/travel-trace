@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Container } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 function Login() {
 
@@ -20,12 +21,13 @@ function Login() {
 
     console.log('Email', Email)
     console.log('Password', Password)
-    // 로그인 값을 서버에 보내기
-  //   let body ={
-  //     email: Email,
-  //     password: Password
-  //   }
-  //   Axios.post('/api/user/login', body)
+
+    //로그인 값을 서버에 보내기
+    let body ={
+      email: Email,
+      password: Password
+    }
+    axios.post('http://127.0.0.1:8000/accounts/', body)
   }
 
   return(
