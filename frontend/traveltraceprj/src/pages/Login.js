@@ -60,10 +60,10 @@ function Login() {
           <form onSubmit={handleLogin}>
             <Form>
               <Form.Group className="mb-3" controlId="formBasicEmail">
-              <Form.Control size="lg" type="email" id="email" placeholder="이메일" value={email} onChange={handleEmailChange}/>
+              <Form.Control size="lg" type="email" id="email" placeholder="이메일" value={email} onChange={handleFormChange}/>
               </Form.Group>
               <Form.Group className="mb-3" controlId="formBasicPassword">
-                <Form.Control size="lg" type="password" id="password" placeholder="비밀번호" value={password} onChange={handlePasswordChange} />
+                <Form.Control size="lg" type="password" id="password" placeholder="비밀번호" value={password} onChange={handleFormChange} />
               </Form.Group>
               <div className="d-grid gap-2 mb-5">
                 <Button className='login2_btn' size="lg" type="submit">로그인</Button>
