@@ -1,6 +1,7 @@
 import React from 'react'
 import { Navbar, Nav, Form, Button, Stack } from "react-bootstrap";
 import { Link } from 'react-router-dom';
+import "../styles/AppNavbar.css";
 
 function AppNavbar() {
   return (

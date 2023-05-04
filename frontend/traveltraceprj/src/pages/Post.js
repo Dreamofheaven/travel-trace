@@ -1,8 +1,10 @@
+// 게시글 작성 페이지
 import React, {useState} from 'react';
 import Form from 'react-bootstrap/Form';
 import Card from 'react-bootstrap/Card';
 import DatePicker from '../components/DatePicker';
 import { Button } from 'react-bootstrap';
+import "../styles/Post.css";
 
 function Post() {
   

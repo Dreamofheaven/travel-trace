@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, Container, Stack } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import "../styles/Profile.css";
 
 function Profile() {
   return (
