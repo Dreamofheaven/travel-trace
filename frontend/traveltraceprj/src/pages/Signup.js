@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useCookies } from 'react-cookie';
 import axios from "axios";
-import "../styles/SignUp.css";
+// import "../styles/SignUp.css";
 
 
 function SignUp() {
-  const [cookies, setCookie] = useCookies(['jwt']);
+  const [cookies, setCookies] = useCookies(['access', 'refresh']);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -17,13 +17,17 @@ function SignUp() {
     
     try {
       const response = await axios.post('http://127.0.0.1:8000/accounts/signup/', {username, email, password});
-      console.log(response);
-      setCookie('jwt', response.data.token.access, { path: '/' });
+      console.log(response.data);
+      const { access, refresh } = response.data.token;
+      setCookies('access', access, { secure: true, sameSite: 'strict' });
+      setCookies('refresh', refresh, { secure: true, sameSite: 'strict' });
+      // setCookie('jwt', response.data.token.access, { path: '/' });
       // console.log('jwt');
       console.log('Successfully signed up and logged in!');
       // 리다이렉트 등 다른 작업 수행
     } catch (error) {
       console.error(error.response.data);
+      alert(error.response.data.email);
       // 에러 처리
     }
   };
