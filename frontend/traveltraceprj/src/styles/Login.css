@@ -1,0 +1,17 @@
+.login2_btn {
+  background-color: #A0D468;
+  border: 0;
+  font-weight: bold;
+  cursor: pointer; 
+}
+.login2_btn:hover {
+  background-color: #A0D468;
+}
+
+
+.signup_link {
+  text-decoration: none;
+  color: rgb(107, 106, 106);
+  font-weight: bold;
+  font-size: 14px;
+}
