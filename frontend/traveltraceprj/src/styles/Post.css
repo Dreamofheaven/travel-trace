@@ -1,1 +1,14 @@
 /* 게시글 작성.css */
+
+.card {
+  height: 1000px;
+  width: 800px;
+  border-color: #A0D468;
+  border-width: 2px;
+}
+
+/* .hearts_icon {
+  width: 15px;
+  height: 15px;
+  fill: red;
+} */
