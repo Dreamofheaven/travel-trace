@@ -1,11 +1,31 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Button, Container, Stack, Image} from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import "../styles/Profile.css";
 import defaultProfilePic from '../assets/profile_logo.png';
 import { BookmarkHeartFill, PostcardHeartFill, PersonPlus, PlusSquareDotted } from 'react-bootstrap-icons'
 
+const BASE_URL = 'http://127.0.0.1:8000';
+
 function Profile() {
+  const [user, setUser] = useState({});
+  console.log(localStorage.getItem('access'));
+
+  useEffect(() => {
+    axios.get('http://127.0.0.1:8000/accounts/profile/', {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('access')}`
+      }
+    })
+    .then(response => {
+      setUser(response.data);
+    })
+    .catch(error => {
+      console.log(error);
+    });
+    }, []);
+
   return (
     <Container className="my-5 text-align-center">
       <Stack gap={4} className='Profile col-md-5 mx-auto text-center'>
@@ -21,9 +41,15 @@ function Profile() {
             <PlusSquareDotted className='img_plus_icon'/>
           </div>
         </div>
+
         <div className='d-flex justify-content-center'>
           <span className='user_identification'>
             닉네임(이메일)
+            <>
+              <p>정보 뿌려주기</p>
+              <h2>{user.username}</h2>
+              <p>Email: {user.email}</p>
+            </>
           </span>
           <span className='ps-3 align-self-center'>
             <PersonPlus className='follow_icon'/>
@@ -52,3 +78,6 @@ function Profile() {
 }
 
 export default Profile;
+
+
+
