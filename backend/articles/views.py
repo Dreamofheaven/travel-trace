@@ -1,5 +1,5 @@
 from .serializers import ArticleSerializer, ArticleListSerializer, CommentSerializer
-from .models import Article, Comment, Route
+from .models import Article, Comment, Route, Image
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -23,6 +23,11 @@ from rest_framework.views import APIView
 from rest_framework import generics
 from django.db.models.functions import Sqrt, Cast
 from django.db.models import F
+
+# 다중 이미지
+from django.http import QueryDict
+
+
 
 
 class NearbArticleListView(APIView):
@@ -81,10 +86,19 @@ class ArticeListView(APIView):
         return Response(serializer.data)
 
     def post(self, request):
-        serializer = ArticleSerializer(data=request.data)
+        serializer = ArticleSerializer(data=request.data, context={'request': request})
+        # serializer = ArticleSerializer(data=request.data)
+        
         if serializer.is_valid(raise_exception=True):
             # 게시글 저장
             article = serializer.save(user=request.user)
+
+             # 이미지 파일 처리
+            images = request.FILES.getlist('images')  # 여러 개의 이미지 파일을 받습니다.
+
+            for image in images:
+                Image.objects.create(article=article, image=image)
+            
             # 태그 추출 및 저장
             # tags_input = request.data.get('tags', '')
             # tags_list = tags_input.split()
@@ -240,4 +254,5 @@ def routes(request, article_pk):
             article.routes.add(route)
 
     return Response({'message': 'Routes added successfully.'}, status=status.HTTP_200_OK)
+
 

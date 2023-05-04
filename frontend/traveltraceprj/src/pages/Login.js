@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { Container } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
+import "../styles/Login.css";
+import { Container, Button, Form } from 'react-bootstrap';
+import logo from '../assets/login_logo.png'
 
 function Login() {
 
@@ -43,23 +45,40 @@ function Login() {
     }
   };
   
-  return(
+  return (
     <Container>
-      {/* <button onClick={handleLogout}>로그아웃</button> */}
-      <form onSubmit={handleLogin}>
-        <label>
-          이메일:
-          <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} />
-        </label>
-        <label>
-          비밀번호:
-          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-        </label>
-        <button type="submit">로그인</button>
-      </form>
-      <p>
-        <Link to="/signup">회원가입</Link>
-      </p>
+      <div className='d-flex flex-column justify-content-center align-items-center'>
+        <div>
+          <img
+            src={logo}
+            height="350"
+            className="login_logo"
+            alt="Travel-trace logo"
+          />
+        </div>
+        <div>
+          <form onSubmit={handleLogin}>
+            <Form>
+              <Form.Group className="mb-3" controlId="formBasicEmail">
+              <Form.Control size="lg" type="email" id="email" placeholder="이메일" value={email} onChange={handleEmailChange}/>
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="formBasicPassword">
+                <Form.Control size="lg" type="password" id="password" placeholder="비밀번호" value={password} onChange={handlePasswordChange} />
+              </Form.Group>
+              <div className="d-grid gap-2 mb-5">
+                <Button className='login2_btn' size="lg" type="submit">로그인</Button>
+              <Form.Group>
+                <Form.Text className="text-muted d-flex justify-content-center">
+                  <Link className='signup_link' to="/Signup.js">
+                    회원가입
+                  </Link>
+                </Form.Text>
+              </Form.Group>
+              </div>
+            </Form>
+          </form>
+        </div>
+      </div>
     </Container>
   );
 }
