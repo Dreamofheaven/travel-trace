@@ -1,1 +1,46 @@
+.profile_image {
+  object-fit: contain;
+}
 
+.user_identification {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.user_follow {
+  font-size: 1.3rem;
+}
+
+.user_info {
+  font-size: 1.8rem;
+  color: rgb(97, 94, 94);
+  white-space: nowrap
+}
+
+.follow_icon {
+  width: 40px;
+  height: 40px;
+  fill: limegreen;
+}
+
+.bookmark_icon {
+  width: 50px;
+  height: 50px;
+  fill: limegreen;
+}
+
+.post_icon {
+  width: 50px;
+  height: 50px;
+  fill: limegreen;
+}
+
+.img_plus_icon {
+  width: 30px;
+  height: 30px;
+  fill: rgb(53, 88, 53);  
+}
+.account_management {
+  text-decoration: none;
+  color: rgb(97, 94, 94);
+}
