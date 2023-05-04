@@ -1,5 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
+import "../styles/All.css";
+
 
 function All() {
   const [articles, setArticles] = useState([]);

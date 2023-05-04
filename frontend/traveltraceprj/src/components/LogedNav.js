@@ -3,6 +3,8 @@ import { useCookies } from 'react-cookie';
 import { Navbar, Nav, Form, Button, Stack } from "react-bootstrap";
 import { Link } from 'react-router-dom';
 
+// 이거는 제가 로그인 로그아웃 구분할라고 잠시 작성 중인페이지라서 정식 페이지 아니예요!! 
+
 function LogedNav() {
   
   const [cookies, setCookie, removeCookie] = useCookies(['access', 'refresh']);

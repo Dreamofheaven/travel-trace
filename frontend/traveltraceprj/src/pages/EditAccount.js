@@ -1,4 +1,5 @@
 import React from 'react';
+import "../styles/EditAccount.css";
 
 function EditAccount() {
   return(
