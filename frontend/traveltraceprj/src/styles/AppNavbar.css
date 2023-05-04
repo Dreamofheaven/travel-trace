@@ -1,1 +1,51 @@
 /* 네브바 */
+
+.navbar {
+  height: 80px;
+}
+
+.navbar_logo {
+  height: 80px;
+  object-fit: contain; /* 로고 이미지 비율 유지 */
+}
+
+.create_bar {
+  border: 0;
+  box-shadow: 3px 3px 5px lightgray;
+  font-size: 20px;
+  border-radius: 10px;
+  white-space: nowrap
+}
+
+.my_profile {
+  text-decoration: none;
+  color: rgb(107, 106, 106);
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.person_icon {
+  width: 25px;
+  height: 25px;
+}
+
+.login_btn {
+  background-color: #A0D468;
+  border: 0;
+  font-weight: bold;
+  cursor: pointer; 
+}
+.login_btn:hover {
+  background-color: #A0D468;
+}
+
+
+.logout_btn {
+  background-color: #be2922;
+  border: 0;
+  font-weight: bold;
+  cursor: pointer; 
+}
+.logout_btn:hover {
+  background-color: #be2922;
+}
