@@ -2,7 +2,6 @@ import './App.css';
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, Link } from "react-router-dom";
 import AppNavbar from './components/AppNavbar';
-import LogedNav from './components/LogedNav';
 import Footer from './components/Footer';
 import MainPage from './pages/MainPage';
 import Profile from './pages/Profile';
@@ -14,6 +13,7 @@ import All from './pages/All';
 import EditAccount from './pages/EditAccount';
 import Bookmark from './pages/Bookmark';
 import PersonalAll from './pages/PersonalAll';
+import Map from "./components/Map";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -30,20 +30,7 @@ function App() {
 
   return (
     <div>
-      <div>
-        {loggedIn ? (
-          <div>
-            <LogedNav />
-            <p>Welcome, you are logged in!</p>
-          </div>
-          ) : (
-            <div>
-              <AppNavbar />
-              <p>Please log in to continue.</p>
-            </div>
-          )}
-      </div>
-
+      <AppNavbar />
       <Routes>
         <Route path="/" element={<MainPage />} />
         <Route path="/profile" element={<Profile />} />
@@ -55,6 +42,7 @@ function App() {
         <Route path="/edit_account" element={<EditAccount/>}/>
         <Route path="/bookmark" element={<Bookmark/>}/>
         <Route path="/personal_all" element={<PersonalAll/>}/>
+        <Route path="/map" element={<Map/>}/>
       </Routes>
       <Footer />
     </div>
