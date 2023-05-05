@@ -1,1 +1,56 @@
-/* // 전체 게스글 보여주는  */
+/* // 전체 게시글 보여주는  */
+
+.card_container {
+  width: 250px;
+  height: auto;
+  border: 0;
+}
+
+.all_link {
+  text-decoration: none;
+  color: black;
+  /* font-weight: bold; */
+}
+
+.button-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.button-wrapper button:not(:last-child) {
+  margin-right: 30px;
+}
+
+.btn_custom {
+  background-color: #fff;
+  border-color: #A0D468;
+  color: black;
+  min-width: 100px;
+  border-radius: 20px;
+  border-width: 2px;
+}
+
+.btn_custom:hover{
+  background-color: white;
+  border: 2px solid #A0D468;;
+  color: black;
+}
+
+.pin_icon {
+  width: 20px;
+  height: 20px;
+  fill: black;
+  text-align: center;
+}
+
+.search_bar {
+  width: 50%;
+  height: 40px;
+  border: 0;
+  background-color: #cef1ab;
+  border-radius: 10px;
+  padding-left: 10px;
+  font-size: 16px;
+  font-weight: bold;
+}

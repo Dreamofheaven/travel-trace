@@ -10,17 +10,17 @@
   fill: #A0D468;
 }
 
-.background {
-  /* background-color: beige;
+/* .background {
+  background-color: beige;
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
   background-position: top center;
   background-size: cover;
   background-attachment: fixed;
-  background-origin: content-box;background-repeat: no-repeat; */
+  background-origin: content-box;background-repeat: no-repeat;
   height: 800px;
-}
+} */
 
 /* .box {
   background-color: rgba( 255, 255, 255, 0.5 );
