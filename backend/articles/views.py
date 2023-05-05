@@ -7,6 +7,7 @@ from rest_framework.decorators import api_view,permission_classes
 # from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
+from rest_framework.exceptions import AuthenticationFailed
 from django.shortcuts import get_object_or_404
 
 from rest_framework import viewsets
@@ -79,6 +80,17 @@ class NearbArticleListView(APIView):
 #         serializer = ArticleListSerializer(articles, many=True)
 #         return Response(serializer.data)    
 
+class CustomTokenAuthentication(TokenAuthentication):
+    def authenticate_credentials(self, key):
+        try:
+            token = self.get_model().objects.get(key=key)
+        except self.get_model().DoesNotExist:
+            raise AuthenticationFailed('Invalid token.')
+
+        if not token.user.is_active:
+            raise AuthenticationFailed('User inactive or deleted.')
+
+        return (token.user, token)
 
 class ArticleListView(generics.ListAPIView):
     authentication_classes = [TokenAuthentication]
