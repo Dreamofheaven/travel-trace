@@ -222,9 +222,9 @@ const SearchMap = () => {
       <div id="menu_wrap" className="bg_white">
         <div className="option">
           <div>
-            <form onsubmit="searchPlaces(); return false;">
+            <form onSubmit="searchPlaces(); return false;">
               키워드 :
-              <input type="text" value="냉면" id="keyword" size="15" /> 
+              <input type="text" defaultValue={myValue} onChange={handleInputChange} id="keyword" size="15" /> 
               <button type="submit">검색하기</button> 
             </form>
           </div>
