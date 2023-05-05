@@ -7,7 +7,12 @@ function All() {
   const [articles, setArticles] = useState([]);
 
   useEffect(() => {
+    const token = document.cookie.replace(/(?:(?:^|.*;\s*)access\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+    console.log(token)
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
     const fetchData = async () => {
+<<<<<<< HEAD
       try {
         const token = localStorage.getItem('access_token'); // 로컬 스토리지에서 인증 토큰 가져오기
         const response = await axios.get('http://127.0.0.1:8000/articles/', {
@@ -19,6 +24,10 @@ function All() {
       } catch (error) {
         console.error(error);
       }
+=======
+      const result = await axios.get('http://127.0.0.1:8000/articles/');
+      setArticles(result.data);
+>>>>>>> 62891ba296491d1fd857ac5167ce506bc4947ff3
     };
 
     fetchData();
@@ -39,15 +48,31 @@ function All() {
 }
 
 export default All;
+<<<<<<< HEAD
+=======
+
+
+
+
+/////////////////////////////////
+>>>>>>> 62891ba296491d1fd857ac5167ce506bc4947ff3
 // function All() {
 //   const [articles, setArticles] = useState([]);
 
 //   useEffect(() => {
 //     const fetchData = async () => {
+<<<<<<< HEAD
 //       const token = localStorage.getItem('access_token'); // 로컬 스토리지에서 인증 토큰 가져오기
 //       const result = await axios.get('http://127.0.0.1:8000/articles/', {
 //         headers: {
 //           Authorization: `Bearer ${token}` 
+=======
+//       const token = localStorage.getItem('access'); // 로컬 스토리지에서 인증 토큰 가져오기
+//       console.log(token)
+//       const result = await axios.get('http://127.0.0.1:8000/articles/', {
+//         headers: {
+//           Authorization: `Bearer ${token}`
+>>>>>>> 62891ba296491d1fd857ac5167ce506bc4947ff3
 //         }
 //       });
 //       setArticles(result.data);

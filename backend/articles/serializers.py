@@ -11,13 +11,14 @@ class ImageSerializer(serializers.ModelSerializer):
 class ArticleListSerializer(serializers.ModelSerializer):
     like_count = serializers.SerializerMethodField()
     views = serializers.IntegerField()
+    username = serializers.SerializerMethodField()
+    images = ImageSerializer(many=True)
 
     def get_like_count(self, instance):
         return instance.like_users.count()
 
     def get(self, request):
         articles = Article.objects.all()
-
         sort_category = request.query_params.get('sort_category', None)
         if sort_category:
             articles = Article.get_articles_by_category(sort_category)
@@ -27,9 +28,11 @@ class ArticleListSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Article
-        fields = ('user', 'id', 'title','content','location', 'rating','category','like_count','views')
+        fields = ('user', 'username', 'id', 'title','content','location', 'rating','category','like_count','views', 'images')
         read_only_fields = ('user', 'location', 'latitude', 'logitude')
 
+    def get_username(self, obj):
+        return obj.user.username
 
 
 class ArticleSerializer(serializers.ModelSerializer):
