@@ -20,7 +20,8 @@ function AppNavbar() {
   };
 
   return (
-    <Navbar bg='light' sticky='top' fill variant="tabs" defaultActiveKey="/home">
+    // <Navbar bg='light' sticky='top' fill variant="tabs" defaultActiveKey="/home">
+    <Navbar bg='light' sticky='top' defaultactivekey="/home">
       <Container fluid>
         <Nav.Item>
           <Navbar.Brand>

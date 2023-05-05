@@ -20,13 +20,13 @@ function Login() {
       const { access, refresh } = response.data;
 
       if (response && response.data) {
-        setCookies("access_token", response.data.token.access, { path: "/" });
-        setCookies("refresh_token", response.data.token.refresh, { path: "/" });
+        setCookies("access", response.data.token.access, { path: "/" });
+        setCookies("refresh", response.data.token.refresh, { path: "/" });
         console.log('Successfully logged in!');
         console.log(email, password);
         console.log(response.data);
         console.log(response.data.user.id);
-        // window.location.href = '/profile';
+        window.location.href = '/';
       }
 
       } catch (error) {
@@ -57,12 +57,12 @@ function Login() {
           />
         </div>
         <div>
-          <form onSubmit={handleLogin}>
-            <Form>
-              <Form.Group className="mb-3" controlId="formBasicEmail">
+          {/* <form onSubmit={handleLogin}> */}
+            <Form onSubmit={handleLogin}>
+              <Form.Group className="mb-3">
               <Form.Control size="lg" type="email" name="email" id="email" placeholder="이메일" value={email} onChange={handleFormChange}/>
               </Form.Group>
-              <Form.Group className="mb-3" controlId="formBasicPassword">
+              <Form.Group className="mb-3">
                 <Form.Control size="lg" type="password" name="password" id="password" placeholder="비밀번호" value={password} onChange={handleFormChange} />
               </Form.Group>
               <div className="d-grid gap-2 mb-5">
@@ -76,7 +76,7 @@ function Login() {
               </Form.Group>
               </div>
             </Form>
-          </form>
+          {/* </form> */}
         </div>
       </div>
     </Container>

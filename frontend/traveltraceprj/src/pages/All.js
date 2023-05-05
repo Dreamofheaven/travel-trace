@@ -8,7 +8,12 @@ function All() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await axios.get('http://127.0.0.1:8000/articles/');
+      const token = localStorage.getItem('access_token'); // 로컬 스토리지에서 인증 토큰 가져오기
+      const result = await axios.get('http://127.0.0.1:8000/articles/', {
+        headers: {
+          Authorization: 'Bearer ${token}' 
+        }
+      });
       setArticles(result.data);
     };
 
