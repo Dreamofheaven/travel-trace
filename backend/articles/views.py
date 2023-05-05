@@ -1,8 +1,8 @@
 from .serializers import ArticleSerializer, ArticleListSerializer, CommentSerializer
-from .models import Article, Comment, Route, Image
+from .models import Article, Comment, Image
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view,permission_classes
 # from rest_framework.decorators import authentication_classes, permission_classes
 # from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -27,7 +27,9 @@ from django.db.models import F
 # 다중 이미지
 from django.http import QueryDict
 
-
+# 카테고리 정렬
+from rest_framework import filters
+from django.http import Http404
 
 
 class NearbArticleListView(APIView):
@@ -77,37 +79,46 @@ class NearbArticleListView(APIView):
 #         return Response(serializer.data)    
 
 
-class ArticeListView(APIView):
+class ArticleListView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
+    serializer_class = ArticleListSerializer
+    filter_backends = [filters.OrderingFilter]
+    ordering_fields = ['category']
 
-    def get(self, request):
-        articles = Article.objects.all()
-        serializer = ArticleListSerializer(articles, many=True)
-        return Response(serializer.data)
+    def get_queryset(self):
+        category_name = self.kwargs.get('category_name')
+        if category_name:
+            # 카테고리로 필터링하여 게시글 조회
+            queryset = Article.objects.filter(category=category_name)
+        else:
+            # 전체 게시글 조회
+            queryset = Article.objects.all()
+
+        # 좋아요, 최신, 조회순 정렬
+        sort = self.request.query_params.get('sort')
+        if sort == 'likes':
+            queryset = queryset.annotate(like_count=Count('like_users')).order_by('-like_count')
+        elif sort == 'newest':
+            queryset = queryset.order_by('-created_at')
+        elif sort == 'views':
+            queryset = queryset.order_by('-views')
+
+        return queryset
 
     def post(self, request):
-        serializer = ArticleSerializer(data=request.data, context={'request': request})
-        # serializer = ArticleSerializer(data=request.data)
-        
+        tags = request.data.get('tags', [])  # 태그 데이터를 가져옵니다.
+        serializer = ArticleSerializer(data=request.data, context={'request': request, 'tags': tags})
         if serializer.is_valid(raise_exception=True):
             # 게시글 저장
             article = serializer.save(user=request.user)
 
-             # 이미지 파일 처리
-            images = request.FILES.getlist('images')  # 여러 개의 이미지 파일을 받습니다.
+            article.category = request.data.get('category')  # 카테고리 저장 추가
 
+            # 이미지 파일 처리
+            images = request.FILES.getlist('images')  # 여러 개의 이미지 파일을 받습니다.
             for image in images:
                 Image.objects.create(article=article, image=image)
-            
-            # 태그 추출 및 저장
-            # tags_input = request.data.get('tags', '')
-            # tags_list = tags_input.split()
-            # for tag_name in tags_list:
-            #     tag, created = Tag.objects.get_or_create(name=tag_name)
-            #     article.tags.add(tag)
-            routes_input = request.data.get('routes', [])
-            routes_str = ",".join(routes_input)
-            article.routes = routes_str
+
             location = request.data.get('location')
             # 카카오 API를 이용해 입력받은 장소의 좌표 정보를 받아옴
             client_id = os.environ.get('SOCIAL_AUTH_KAKAO_CLIENT_ID')
@@ -131,14 +142,19 @@ class ArticeListView(APIView):
 
             return Response(serializer.data, status=status.HTTP_200_OK)
 
-
 @api_view(['GET', 'DELETE', 'PUT'])
 # @authentication_classes([SessionAuthentication, BasicAuthentication])
 # @permission_classes([IsAuthenticated])
 def article_detail(request, article_pk):
-    article = Article.objects.get(pk=article_pk)
+    try:
+        article = Article.objects.get(pk=article_pk)
+    except Article.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
+        article.views += 1  # 조회수 증가
+        article.save()  # 조회수 업데이트
+
         serializer = ArticleSerializer(article)
         return Response(serializer.data)
 
@@ -152,30 +168,39 @@ def article_detail(request, article_pk):
             # 게시글의 평점을 업데이트
             rating = request.data.get('rating')
             article.rating = rating
+            article.category = request.data.get('category') 
+
             # 수정시 평점 업데이트 전 유요성검사 실시
             if rating is not None:
                 article.rating = rating
+            
+
             serializer.save(user=request.user) # user 필드를 현재 사용자로 설정
             return Response(serializer.data)
 
 
 @api_view(['GET'])
 def comment_list(request):
-    comments = Comment.objects.all()
+    comments = Comment.objects.filter(article__isnull=False)
     serializer = CommentSerializer(comments, many=True)
     return Response(serializer.data)
 
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 # @authentication_classes([SessionAuthentication, BasicAuthentication])
-# @permission_classes([IsAuthenticated])
 def comment_create(request, article_pk):
     article = Article.objects.get(pk=article_pk)
-    serializer = CommentSerializer(data=request.data)
-    if serializer.is_valid(raise_exception=True):
-        serializer.save(article=article)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    data = request.data.copy()
+    data['user'] = request.user.id
 
+    serializer = CommentSerializer(data=data)
+
+    if serializer.is_valid(raise_exception=True):
+        serializer.validated_data['article'] = article   # article 정보 추가
+        serializer.save()
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 @api_view(['GET', 'DELETE', 'PUT'])
 # @authentication_classes([SessionAuthentication, BasicAuthentication])
@@ -210,7 +235,7 @@ def like_article(request, article_pk):
 
 @api_view(['POST'])
 # @permission_classes([IsAuthenticated])
-def like_comment(request, comment_pk):
+def like_comment(request, article_pk, comment_pk):
     comment = Comment.objects.get(pk=comment_pk)
     user = request.user
     if user in comment.like_users.all():
@@ -222,37 +247,19 @@ def like_comment(request, comment_pk):
     serializer = CommentSerializer(comment)
     return Response({'is_liked': is_liked, 'comment': serializer.data})
 
-# 정렬 ( 좋아요 순, 최신순, 조회순 )
-class ArticleViewSet(viewsets.ModelViewSet):
-    serializer_class = ArticleSerializer
+# # 정렬 ( 좋아요 순, 최신순, 조회순 )
+# class ArticleViewSet(viewsets.ModelViewSet):
+#     queryset = Article.objects.all()
+#     serializer_class = ArticleSerializer
 
-    def get_queryset(self):
-        # 요청하는 쿼리 파라미터에서 sort 값을 가져옴
-        sort = self.request.query_params.get('sort')
-        # Article 모델 전체 쿼리셋을 변수에 저장
-        queryset = Article.objects.all()
+#     def get_queryset(self):
+#         sort = self.request.query_params.get('sort')
+#         queryset = super().get_queryset()
 
-        # 정렬 기준에 따라 
-        if sort == 'likes':
-            queryset = queryset.annotate(like_count=Count('like_users')).order_by('-like_count')
-        elif sort == 'newest':
-            queryset = queryset.order_by('-created_at')
-        elif sort == 'views':
-            queryset = queryset.order_by('-views')
-        return queryset
+#         if sort == 'newest':
+#             queryset = queryset.order_by('-created_at')
+#         elif sort == 'views':
+#             queryset = queryset.order_by('-views')
 
-#
-
-@api_view(['POST'])
-def routes(request, article_pk):
-    article = get_object_or_404(Article, pk=article_pk)
-    route_names = request.data.get('routes', [])  # 지역 이름 리스트를 받음
-
-    for route_name in route_names:
-        if route_name:
-            route, created = Route.objects.get_or_create(name=route_name)
-            article.routes.add(route)
-
-    return Response({'message': 'Routes added successfully.'}, status=status.HTTP_200_OK)
-
+#         return queryset
 
