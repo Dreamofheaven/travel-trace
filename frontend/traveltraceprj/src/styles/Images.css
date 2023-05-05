@@ -1,0 +1,48 @@
+.add_btn {
+  border: 1;
+  line-height: 2.5;
+  padding: 0 20px;
+  font-size: 1rem;
+  text-align: center;
+  color: #fff;
+  border-radius: 10px;
+  background-color: #A0D468;
+  box-shadow: 1px;
+}
+
+.add_btn2 {
+  border: 1;
+  line-height: 2.5;
+  padding: 0 20px;
+  font-size: 1rem;
+  text-align: center;
+  color: #fff;
+  border-radius: 10px;
+  background-color: #A0D468;
+  box-shadow: 1px;
+  display: none;
+}
+
+.add_picture {
+  height: 500px;
+  border: solid black 5px;
+  display: flex;
+}
+
+.img_container {
+  display: flex;
+  height: 300px;
+  width: 300px;
+  border: solid black 5px;
+}
+
+.trip_img {
+  width:90%;
+  height:90%;
+  object-fit:cover;
+}
+.x_icon {
+  width: 30px;
+  height: 30px;
+  fill: red;
+}

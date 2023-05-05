@@ -1,17 +1,29 @@
-// 게시글 작성 페이지
-import React, {useState} from 'react';
+// // 게시글 작성 페이지
+import React, { useState } from 'react';
 import Card from 'react-bootstrap/Card';
-import DatePicker from '../components/DatePicker';
+// import DatePicker from '../components/DatePicker';
 import { Button, Container, Stack, Image, InputGroup, Form, FormGroup, Row, Col } from 'react-bootstrap';
-import { Hearts } from 'react-bootstrap-icons'
+import Images from '../components/Images';
+import { Hearts, Plus, X} from 'react-bootstrap-icons';
 import "../styles/Post.css";
 
 function Post() {
+  const [images, setImages] = useState([]);
+
+  const handleImagesChange = (newImages) => {
+    setImages(newImages);
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    // handle form submission with images data
+  }
+
   return (
     <Container className='d-flex justify-content-center'>
       <Card className='card my-5'>
         <Card.Body>
-          <Form>
+          <Form onSubmit={handleSubmit}>
             <Row className="mb-3">
               <Col xs={9}>
                 <InputGroup className="mb-3">
@@ -38,24 +50,22 @@ function Post() {
               </Col>
             </Row> 
             <div>장소</div>
-            <div>사진</div>
+            <div></div>
             <InputGroup>
               <InputGroup.Text>내용</InputGroup.Text>
                 <Form.Control as="textarea" row={3} aria-label="With textarea" />
               </InputGroup>
             <p>경로</p>
+            <Images onChange={handleImagesChange} />
             <Button type="submit">입력</Button>
           </Form>
         </Card.Body>
       </Card>
     </Container>
-    
   );
-};
+}
 
 export default Post;
-
-
 // function Post() {
   
 //   const [selectedDate, setSelectedDate] = useState(new Date());
