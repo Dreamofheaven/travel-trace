@@ -80,20 +80,20 @@ class NearbArticleListView(APIView):
 #         serializer = ArticleListSerializer(articles, many=True)
 #         return Response(serializer.data)    
 
-class CustomTokenAuthentication(TokenAuthentication):
-    def authenticate_credentials(self, key):
-        try:
-            token = self.get_model().objects.get(key=key)
-        except self.get_model().DoesNotExist:
-            raise AuthenticationFailed('Invalid token.')
+# class CustomTokenAuthentication(TokenAuthentication):
+#     def authenticate_credentials(self, key):
+#         try:
+#             token = self.get_model().objects.get(key=key)
+#         except self.get_model().DoesNotExist:
+#             raise AuthenticationFailed('Invalid token.')
 
-        if not token.user.is_active:
-            raise AuthenticationFailed('User inactive or deleted.')
+#         if not token.user.is_active:
+#             raise AuthenticationFailed('User inactive or deleted.')
 
-        return (token.user, token)
+#         return (token.user, token)
 
 class ArticleListView(generics.ListAPIView):
-    authentication_classes = [TokenAuthentication]
+    # authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
     serializer_class = ArticleListSerializer
     filter_backends = [filters.OrderingFilter]
