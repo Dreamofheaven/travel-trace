@@ -7,7 +7,7 @@ function All() {
   const [articles, setArticles] = useState([]);
 
   useEffect(() => {
-    const token = localStorage.getItem('access');
+    const token = document.cookie.replace(/(?:(?:^|.*;\s*)access\s*\=\s*([^;]*).*$)|^.*$/, "$1");
     console.log(token)
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
