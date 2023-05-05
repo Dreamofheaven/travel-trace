@@ -2,13 +2,14 @@
 import React, { useState } from 'react';
 import Card from 'react-bootstrap/Card';
 // import DatePicker from '../components/DatePicker';
-import { Button, Container, Stack, Image, InputGroup, Form, FormGroup, Row, Col } from 'react-bootstrap';
-import Images from '../components/Images';
-import { Hearts, Plus, X} from 'react-bootstrap-icons';
+import { Button, Container, InputGroup, Form, Row, Col } from 'react-bootstrap';
+import ImageFuntion from '../components/Images';
+import Rating from '../components/Rating';
 import "../styles/Post.css";
 
 function Post() {
   const [images, setImages] = useState([]);
+  const [score, setScore] = useState(0); // score state 추가
 
   const handleImagesChange = (newImages) => {
     setImages(newImages);
@@ -16,7 +17,7 @@ function Post() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // handle form submission with images data
+    // handle form submission with images and score data
   }
 
   return (
@@ -42,22 +43,20 @@ function Post() {
                     <option>---</option>
                     <option value="1">힐링</option>
                     <option value="2">관광</option>
-                    <option value="3">맛집</option>
-                    <option value="4">카페</option>
+                    <option value="3">맛집/카페</option>
                     <option value="4">액티비티</option>
                   </Form.Select>
                 </InputGroup>
               </Col>
             </Row> 
+            <ImageFuntion onChange={handleImagesChange} />
             <div>장소</div>
-            <div></div>
             <InputGroup>
               <InputGroup.Text>내용</InputGroup.Text>
-                <Form.Control as="textarea" row={3} aria-label="With textarea" />
+                <Form.Control as="textarea" row={5} aria-label="With textarea" style={{ height: '300px' }} placeholder='여행의 추억, 고스란히 담아볼까요?!' />
               </InputGroup>
-            <p>경로</p>
-            <Images onChange={handleImagesChange} />
-            <Button type="submit">입력</Button>
+              <Rating setScore={setScore} /> {/* Rating 컴포넌트 추가 */}
+            <Button className='mt-2 create_btn' type="submit">후기 생성</Button>
           </Form>
         </Card.Body>
       </Card>
