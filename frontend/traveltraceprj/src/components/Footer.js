@@ -4,7 +4,7 @@ import "../styles/Footer.css";
 
 function Footer() {
   return (
-    <footer className="bg-light py-3">
+    <footer className="footer bg-light py-3">
       <div className='container text-center'>
         <p>저작권 @ 2023 6조 'chatGPT야 도와조'. All rights reserved.</p>
       </div>
