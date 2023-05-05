@@ -56,22 +56,20 @@ function SignUp() {
           />
         </div>
         <div>
-          <form onSubmit={handleSignUp}>
-            <Form>
-              <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                <Form.Control size="lg" name="username" type="text" id="username" placeholder="닉네임" value={username} onChange={handleFormChange}/>
-                </Form.Group>
-              <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Control size="lg" type="email" name="email" id="email" placeholder="이메일" value={email} onChange={handleFormChange}/>
+          <Form onSubmit={handleSignUp}>
+            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+              <Form.Control size="lg" name="username" type="text" placeholder="닉네임" value={username} onChange={handleFormChange}/>
               </Form.Group>
-              <Form.Group className="mb-3" controlId="formBasicPassword">
-                <Form.Control size="lg" type="password" id="password" name="password"  placeholder="비밀번호" value={password} onChange={handleFormChange} />
-              </Form.Group>
-              <div className="d-grid gap-2 mb-5">
-                <Button className='signup2_btn' size="lg" type="submit">회원가입</Button>
-              </div>
-            </Form>
-          </form>
+            <Form.Group className="mb-3" controlId="formBasicEmail">
+              <Form.Control size="lg" type="email" name="email" placeholder="이메일" value={email} onChange={handleFormChange}/>
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formBasicPassword">
+              <Form.Control size="lg" type="password" name="password"  placeholder="비밀번호" value={password} onChange={handleFormChange} />
+            </Form.Group>
+            <div className="d-grid gap-2 mb-5">
+              <Button className='signup2_btn' size="lg" type="submit">회원가입</Button>
+            </div>
+          </Form>
         </div>
       </div>
     </Container>
