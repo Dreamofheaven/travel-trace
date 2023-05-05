@@ -57,26 +57,24 @@ function Login() {
           />
         </div>
         <div>
-          <form onSubmit={handleLogin}>
-            <Form>
-              <Form.Group className="mb-3" controlId="formBasicEmail">
-              <Form.Control size="lg" type="email" name="email" id="email" placeholder="이메일" value={email} onChange={handleFormChange}/>
-              </Form.Group>
-              <Form.Group className="mb-3" controlId="formBasicPassword">
-                <Form.Control size="lg" type="password" name="password" id="password" placeholder="비밀번호" value={password} onChange={handleFormChange} />
-              </Form.Group>
-              <div className="d-grid gap-2 mb-5">
-                <Button className='login2_btn' size="lg" type="submit">로그인</Button>
-              <Form.Group>
-                <Form.Text className="text-muted d-flex justify-content-center">
-                  <Link className='signup_link' to="/Signup">
-                    회원가입
-                  </Link>
-                </Form.Text>
-              </Form.Group>
-              </div>
-            </Form>
-          </form>
+          <Form onSubmit={handleLogin}>
+            <Form.Group className="mb-3" controlId="formBasicEmail">
+            <Form.Control size="lg" type="email" name="email" placeholder="이메일" value={email} onChange={handleFormChange}/>
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formBasicPassword">
+              <Form.Control size="lg" type="password" name="password" placeholder="비밀번호" value={password} onChange={handleFormChange} />
+            </Form.Group>
+            <div className="d-grid gap-2 mb-5">
+              <Button className='login2_btn' size="lg" type="submit">로그인</Button>
+            <Form.Group>
+              <Form.Text className="text-muted d-flex justify-content-center">
+                <Link className='signup_link' to="/Signup">
+                  회원가입
+                </Link>
+              </Form.Text>
+            </Form.Group>
+            </div>
+          </Form>
         </div>
       </div>
     </Container>
