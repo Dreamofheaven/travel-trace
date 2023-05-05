@@ -1,15 +1,16 @@
 /* 게시글 작성.css */
 
 .card {
-  height: 1000px;
   width: 800px;
   border-color: #A0D468;
   border-width: 2px;
 }
 
-/* .hearts_icon {
-  width: 15px;
-  height: 15px;
-  fill: red;
-} */
+.create_btn {
+  margin-left: 88%;
+  white-space: nowrap;
+  background-color: #A0D468;
+  border: 0;
+  font-weight: bold;
 
+}

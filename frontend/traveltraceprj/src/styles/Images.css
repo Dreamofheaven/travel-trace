@@ -6,8 +6,8 @@
   text-align: center;
   color: #fff;
   border-radius: 10px;
-  background-color: #A0D468;
   box-shadow: 1px;
+  margin-left: 90%;
 }
 
 .add_btn2 {
@@ -18,22 +18,24 @@
   text-align: center;
   color: #fff;
   border-radius: 10px;
-  background-color: #A0D468;
   box-shadow: 1px;
   display: none;
 }
 
 .add_picture {
-  height: 500px;
-  border: solid black 5px;
+  margin-bottom: 20px;
+}
+
+.order_picture {
   display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
 
 .img_container {
   display: flex;
-  height: 300px;
-  width: 300px;
-  border: solid black 5px;
+  height: 150px;
+  width: 150px;
 }
 
 .trip_img {
@@ -41,8 +43,14 @@
   height:90%;
   object-fit:cover;
 }
-.x_icon {
+.trash_icon {
+  fill: rgb(86, 82, 82);
+  cursor: pointer; 
+}
+
+.images_icon {
   width: 30px;
   height: 30px;
-  fill: red;
+  fill: #A0D468;
+  cursor: pointer; 
 }
