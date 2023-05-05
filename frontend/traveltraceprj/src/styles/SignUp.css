@@ -1,0 +1,9 @@
+.signup2_btn {
+  background-color: #A0D468;
+  border: 0;
+  font-weight: bold;
+  cursor: pointer; 
+}
+.signup2_btn:hover {
+  background-color: #A0D468;
+}

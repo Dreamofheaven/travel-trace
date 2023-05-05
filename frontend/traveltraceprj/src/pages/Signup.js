@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useCookies } from 'react-cookie';
 import axios from "axios";
-// import "../styles/SignUp.css";
-
+import "../styles/SignUp.css";
+import { Container, Button, Form } from 'react-bootstrap';
+import logo from '../assets/signup_logo.png'
 
 function SignUp() {
   const [cookies, setCookies] = useCookies(['access', 'refresh']);
@@ -44,22 +45,53 @@ function SignUp() {
   };
 
   return (
-    <form onSubmit={handleSignUp}>
-      <label>
-        Username:
-        <input type="text" name="username" value={username} onChange={handleFormChange} />
-      </label>
-      <label>
-        Email:
-        <input type="email" name="email" value={email} onChange={handleFormChange} />
-      </label>
-      <label>
-        Password:
-        <input type="password" name="password" value={password} onChange={handleFormChange} />
-      </label>
-      <button type="submit">가입</button>
-    </form>
+    <Container>
+      <div className='d-flex flex-column justify-content-center align-items-center'>
+        <div>
+          <img
+            src={logo}
+            height="200"
+            className="my-5"
+            alt="Travel-trace logo"
+          />
+        </div>
+        <div>
+          <form onSubmit={handleSignUp}>
+            <Form>
+              <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                <Form.Control size="lg" name="username" type="text" id="username" placeholder="닉네임" value={username} onChange={handleFormChange}/>
+                </Form.Group>
+              <Form.Group className="mb-3" controlId="formBasicEmail">
+                <Form.Control size="lg" type="email" name="email" id="email" placeholder="이메일" value={email} onChange={handleFormChange}/>
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="formBasicPassword">
+                <Form.Control size="lg" type="password" id="password" name="password"  placeholder="비밀번호" value={password} onChange={handleFormChange} />
+              </Form.Group>
+              <div className="d-grid gap-2 mb-5">
+                <Button className='signup2_btn' size="lg" type="submit">회원가입</Button>
+              </div>
+            </Form>
+          </form>
+        </div>
+      </div>
+    </Container>
   );
 }
 
 export default SignUp;
+
+{/* <form onSubmit={handleSignUp}>
+<label>
+  Username:
+  <input type="text" name="username" value={username} onChange={handleFormChange} />
+</label>
+<label>
+  Email:
+  <input type="email" name="email" value={email} onChange={handleFormChange} />
+</label>
+<label>
+  Password:
+  <input type="password" name="password" value={password} onChange={handleFormChange} />
+</label>
+<button type="submit">가입</button>
+</form> */}

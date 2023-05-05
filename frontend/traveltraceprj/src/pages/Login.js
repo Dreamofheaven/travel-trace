@@ -51,8 +51,8 @@ function Login() {
         <div>
           <img
             src={logo}
-            height="350"
-            className="login_logo"
+            height="200"
+            className="login_logo my-5"
             alt="Travel-trace logo"
           />
         </div>
@@ -60,16 +60,16 @@ function Login() {
           <form onSubmit={handleLogin}>
             <Form>
               <Form.Group className="mb-3" controlId="formBasicEmail">
-              <Form.Control size="lg" type="email" id="email" placeholder="이메일" value={email} onChange={handleFormChange}/>
+              <Form.Control size="lg" type="email" name="email" id="email" placeholder="이메일" value={email} onChange={handleFormChange}/>
               </Form.Group>
               <Form.Group className="mb-3" controlId="formBasicPassword">
-                <Form.Control size="lg" type="password" id="password" placeholder="비밀번호" value={password} onChange={handleFormChange} />
+                <Form.Control size="lg" type="password" name="password" id="password" placeholder="비밀번호" value={password} onChange={handleFormChange} />
               </Form.Group>
               <div className="d-grid gap-2 mb-5">
                 <Button className='login2_btn' size="lg" type="submit">로그인</Button>
               <Form.Group>
                 <Form.Text className="text-muted d-flex justify-content-center">
-                  <Link className='signup_link' to="/Signup.js">
+                  <Link className='signup_link' to="/Signup">
                     회원가입
                   </Link>
                 </Form.Text>
