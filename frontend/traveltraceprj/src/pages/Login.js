@@ -20,13 +20,13 @@ function Login() {
       const { access, refresh } = response.data;
 
       if (response && response.data) {
-        setCookies("access_token", response.data.token.access, { path: "/" });
-        setCookies("refresh_token", response.data.token.refresh, { path: "/" });
+        setCookies("access", response.data.token.access, { path: "/" });
+        setCookies("refresh", response.data.token.refresh, { path: "/" });
         console.log('Successfully logged in!');
         console.log(email, password);
         console.log(response.data);
         console.log(response.data.user.id);
-        // window.location.href = '/profile';
+        window.location.href = '/';
       }
 
       } catch (error) {
