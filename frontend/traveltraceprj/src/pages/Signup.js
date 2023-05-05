@@ -13,8 +13,6 @@ function SignUp() {
 
   const handleSignUp = async (event) => {
     event.preventDefault();
-
-    console.log(username, email, password)
     
     try {
       const response = await axios.post('http://127.0.0.1:8000/accounts/signup/', {username, email, password});
@@ -22,9 +20,8 @@ function SignUp() {
       const { access, refresh } = response.data.token;
       setCookies('access', access, { secure: true, sameSite: 'strict' });
       setCookies('refresh', refresh, { secure: true, sameSite: 'strict' });
-      // setCookie('jwt', response.data.token.access, { path: '/' });
-      // console.log('jwt');
-      console.log('Successfully signed up and logged in!');
+
+      console.log('Successfully signed up!');
       // 리다이렉트 등 다른 작업 수행
     } catch (error) {
       console.error(error.response.data);

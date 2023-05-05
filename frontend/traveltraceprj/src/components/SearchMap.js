@@ -11,21 +11,6 @@ const SearchMap = () => {
     setMyValue(event.target.value);
   }
 
-  // 키워드 검색을 요청하는 함수입니다
-  function searchPlaces(event) {
-    event.preventDefault();
-      
-    var keyword = document.getElementById('keyword').value;
-
-    if (!keyword.replace(/^\s+|\s+$/g, '')) {
-      // alert('키워드를 입력해주세요!');
-      return false;
-    }
-
-      // 장소검색 객체를 통해 키워드로 장소검색을 요청합니다
-      // ps.keywordSearch( keyword, placesSearchCB); 
-    }
-
   useEffect(() => {
     // 마커를 담을 배열입니다
     var markers = [];
@@ -48,20 +33,20 @@ const SearchMap = () => {
     // 키워드로 장소를 검색합니다
     searchPlaces();
 
-    // // 키워드 검색을 요청하는 함수입니다
-    // function searchPlaces(event) {
-    //   event.preventDefault();
+    // 키워드 검색을 요청하는 함수입니다
+    function searchPlaces(event) {
+      event.preventDefault();
       
-    //   var keyword = document.getElementById('keyword').value;
+      var keyword = document.getElementById('keyword').value;
 
-    //   if (!keyword.replace(/^\s+|\s+$/g, '')) {
-    //     // alert('키워드를 입력해주세요!');
-    //     return false;
-    //   }
+      if (!keyword.replace(/^\s+|\s+$/g, '')) {
+        // alert('키워드를 입력해주세요!');
+        return false;
+      }
 
-    //   // 장소검색 객체를 통해 키워드로 장소검색을 요청합니다
-    //   ps.keywordSearch( keyword, placesSearchCB); 
-    // }
+      // 장소검색 객체를 통해 키워드로 장소검색을 요청합니다
+      ps.keywordSearch( keyword, placesSearchCB); 
+    }
 
     function placesSearchCB(data, status, pagination) {
       if (status === kakao.maps.services.Status.OK) {
@@ -242,16 +227,13 @@ const SearchMap = () => {
       <div id="myMap" style={{ width: '100%', height: '500px', position: 'relative', overflow: 'hidden' }}>
         지도
       </div>
-
       <div id="menu_wrap" className="bg_white">
         <div className="option">
           <div>
-            {/* <form onSubmit="searchPlaces(); return false;"> */}
             <form onSubmit={searchPlaces}>
               키워드 :
               <input type="text" defaultValue={myValue} onChange={handleInputChange} id="keyword" size="15" /> 
               <button type="submit">검색</button> 
-              {/* <button onClick={searchPlaces}>검색하기</button>  */}
             </form>
           </div>
         </div>
