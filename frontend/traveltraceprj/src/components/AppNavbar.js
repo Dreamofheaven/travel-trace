@@ -4,7 +4,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import '../styles/AppNavbar.css'
 import logo from '../assets/logo.png'
 import { Person } from 'react-bootstrap-icons'
-import Logout from './Logout';
 import axios from 'axios';
 
 
