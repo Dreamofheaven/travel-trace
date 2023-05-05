@@ -8,6 +8,7 @@ from rest_framework.decorators import api_view,permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.exceptions import AuthenticationFailed
+from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.shortcuts import get_object_or_404
 
 from rest_framework import viewsets
@@ -93,7 +94,7 @@ class NearbArticleListView(APIView):
 #         return (token.user, token)
 
 class ArticleListView(generics.ListAPIView):
-    # authentication_classes = [TokenAuthentication]
+    authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
     serializer_class = ArticleListSerializer
     filter_backends = [filters.OrderingFilter]
