@@ -5,6 +5,7 @@ import '../styles/AppNavbar.css'
 import logo from '../assets/logo.png'
 import { Person } from 'react-bootstrap-icons'
 import axios from 'axios';
+import { useCookies } from 'react-cookie';
 
 
 function AppNavbar() {
@@ -16,14 +17,16 @@ function AppNavbar() {
     setIsLoggedIn(true);
     navigate('/login'); // 페이지 이동
   };
-
+  
+  const [cookies, setCookie, removeCookie] = useCookies(['access', 'refresh']);
+  
   const handleLogout = () => {
     setIsLoggedIn(false);
 
     axios.delete('http://127.0.0.1:8000/accounts/')
     .then(() => {
-      localStorage.removeItem('access');
-      localStorage.removeItem('refresh');
+      removeCookie('access');
+      removeCookie('refresh');
       // 로그아웃 후 처리할 작업이 있다면 여기에 추가
       console.log('로그아웃 성공')
     })
