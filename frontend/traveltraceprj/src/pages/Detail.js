@@ -8,15 +8,14 @@ import { useCookies } from 'react-cookie';
 function Detail() {
   const [article, setArticle] = useState(null);
 
-  const { id } = useParams(); // 디테일이랑 all 연결
-  const [cookies] = useCookies(['access', 'refresh']);//쿠키
+  const { id } = useParams();
+  const [cookies] = useCookies(['access', 'refresh']);
   
-  const [commentCount, setCommentCount] = useState(0); // 댓글 개수 상태 변수
+  const [commentCount, setCommentCount] = useState(0);
   const [comments, setComments] = useState([]);
-  const [content, setContent] = useState([]);//댓글 입력해서 보내기 변수
-  const [newContent, setNewContent] = useState([]);//댓글 입력해서 보내기 변수
+  const [content, setContent] = useState('');
+  const [newContent, setNewContent] = useState([]);
 
-  // 작성일(년월일)
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const year = date.getFullYear();
@@ -26,76 +25,58 @@ function Detail() {
   };
 
   const handleCommentChange = (event) => {
-    setContent(event.target.value); // 선택된 값으로 상태 업데이트
-    console.log('댓글이 입력되었다.')
-    console.log(content) 
-  }
+    setContent(event.target.value);
+  };
+
+  const fetchComments = async () => {
+    try {
+      const response = await axios.get(`http://127.0.0.1:8000/articles/${id}/comments`);
+      setComments(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const fetchCommentCount = async () => {
+    try {
+      const response = await axios.get(`http://127.0.0.1:8000/articles/${id}/`);
+      setCommentCount(response.data.comment_count);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const handleSubmit = (event) => {
-    console.log("입력을 눌렀다.")
     event.preventDefault();
     setContent('');
-
-    // HTTP POST 요청 보내기
-    axios.post(`http://127.0.0.1:8000/articles/${id}/comments/`, {content},{
-      headers: {
-        Authorization: `Bearer ${cookies.access}`, // access 토큰을 요청 헤더에 포함
-      },
-    })
-    .then(response => {
-      console.log(response);
-      setNewContent([...newContent, content]);
+    console.log(content); // content 값 확인
+    axios.post(
+      `http://127.0.0.1:8000/articles/${id}/comments/create/`,
+      { content },
+      {
+        headers: {
+          Authorization: `Bearer ${cookies.access}`,
+        },
+      }
+    )
+    
+    .then((response) => {
+      setComments([...comments, { content, user: article.username, created_at: new Date().toISOString() }]);
+      setCommentCount(commentCount + 1);
       setContent('');
-      console.log(newContent)
     })
-    .catch(error => {
+    .catch((error) => {
       console.log(error);
     });
-    setContent('');
-    // // HTTP GET 요청 보내기
-    // axios.get(`http://127.0.0.1:8000/articles/${id}/`, {
-    //   headers: {
-    //     Authorization: `Bearer ${cookies.access}`, // access 토큰을 요청 헤더에 포함
-    //   },
-    // })
-    // .then(response => {
-    //   console.log(response);
-    // })
-    // .catch(error => {
-    //   console.log(error);
-    // });
-  }
+  };
 
   useEffect(() => {
     const fetchArticle = async () => {
       try {
-        const response = await axios.get(`http://127.0.0.1:8000/articles/${id}/`); // 디테일과 all 연결을 위한 url파라미터
-        console.log("이거의 id파람스: " + id)
-        setArticle(response.data);
-        console.log('아티클:'+ {id});
-      } catch (error) {
-        console.error(error);
-        console.log('아티클:'+ {id});
-      }
-    };
-    const fetchCommentCount = async () => {
-      try {
         const response = await axios.get(`http://127.0.0.1:8000/articles/${id}/`);
-        setCommentCount(response.data.comment_count);
-        console.log(comments)
-        console.log('댓글카운트:'+ {id});
+        setArticle(response.data);
       } catch (error) {
         console.error(error);
-        console.log('댓글카운트:'+ {id});
-      }
-    };
-    const fetchComments = async () => {
-      try {
-        const response = await axios.get(`http://127.0.0.1:8000/articles/${id}/comments`);
-        setComments(response.data);
-        console.log('댓글:'+ {id});
-      } catch (error) {
-        console.error(error);
-        console.log('댓글:'+ {id});
       }
     };
 
@@ -105,10 +86,10 @@ function Detail() {
   }, []);
 
   if (!article) {
-    return <div>Loading...</div>; // 로딩 상태 표시
+    return <div>Loading...</div>;
   }
 
-  return (
+    return (
     <Container className="mt-5">
       <div className="border p-4">
         <div className='d-flex justify-content-between align-items-center'>
@@ -187,24 +168,29 @@ function Detail() {
         <div>
           <p>=============댓글보기테스트===========</p>
           {newContent.map((item, index) => (
-            <p key={index}>{item}</p>
-          ))}
-        </div>
-        
-        {comments.map((comment) => (
-          <div key={comment.id}>
-            <div className="d-flex mb-3">
-              <p className="ms-3">{comment.user}</p>
-              <p className="ms-auto me-3">{formatDate(comment.created_at)}</p>
-            </div>
-            <div className="d-flex align-items-center">
-              <p>{comment.content}</p>
-              <button className="btn btn-success ms-auto" style={{ backgroundColor: '#A0D468', border: 'none' }}>댓글 좋아요</button>
-            </div>
-            <hr className="my-4" />
+            <div key={index} className="d-flex mb-3">
+            <p className="ms-3">{article.username}</p>
+            <p className="ms-auto me-3">{formatDate(new Date().toISOString())}</p>
+            <p>{item}</p>
+            <button className="btn btn-success ms-auto" style={{ backgroundColor: '#A0D468', border: 'none' }}>댓글 좋아요</button>
           </div>
         ))}
       </div>
+    
+      {comments.map((comment) => (
+        <div key={comment.id}>
+          <div className="d-flex mb-3">
+            <p className="ms-3">{comment.user}</p>
+            <p className="ms-auto me-3">{formatDate(comment.created_at)}</p>
+          </div>
+          <div className="d-flex align-items-center">
+            <p>{comment.content}</p>
+            <button className="btn btn-success ms-auto" style={{ backgroundColor: '#A0D468', border: 'none' }}>댓글 좋아요</button>
+          </div>
+          <hr className="my-4" />
+        </div>
+      ))}
+    </div>
       </div>
   
     </Container>
