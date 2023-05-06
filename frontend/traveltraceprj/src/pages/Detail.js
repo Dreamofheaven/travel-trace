@@ -25,7 +25,7 @@ function Detail() {
     const fetchArticle = async () => {
       try {
         const response = await axios.get('http://127.0.0.1:8000/articles/${id}/'); // 디테일과 all 연결을 위한 url파라미터
-        console.log(id)
+        console.log("이거의 id파람스: " + id)
         setArticle(response.data);
       } catch (error) {
         console.error(error);
@@ -33,7 +33,7 @@ function Detail() {
     };
     const fetchCommentCount = async () => {
       try {
-        const response = await axios.get(`http://127.0.0.1:8000/articles/2/`);
+        const response = await axios.get(`http://127.0.0.1:8000/articles/${id}/`);
         setCommentCount(response.data.comment_count);
       } catch (error) {
         console.error(error);
@@ -41,7 +41,7 @@ function Detail() {
     };
     const fetchComments = async () => {
       try {
-        const response = await axios.get(`http://127.0.0.1:8000/articles/2/comments`);
+        const response = await axios.get(`http://127.0.0.1:8000/articles/${id}/comments`);
         setComments(response.data);
       } catch (error) {
         console.error(error);
