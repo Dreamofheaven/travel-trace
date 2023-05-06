@@ -10,10 +10,13 @@ function ImageFuntion({images, setShowImages}) {
     console.log(event);
     const imageLists = event.target.files;
     let imageUrlLists = [...images];
+    const formData = new FormData();
 
     for (let i = 0; i < imageLists.length; i++) {
-      const currentImageUrl = URL.createObjectURL(imageLists[i]);
+      const file = imageLists[i]
+      const currentImageUrl = URL.createObjectURL(file);
       imageUrlLists.push(currentImageUrl);
+      formData.append('images', file);
     }
 
     if (imageUrlLists.length > 10) {
