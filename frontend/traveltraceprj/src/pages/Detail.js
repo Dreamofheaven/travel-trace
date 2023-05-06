@@ -33,7 +33,7 @@ function Detail() {
     };
     const fetchCommentCount = async () => {
       try {
-        const response = await axios.get(`http://127.0.0.1:8000/articles/1/`);
+        const response = await axios.get(`http://127.0.0.1:8000/articles/2/`);
         setCommentCount(response.data.comment_count);
       } catch (error) {
         console.error(error);
@@ -41,7 +41,7 @@ function Detail() {
     };
     const fetchComments = async () => {
       try {
-        const response = await axios.get(`http://127.0.0.1:8000/articles/1/comments`);
+        const response = await axios.get(`http://127.0.0.1:8000/articles/2/comments`);
         setComments(response.data);
       } catch (error) {
         console.error(error);
