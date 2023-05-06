@@ -62,9 +62,7 @@ function All() {
                 }
                 <Card.Body className='p-2'>
                   <Card.Title>
-                    <p>{article.id}</p>
                     <Link className='all_link' to={`/detail/${article.id}/`}>{article.title}</Link>
-                    {article.title}
                   </Card.Title>
                   <Card.Text>
                     <div className='d-flex justify-content-between align-items-center'>
