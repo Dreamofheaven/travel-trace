@@ -19,14 +19,19 @@ function Rating({ rating, setCountStar }) {
       if (clickStates[i] === true) {
         star_count++;
       }
+      setClicked(clickStates);
     }
     console.log("별점 : " + star_count)
     setCountStar(star_count);
   };
 
   useEffect(() => {
+    sendReview();
   }, [clicked]); //컨디마 컨디업
 
+  const sendReview = () => {
+    let score = clicked.filter(Boolean).length;
+  };
   return (
     <Wrap>
       <RatingText className="rating_title">이 여행지는 어땠나요?</RatingText>
