@@ -11,24 +11,25 @@ const SearchMap = () => {
     setMyValue(event.target.value);
   }
 
-  useEffect(() => {
+  // useEffect(() => {
+  // },[]);
     // 마커를 담을 배열입니다
-    var markers = [];
+    const markers = [];
 
-    var mapContainer = document.getElementById('myMap'), // 지도를 표시할 div 
-        mapOption = {
-        center: new kakao.maps.LatLng(37.566826, 126.9786567), // 지도의 중심좌표
-        level: 3 // 지도의 확대 레벨
+    const mapContainer = document.getElementById('myMap'), // 지도를 표시할 div 
+    mapOption = {
+      center: new kakao.maps.LatLng(37.566826, 126.9786567), // 지도의 중심좌표
+      level: 3 // 지도의 확대 레벨
     };  
-
+    
     // 지도를 생성합니다    
-    var map = new kakao.maps.Map(mapContainer, mapOption); 
+    const map = new kakao.maps.Map(mapContainer, mapOption); 
 
     // 장소 검색 객체를 생성합니다
-    var ps = new kakao.maps.services.Places();  
+    const ps = new kakao.maps.services.Places();  
 
     // 검색 결과 목록이나 마커를 클릭했을 때 장소명을 표출할 인포윈도우를 생성합니다
-    var infowindow = new kakao.maps.InfoWindow({zIndex:1});
+    const infowindow = new kakao.maps.InfoWindow({zIndex:1});
 
     // 키워드로 장소를 검색합니다
     searchPlaces();
@@ -37,7 +38,7 @@ const SearchMap = () => {
     function searchPlaces(event) {
       event.preventDefault();
       
-      var keyword = document.getElementById('keyword').value;
+      const keyword = document.getElementById('keyword').value;
 
       if (!keyword.replace(/^\s+|\s+$/g, '')) {
         // alert('키워드를 입력해주세요!');
@@ -68,11 +69,11 @@ const SearchMap = () => {
 
     function displayPlaces(places) {
 
-      var listEl = document .getElementById('placesList'),
-          menuEl = document .getElementById('menu_wrap'),
-          fragment = document .createDocumentFragment(),
-          bounds = new kakao.maps.LatLngBounds(),
-          listStr = '';
+      const listEl = document .getElementById('placesList'),
+            menuEl = document .getElementById('menu_wrap'),
+            fragment = document .createDocumentFragment(),
+            bounds = new kakao.maps.LatLngBounds(),
+            listStr = '';
 
       // 검색 결과 목록에 추가된 항목들을 제거합니다
       removeAllChildNods(listEl);
@@ -82,9 +83,9 @@ const SearchMap = () => {
 
       for (var i=0; i<places.length; i++) {
         // 마커를 생성하고 지도에 표시합니다
-        var placePosition = new kakao.maps.LatLng(places[i].y, places[i].x),
-            marker = addMarker(placePosition, i), 
-            itemEl = getListItem(i, places[i]); // 검색 결과 항목 Element를 생성합니다
+        const placePosition = new kakao.maps.LatLng(places[i].y, places[i].x),
+              marker = addMarker(placePosition, i), 
+              itemEl = getListItem(i, places[i]); // 검색 결과 항목 Element를 생성합니다
 
         // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
         // LatLngBounds 객체에 좌표를 추가합니다
@@ -124,8 +125,8 @@ const SearchMap = () => {
 
     // 검색결과 항목을 Element로 반환하는 함수입니다
     function getListItem(index, places) {
-      var el = document.createElement('li'),
-      itemStr = '<span class="markerbg marker_' + (index+1) + '"></span>' +
+      const el = document.createElement('li'),
+            itemStr = '<span class="markerbg marker_' + (index+1) + '"></span>' +
               '<div class="info">' +
               '   <h5>' + places.place_name + '</h5>';
 
@@ -147,13 +148,13 @@ const SearchMap = () => {
 
     // 마커를 생성하고 지도 위에 마커를 표시하는 함수입니다
     function addMarker(position, idx, title) {
-      var imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png', // 마커 이미지 url, 스프라이트 이미지를 씁니다
-          imageSize = new kakao.maps.Size(36, 37),  // 마커 이미지의 크기
-          imgOptions =  {
-            spriteSize : new kakao.maps.Size(36, 691), // 스프라이트 이미지의 크기
-            spriteOrigin : new kakao.maps.Point(0, (idx*46)+10), // 스프라이트 이미지 중 사용할 영역의 좌상단 좌표
-            offset: new kakao.maps.Point(13, 37) // 마커 좌표에 일치시킬 이미지 내에서의 좌표
-          },
+      const imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png', // 마커 이미지 url, 스프라이트 이미지를 씁니다
+            imageSize = new kakao.maps.Size(36, 37),  // 마커 이미지의 크기
+            imgOptions =  {
+              spriteSize : new kakao.maps.Size(36, 691), // 스프라이트 이미지의 크기
+              spriteOrigin : new kakao.maps.Point(0, (idx*46)+10), // 스프라이트 이미지 중 사용할 영역의 좌상단 좌표
+              offset: new kakao.maps.Point(13, 37) // 마커 좌표에 일치시킬 이미지 내에서의 좌표
+            },
           markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imgOptions),
             marker = new kakao.maps.Marker({
             position: position, // 마커의 위치
@@ -176,9 +177,9 @@ const SearchMap = () => {
 
     // 검색결과 목록 하단에 페이지번호를 표시는 함수입니다
     function displayPagination(pagination) {
-      var paginationEl = document.getElementById('pagination'),
-          fragment = document.createDocumentFragment(),
-          i; 
+      const paginationEl = document.getElementById('pagination');
+      const fragment = document.createDocumentFragment();
+      let i;
 
       // 기존에 추가된 페이지번호를 삭제합니다
       while (paginationEl.hasChildNodes()) {
@@ -186,7 +187,7 @@ const SearchMap = () => {
       }
 
       for (i=1; i<=pagination.last; i++) {
-        var el = document.createElement('a');
+        const el = document.createElement('a');
         el.href = "#";
         el.innerHTML = i;
 
@@ -220,7 +221,6 @@ const SearchMap = () => {
         el.removeChild (el.lastChild);
       }
     }
-  });
 
   return (
     <div className="map_wrap d-flex">
