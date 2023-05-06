@@ -14,6 +14,7 @@ import EditAccount from './pages/EditAccount';
 import Bookmark from './pages/Bookmark';
 import PersonalAll from './pages/PersonalAll';
 import Map from "./components/Map";
+import Map2 from "./components/Map2";
 import Test from "./pages/Test";
 import { useParams } from 'react-router-dom';
 
@@ -47,6 +48,7 @@ function App() {
         <Route path="/bookmark" element={<Bookmark/>}/>
         <Route path="/personal_all" element={<PersonalAll/>}/>
         <Route path="/map" element={<Map/>}/>
+        <Route path="/map_second" element={<Map2/>}/>
         <Route path="/test" element={<Test/>}/>
         
       </Routes>
