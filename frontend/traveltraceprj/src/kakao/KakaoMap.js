@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react'
-// import Test from '../pages/Test'
+import Test from '../pages/Test'
 
 const { kakao } = window
 
 const KakaoMap = ({ searchPlace, setLocation, setPlaceName }) => {
   // const [placeName, setPlaceName] = useState('')
+
   const [InputText, setInputText] = useState('')
   const [Place, setPlace] = useState('')
   // const [address, setAddress] = useState('')
+
 
   const onChange = (e) => {
     setInputText(e.target.value)

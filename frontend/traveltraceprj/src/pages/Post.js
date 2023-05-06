@@ -7,40 +7,66 @@ import ImageFuntion from '../components/Images';
 import Rating from '../components/Rating';
 import "../styles/Post.css";
 import axios from 'axios';
-
+import { useCookies } from 'react-cookie';
+// import Map from '../components/Map';
 
 function Post() {
  
   // 서버로 보내기 위한 변수들
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+  const [category, setCategory] = useState(''); // 선택된 값을 상태로 유지
+ 
+  //쿠키
+  const [cookies] = useCookies(['access', 'refresh']);
 
   // 이미지관련
-  const [images, setImages] = useState([]);
-  const [score, setScore] = useState(0); // score state 추가
+  // const [images, setImages] = useState([]);
+  const [images, setShowImages] = useState([]);
+  // const [file,setFile] = useState()
 
-  const token = '';
+  //레이팅
+  const [rating, setCountStar] = useState(0); 
 
-  const handleImagesChange = (newImages) => {
-    setImages(newImages);
+  // const handleImagesChange = (event) => {
+
+  //   const formData = new FormData();
+
+  //   if(event.target.files){
+  //     const uploadFile = event.target.files[0]
+  //     formData.append('file',uploadFile)
+  //     setFile(uploadFile)
+  //     console.log(uploadFile)
+  //     console.log('===useState===')
+  //     console.log(file)
+  //   }
+
+  // }
+
+  // 카테고리 처리
+  const handleCategoryChange = (event) => {
+    setCategory(event.target.value); // 선택된 값으로 상태 업데이트
   }
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
+    // const formData = new FormData();
+    // formData.append('file',file)
+
     // HTTP POST 요청 보내기
-    axios.post('http://127.0.0.1:8000/articles/', {title, content, images}, {
+    axios.post('http://127.0.0.1:8000/articles/', {title, content, category, rating, images}, {
       headers: {
-        'Authorization': `Bearer ${token}`
-      }
+        Authorization: `Bearer ${cookies.access}`, // access 토큰을 요청 헤더에 포함
+      },
     })
-    
       .then(response => {
         console.log(response);
         // 게시글 작성 성공 후 처리할 작업
       })
       .catch(error => {
         console.log(error);
+        console.log(title, content, rating, "실패!", category, images)
         // 게시글 작성 실패 후 처리할 작업
       });
   }
@@ -66,7 +92,7 @@ function Post() {
               <Col>
                 <InputGroup className="mb-3">
                   <InputGroup.Text id="basic-addon1">카테고리</InputGroup.Text>
-                  <Form.Select aria-label='Default select example'>
+                  <Form.Select aria-label='Default select example' onChange={handleCategoryChange}>
                     <option>---</option>
                     <option value="1">힐링</option>
                     <option value="2">관광</option>
@@ -76,8 +102,11 @@ function Post() {
                 </InputGroup>
               </Col>
             </Row> 
-            <ImageFuntion onChange={handleImagesChange} />
+            {/* <ImageFuntion onChange={handleImagesChange} /> */}
+            <ImageFuntion images={images} setShowImages={setShowImages} />
+            {/* <input type="file" id="profile-upload" accept="image/*" onChange={handleImagesChange} /> */}
             <button>장소 선택</button>
+            {/* <Map lat={lat} lon={lon} /> */}
             <InputGroup>
               <InputGroup.Text>내용</InputGroup.Text>
                 <Form.Control 
@@ -90,7 +119,9 @@ function Post() {
                   onChange={e => setContent(e.target.value)} 
                 />
               </InputGroup>
-              <Rating setScore={setScore} /> {/* Rating 컴포넌트 추가 */}
+              {/* <Rating setScore={setScore} />  */}
+              <Rating rating={rating} setCountStar={setCountStar} />
+              {/* Rating 컴포넌트 추가 */}
             <Button className='mt-2 create_btn' type="submit">후기 생성</Button>
           </Form>
         </Card.Body>

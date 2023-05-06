@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 const ARRAY = [0, 1, 2, 3, 4];
 
-function Rating() {
+function Rating({ rating, setCountStar }) {
   const [clicked, setClicked] = useState([false, false, false, false, false]);
 
   const handleStarClick = index => {
@@ -13,38 +13,19 @@ function Rating() {
     for (let i = 0; i < 5; i++) {
       clickStates[i] = i <= index ? true : false;
     }
-    setClicked(clickStates);
+
+    let star_count = 0;
+    for (let i = 0; i < 5; i++){
+      if (clickStates[i] === true) {
+        star_count++;
+      }
+    }
+    console.log("별점 : " + star_count)
+    setCountStar(star_count);
   };
 
   useEffect(() => {
-    sendReview();
   }, [clicked]); //컨디마 컨디업
-
-  const sendReview = () => {
-    // let score = clicked.filter(Boolean).length;
-    const score = clicked.filter(Boolean).length;
-    fetch('/api/review', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        score: score
-      })
-    })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return response.json();
-    })
-    .then(data => {
-      console.log(data);
-    })
-    .catch(error => {
-      console.error('There was a problem with the fetch operation:', error);
-    });
-  };
 
   return (
     <Wrap>
@@ -57,7 +38,7 @@ function Rating() {
               size="50"
               onClick={() => handleStarClick(el)}
               className={clicked[el] && 'yellowStar'}
-            />
+              />
           );
         })}
       </Stars>
