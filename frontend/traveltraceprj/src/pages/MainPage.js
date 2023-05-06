@@ -8,7 +8,7 @@ function MainPage() {
   return (
     <div className="d-flex flex-column justify-content-center align-items-center background">
       <div>
-        <Link to='/map'>
+        <Link to='/map_second'>
           {/* <img src={process.env.PUBLIC_URL + '/img/location.png'} 
             style={{width: "30%", marginTop: "100px", marginBottom: "100px"}}
           /> */}
