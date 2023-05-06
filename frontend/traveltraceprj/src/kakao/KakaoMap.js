@@ -3,10 +3,13 @@ import Test from '../pages/Test'
 
 const { kakao } = window
 
-const KakaoMap = ({ searchPlace }) => {
+const KakaoMap = ({ searchPlace, setLocation, setPlaceName }) => {
   // const [placeName, setPlaceName] = useState('')
-  // const [InputText, setInputText] = useState('')
-  // const [Place, setPlace] = useState('')
+
+  const [InputText, setInputText] = useState('')
+  const [Place, setPlace] = useState('')
+  // const [address, setAddress] = useState('')
+
 
   const onChange = (e) => {
     setInputText(e.target.value)
@@ -54,17 +57,26 @@ const KakaoMap = ({ searchPlace }) => {
       // 마커에 클릭이벤트를 등록합니다
       kakao.maps.event.addListener(marker, 'click', function () {
         // 마커를 클릭하면 장소명이 인포윈도우에 표출됩니다
-        // setPlaceName(place.place_name)
+        setPlaceName(place.place_name)
         infowindow.setContent('<div style="padding:5px;font-size:12px;">' + place.place_name + '</div>')
         infowindow.open(map, marker)
 
+        // 클릭한 위치의 좌표를 얻어옵니다
+        var latlng = marker.getPosition();
+        
+        // 좌표로 위치 정보를 얻어옵니다
+        var geocoder = new kakao.maps.services.Geocoder();
+        geocoder.coord2Address(latlng.getLng(), latlng.getLat(), function(result, status) {
+            if (status === kakao.maps.services.Status.OK) {
+              setLocation(result[0].address.address_name);
+            }
+        });
       })
     }
   }, [searchPlace])
 
   return (
     <div>
-
       <div
           id="myMap"
           style={{
@@ -72,18 +84,23 @@ const KakaoMap = ({ searchPlace }) => {
             height: '500px',
           }}>
       </div>
-
-        {/* <div>
-        <form className="inputForm" onSubmit={handleSubmit}>
-          <input placeholder="검색어를 입력하세요" onChange={onChange} value={InputText} />
-          <button type="submit">검색</button>
-        </form>
-        <KakaoMap searchPlace={Place} />
-        {/* <p>{{ placeName }}</p>
-      </div> */}
-        {/* <Test value={placeName} /> */}
     </div>
   )
 }
 
 export default KakaoMap
+    //   <div>
+    //     <form className="inputForm" onSubmit={handleSubmit}>
+    //       <input placeholder="검색어를 입력하세요" onChange={onChange} value={InputText} />
+    //       <button type="submit">검색</button>
+    //     </form>
+    //     <KakaoMap searchPlace={Place} />
+    //     <p>{{ placeName }}</p>
+    //   </div>
+    //     <Test value={placeName} />
+    // </div>
+
+        {/* <form className="inputForm" onSubmit={handleSubmit}>
+      <input placeholder="검색어를 입력하세요" onChange={onChange} value={InputText} />
+      <button type="submit">검색</button>
+    </form> */}
