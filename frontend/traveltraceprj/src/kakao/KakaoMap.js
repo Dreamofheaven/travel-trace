@@ -3,7 +3,7 @@ import Test from '../pages/Test'
 
 const { kakao } = window
 
-const KakaoMap = ({ searchPlace, setLocation, setPlaceName }) => {
+const KakaoMap = ({ searchPlace, setAddress, setPlaceName }) => {
   // const [placeName, setPlaceName] = useState('')
 
   const [InputText, setInputText] = useState('')
@@ -68,7 +68,7 @@ const KakaoMap = ({ searchPlace, setLocation, setPlaceName }) => {
         var geocoder = new kakao.maps.services.Geocoder();
         geocoder.coord2Address(latlng.getLng(), latlng.getLat(), function(result, status) {
             if (status === kakao.maps.services.Status.OK) {
-              setLocation(result[0].address.address_name);
+              setAddress(result[0].address.address_name);
             }
         });
       })

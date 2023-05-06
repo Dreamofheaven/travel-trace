@@ -13,7 +13,7 @@ function Test() {
     setInputText(e.target.value)
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit2 = (e) => {
     e.preventDefault()
     setPlace(InputText)
     setInputText('')
@@ -21,7 +21,7 @@ function Test() {
 
   return (
     <>
-      <form className="inputForm" onSubmit={handleSubmit}>
+      <form className="inputForm" onSubmit={handleSubmit2}>
         <input placeholder="검색어를 입력하세요" onChange={onChange} value={InputText} />
         <button type="submit">검색</button>
       </form>
