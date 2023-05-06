@@ -3,11 +3,12 @@ import axios from 'axios';
 import "../styles/Bookmark.css";
 import { Link } from 'react-router-dom';
 import { Card, Col, Row, Button, ButtonGroup, Container, Badge } from "react-bootstrap";
+import { Trash3 } from "react-bootstrap-icons"
 import defaultImg from '../assets/default_img.png';
 
 function Bookmark() {
   const [bookmarks, setBookmarks] = useState([])
-
+  
   useEffect(() => {
     const token = document.cookie.replace(/(?:(?:^|.*;\s*)access\s*\=\s*([^;]*).*$)|^.*$/, "$1");
     console.log(token)
@@ -21,12 +22,20 @@ function Bookmark() {
     fetchData();
   }, []);
 
+  const deleteBookmark = async (articlePk) => {
+    try {
+      await axios.delete(`http://127.0.0.1:8000/accounts/bookmark/${articlePk}/`);
+      setBookmarks((prevBookmarks) => prevBookmarks.filter((bookmark) => bookmark.article.id !== articlePk));
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return(
     <Container>
       <div className="mt-5 d-flex flex-column align-items-center">
-        <h2 className='mb-1'>😎나의 추억 모음집🧡</h2>
-        <h3 className='mb-5'>🚗🚅🛫🚢</h3>
+        <h2 className='mb-1'>😎이번엔 어디로 가지~?🧡</h2>
+        <h3 className='mb-5'>🚗🚅<span className='text1'>북마크</span>🛫🚢</h3>
       </div>
       <div className='my-5 mx-5'>
           <Row xs={1} sm={2} md={3} lg={4}className="g-4">
@@ -37,6 +46,9 @@ function Bookmark() {
                   :
                   <Card.Img variant="top" src={defaultImg} style={{ objectFit: 'contain', height: '250px', padding: '3%' }} />
                   }
+                  {/* <div style={{ position: 'absolute', top: 0, right: 0 }}>
+                    <Trash3 type="button" className="delete_btn" onClick={() => deleteBookmark(bookmark.article.id)} />
+                  </div> */}
                   <Card.Body className='p-2'>
                     <Card.Title>
                       <Link className='bookmark_link' to="/detail">{bookmark.article.title}</Link>
@@ -47,6 +59,7 @@ function Bookmark() {
                       <div><small>{bookmark.article.username}</small></div>
                       <div><small className='fw-bold'>장소</small></div>
                   </Card.Footer>
+                  <div className='delete_btn' onClick={() => deleteBookmark(bookmark.article.id)}><Trash3 fill='rgb(252, 65, 65)' type='button' /></div>
                   </Card.Body>
                 </Card>
               </Col>
