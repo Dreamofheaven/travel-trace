@@ -50,9 +50,9 @@ class ArticleSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         images_data = validated_data.pop('images', [])
+        article = Article.objects.create(**validated_data)
         # route = validated_data.pop('route', '')
 
-        article = Article.objects.create(**validated_data)
 
         # routes = route.split(',')  # route 값을 쉼표(,)로 분리하여 리스트로 저장
         # for route_value in routes:
@@ -60,8 +60,8 @@ class ArticleSerializer(serializers.ModelSerializer):
         #     article.save()
         
         content = validated_data.get('content')
-        # tags = self.extract_tags(content)
-        # validated_data['tags'] = tags
+        tags = self.extract_tags(content)
+        validated_data['tags'] = tags
 
         # 이미지 생성 시 중복 URL 체크
         existing_images = set()
@@ -104,6 +104,12 @@ class ArticleSerializer(serializers.ModelSerializer):
         instance.content = validated_data.get('content', instance.content)
         instance.rating = validated_data.get('rating', instance.rating)
         instance.category = validated_data.get('category', instance.category)
+        instance.save()
+
+        content = validated_data.get('content')
+        tags = self.extract_tags(content)
+        instance.tags = tags
+
         instance.save()
 
         return instance

@@ -1,1 +1,13 @@
 /* //개별 작성 게시글 보기 목록 */
+
+.card_container3 {
+  width: 250px;
+  height: auto;
+  border: 0;
+}
+
+.my_article_link {
+  text-decoration: none;
+  color: black;
+  /* font-weight: bold; */
+}

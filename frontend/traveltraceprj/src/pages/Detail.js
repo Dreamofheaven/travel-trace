@@ -1,23 +1,46 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Container, Button, Form, Carousel } from 'react-bootstrap';
+import { Bookmark, Heart } from 'react-bootstrap-icons';
 
 function Detail() {
+  const [article, setArticle] = useState(null);
+
+  useEffect(() => {
+    const fetchArticle = async () => {
+      try {
+        const response = await axios.get('http://127.0.0.1:8000/articles/1/');
+        setArticle(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchArticle();
+  }, []);
+
+  if (!article) {
+    return <div>Loading...</div>; // 로딩 상태 표시
+  }
+
   return (
     <Container className="mt-5">
       <div className="border p-4">
         <div className='d-flex justify-content-between align-items-center'>
-          <h3>게시글 제목</h3>
-          <p className="me-3">장소</p>
+          <h3>{article.title}</h3>
+          <p className="me-3">{article.location}</p>
         </div>
         <div className="d-flex justify-content-between align-items-center">
           <div>
             
-            작성자  2023-05-05
+          {article.username} {article.createdDate}
             
           </div>
           <div>
-            <Button variant="success" className="me-3" style={{ backgroundColor: '#A0D468', border: 'none' }}>좋아요</Button>
-            <Button variant="success" className="me-3" style={{ backgroundColor: '#A0D468', border: 'none' }}>북마크</Button>
+            <div className='d-flex'>
+              <div className='me-2'><Heart fill='grey' /></div>
+              <div><Bookmark fill='grey'/></div>
+            </div>
           </div>
         </div>
         <hr className="my-4" />
@@ -25,35 +48,24 @@ function Detail() {
           {/* Form 내용을 추가하거나 수정할 수 있습니다 */}
         </Form>
         <div className="mt-4">
-          <Container style={{ maxWidth: '400px' }}>
+          <Container style={{ maxWidth: '600px' }}>
             <Carousel>
-                <Carousel.Item>
+              {article.images.map((image, index) => (
+                <Carousel.Item key={index}>
                   <img
                     className="d-block w-100 mx-auto"
-                    src="https://via.placeholder.com/50"
-                    alt="이미지 1"
-                    />
+                    src={`http://127.0.0.1:8000${image.image}`}
+                    alt={`이미지 ${index + 1}`}
+                  />
                 </Carousel.Item>
-                <Carousel.Item>
-                  <img
-                    className="d-block w-100 mx-auto"
-                    src="https://via.placeholder.com/50"
-                    alt="이미지 2"
-                    />
-                </Carousel.Item>
-                <Carousel.Item>
-                  <img
-                    className="d-block w-100 mx-auto"
-                    src="https://via.placeholder.com/50"
-                    alt="이미지 3"
-                    />
-                </Carousel.Item>
-              </Carousel>
-          </Container>
+              ))}
+            </Carousel>
+
+           </Container>
         </div>
         <div>
           <p>
-            여행 후기 내용 을 적는 칸 입니다. 
+            {article.content}
           </p>
         </div>
         <div className="mt-4">

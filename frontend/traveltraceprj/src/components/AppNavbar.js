@@ -55,9 +55,11 @@ function AppNavbar() {
         <Navbar.Toggle aria-controls="basic-navbar-nav"/>
 
         <Nav.Item>
-          <Button variant="outline-secondary" href="/" size="lg" className='create_bar'>
-            당신의 여행지를 공유해보세요! <Badge pill bg="success">+</Badge>
-          </Button>
+          <Link to='/post'>
+            <Button variant="outline-secondary" href="/" size="lg" className='create_bar'>
+              당신의 여행지를 공유해보세요! <Badge pill bg="success">+</Badge>
+            </Button>
+          </Link>
         </Nav.Item>
 
         <Nav.Item>
