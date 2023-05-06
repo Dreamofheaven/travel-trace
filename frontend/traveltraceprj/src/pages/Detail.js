@@ -24,7 +24,7 @@ function Detail() {
   useEffect(() => {
     const fetchArticle = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:8000/articles/${id}/'); // 디테일과 all 연결을 위한 url파라미터
+        const response = await axios.get(`http://127.0.0.1:8000/articles/${id}/`); // 디테일과 all 연결을 위한 url파라미터
         console.log("이거의 id파람스: " + id)
         setArticle(response.data);
       } catch (error) {
