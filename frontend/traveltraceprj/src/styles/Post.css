@@ -14,3 +14,48 @@
   font-weight: bold;
 
 }
+
+.location_btn {
+  white-space: nowrap;
+  background-color: #A0D468;
+  border: 0;
+  font-weight: bold;
+
+}
+
+.location_text {
+  color: rgb(77, 75, 75);
+  font-size: 20px;
+}
+
+.search_bar2 {
+  width: 80%;
+  height: 40px;
+  border: 0;
+  background-color: #cef1ab;
+  border-radius: 10px;
+  padding-left: 10px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.button2 {
+  height: 40px;
+  border: 0;
+  background-color: #4caf50;
+  color: white;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  margin-left: 10px;
+}
+
+.button3 {
+  height: 40px;
+  border: 0;
+  color: white;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  margin-left: 10px;
+}
