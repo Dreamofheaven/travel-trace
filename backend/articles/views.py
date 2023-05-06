@@ -31,6 +31,21 @@ from django.http import QueryDict
 from rest_framework import filters
 from django.http import Http404
 
+# 이미지 관련
+from django.conf import settings
+from django.conf.urls.static import static
+from django.urls import path
+from django.utils import timezone
+from django.core.files.storage import default_storage
+
+@api_view(['POST'])
+def upload_image(request):
+    file_urls = []
+    for image in request.FILES.getlist('image'):
+        path = f'articles/{timezone.now().strftime("%Y/%m/%d/")}{image.name}'
+        default_storage.save(path, image)
+        file_urls.append(request.build_absolute_uri(default_storage.url(path)))
+    return Response({'fileUrls': file_urls})
 
 class NearbArticleListView(APIView):
     def get(self, request):

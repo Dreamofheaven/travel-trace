@@ -18,6 +18,7 @@ urlpatterns = [
 
     # path('<int:article_pk>/location/', views.ArticleLocationView.as_view()),
     path('nearby/', views.NearbArticleListView.as_view()), 
+    path('upload_image/', views.upload_image, name='upload_image'),
     path('<str:category_name>/', views.ArticleListView.as_view(), name='category_article_list'),
 
 
