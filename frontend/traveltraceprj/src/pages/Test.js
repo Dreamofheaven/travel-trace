@@ -6,6 +6,8 @@ import KakaoMap  from '../kakao/KakaoMap';
 function Test() {
   const [InputText, setInputText] = useState('')
   const [Place, setPlace] = useState('')
+  const [placeName, setPlaceName] = useState('')
+  const [location, setLocation] = useState('');
 
   const onChange = (e) => {
     setInputText(e.target.value)
@@ -23,8 +25,9 @@ function Test() {
         <input placeholder="검색어를 입력하세요" onChange={onChange} value={InputText} />
         <button type="submit">검색</button>
       </form>
-      <KakaoMap searchPlace={Place} />
-      {/* <p>{{ placeName }}</p> */}
+      <KakaoMap searchPlace={Place}  setLocation={setLocation} setPlaceName={setPlaceName}/>
+      <p>{ placeName }</p>
+      <h2>{ location }</h2>
     </>
   )
 }
