@@ -2,6 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from .models import Bookmark, Notification
 from articles.models import Article
+from articles.serializers import ArticleSerializer, ImageSerializer
 User = get_user_model()
 
 
@@ -48,6 +49,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
 
 class BookmarkSerializer(serializers.ModelSerializer):
+    article = ArticleSerializer()
     class Meta:
         model = Bookmark
         fields = '__all__'
@@ -65,4 +67,11 @@ class NotificationDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Notification
+        fields = '__all__'
+
+
+class MyArticleSerializer(serializers.ModelSerializer):
+    images = ImageSerializer(many=True, read_only=True)
+    class Meta:
+        model = Article
         fields = '__all__'

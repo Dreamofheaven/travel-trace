@@ -15,6 +15,7 @@ urlpatterns = [
     path('bookmark/my_bookmark/', views.BookmarkListView.as_view()),
     path('bookmark/<int:article_pk>/', views.BookmarkView.as_view()),
     path('follow/<int:user_pk>/', views.FollowView.as_view()),
+    path('my_article_list/', views.MyArticleListView.as_view()),
 
     # 현위치 정보 저장
     path('current_location/', views.UserLocationView.as_view()),

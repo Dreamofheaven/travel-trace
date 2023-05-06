@@ -258,6 +258,7 @@ def like_comment(request, article_pk, comment_pk):
     serializer = CommentSerializer(comment)
     return Response({'is_liked': is_liked, 'comment': serializer.data})
 
+
 # # 정렬 ( 좋아요 순, 최신순, 조회순 )
 # class ArticleViewSet(viewsets.ModelViewSet):
 #     queryset = Article.objects.all()

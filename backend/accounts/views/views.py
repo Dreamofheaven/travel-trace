@@ -3,6 +3,7 @@ import os
 import requests
 from rest_framework import status
 from rest_framework.response import Response
+from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer
@@ -312,6 +313,26 @@ class UserLocationView(APIView):
             return Response({
                 'error': '제공된 입력에 대한 위치 데이터를 찾을 수 없습니다.'
             }, status=status.HTTP_404_NOT_FOUND)
+
+
+class MyArticleListView(generics.ListAPIView):
+    serializer_class = MyArticleSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        queryset = Article.objects.filter(user=user)
+        return queryset
+
+
+
+
+
+
+
+
+
+
 
     # def post(self, request):
     #     client_id = os.environ.get('SOCIAL_AUTH_KAKAO_CLIENT_ID')

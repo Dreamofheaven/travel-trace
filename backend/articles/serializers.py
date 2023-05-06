@@ -38,7 +38,7 @@ class ArticleListSerializer(serializers.ModelSerializer):
 class ArticleSerializer(serializers.ModelSerializer):
     images = ImageSerializer(many=True, required=False)
     views = serializers.IntegerField(read_only=True)
-
+    username = serializers.SerializerMethodField()
     class CommentInArticleSerializer(serializers.ModelSerializer):
         class Meta:
             model = Comment
@@ -111,7 +111,8 @@ class ArticleSerializer(serializers.ModelSerializer):
     def get_like_count(self,instance):
         return instance.like_users.count()
     
-
+    def get_username(self, obj):
+        return obj.user.username
     
 class CommentSerializer(serializers.ModelSerializer):
     like_count = serializers.SerializerMethodField()
@@ -124,4 +125,5 @@ class CommentSerializer(serializers.ModelSerializer):
     # 댓글 좋아요 횟수 반환
     def get_like_count(self, instance):
         return instance.like_users.count()
+
 
