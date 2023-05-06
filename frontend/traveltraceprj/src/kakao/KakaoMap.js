@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
-// import Test from '../pages/Test'
+import Test from '../pages/Test'
 
 const { kakao } = window
 
 const KakaoMap = ({ searchPlace }) => {
   // const [placeName, setPlaceName] = useState('')
-  const [InputText, setInputText] = useState('')
-  const [Place, setPlace] = useState('')
+  // const [InputText, setInputText] = useState('')
+  // const [Place, setPlace] = useState('')
 
   const onChange = (e) => {
     setInputText(e.target.value)
@@ -73,14 +73,14 @@ const KakaoMap = ({ searchPlace }) => {
           }}>
       </div>
 
-      <div>
+        {/* <div>
         <form className="inputForm" onSubmit={handleSubmit}>
           <input placeholder="검색어를 입력하세요" onChange={onChange} value={InputText} />
           <button type="submit">검색</button>
         </form>
         <KakaoMap searchPlace={Place} />
-        {/* <p>{{ placeName }}</p> */}
-      </div>
+        {/* <p>{{ placeName }}</p>
+      </div> */}
         {/* <Test value={placeName} /> */}
     </div>
   )

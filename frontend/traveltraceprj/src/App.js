@@ -15,9 +15,12 @@ import Bookmark from './pages/Bookmark';
 import PersonalAll from './pages/PersonalAll';
 import Map from "./components/Map";
 import Test from "./pages/Test";
+import { useParams } from 'react-router-dom';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
+
+  const { id } = useParams();
 
   useEffect(() => {
     const access_token = localStorage.getItem('access');
@@ -38,7 +41,7 @@ function App() {
         <Route path="/post" element={<Post/>}/>
         <Route path="/login" element={<Login/>}/>
         <Route path="/signup" element={<Signup/>}/>
-        <Route path="/detail" element={<Detail/>}/>
+        <Route path="/detail/:id" element={<Detail/>}/>
         <Route path="/all" element={<All/>}/>
         <Route path="/edit_account" element={<EditAccount/>}/>
         <Route path="/bookmark" element={<Bookmark/>}/>

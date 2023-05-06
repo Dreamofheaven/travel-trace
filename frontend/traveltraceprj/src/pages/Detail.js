@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { Container, Button, Form, Carousel } from 'react-bootstrap';
 import { Bookmark, Heart } from 'react-bootstrap-icons';
 
 function Detail() {
   const [article, setArticle] = useState(null);
+
+  const { id } = useParams(); // 디테일이랑 all 연결
+  
   const [commentCount, setCommentCount] = useState(0); // 댓글 개수 상태 변수
   const [comments, setComments] = useState([]);
 
@@ -20,7 +24,8 @@ function Detail() {
   useEffect(() => {
     const fetchArticle = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:8000/articles/1/');
+        const response = await axios.get('http://127.0.0.1:8000/articles/${id}/'); // 디테일과 all 연결을 위한 url파라미터
+        console.log(id)
         setArticle(response.data);
       } catch (error) {
         console.error(error);
