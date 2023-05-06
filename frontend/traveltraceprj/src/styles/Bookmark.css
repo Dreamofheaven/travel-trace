@@ -1,1 +1,13 @@
 /* 북마크한 것들 보야주는 페이지 */
+
+.card_container2 {
+  width: 250px;
+  height: auto;
+  border: 0;
+}
+
+.bookmark_link {
+  text-decoration: none;
+  color: black;
+  /* font-weight: bold; */
+}
