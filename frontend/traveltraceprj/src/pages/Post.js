@@ -18,7 +18,7 @@ function Post() {
   const [content, setContent] = useState('');
   const [category, setCategory] = useState(''); // 선택된 값을 상태로 유지
   const [location, setLocation] = useState('');
-  const [locationName, setLocationName] = useState('');
+  const [placeName, setPlaceName] = useState('');
  
   //쿠키
   const [cookies] = useCookies(['access', 'refresh']);
@@ -35,12 +35,12 @@ function Post() {
   const [lgShow, setLgShow] = useState(false);
   const [InputText, setInputText] = useState('')
   const [Place, setPlace] = useState('')
-  const [placeName, setPlaceName] = useState('')
-  const [address, setAddress] = useState('');
+  // const [placeName, setPlaceName] = useState('')
+  // const [address, setAddress] = useState('');
 
   const handleSaveLocation = () => {
-    setLocation(address)
-    setLocationName(placeName)
+    setLocation(location)
+    setPlaceName(placeName)
     setLgShow(false) // 모달 닫기
   }
 
@@ -132,7 +132,7 @@ function Post() {
             <div>{/* <ImageFuntion onChange={handleImagesChange} /> */}
               <ImageFuntion images={images} setShowImages={setShowImages} />
               {/* <input type="file" id="profile-upload" accept="image/*" onChange={handleImagesChange} /> */}</div>
-            <div className='d-flex justify-content-between'>
+            <div className='d-flex justify-content-between mb-3'>
               <div><p className='location_text'>{placeName}</p></div>
               <div><Button className='location_btn' variant="primary" onClick={() => setLgShow(true)}>장소 선택</Button></div>
             </div>
@@ -154,9 +154,9 @@ function Post() {
                       <input className='search_bar2' placeholder="검색어를 입력하세요" onChange={onChange} value={InputText} />
                       <button className='button2' type="submit">검색</button>
                     </form>
-                    <KakaoMap searchPlace={Place}  setAddress={setAddress} setPlaceName={setPlaceName}/>
+                    <KakaoMap searchPlace={Place}  setLocation={setLocation} setPlaceName={setPlaceName}/>
                     <p className='mt-3'>장소: { placeName }</p>
-                    <p>주소: { address }</p>
+                    <p>주소: { location }</p>
                   </>
                 </Modal.Body>
                 <Modal.Footer>
