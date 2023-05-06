@@ -62,7 +62,8 @@ function All() {
                 }
                 <Card.Body className='p-2'>
                   <Card.Title>
-                    {/* <Link className='all_link' to="/detail/2/">{article.title}</Link> */}
+                    <p>{article.id}</p>
+                    <Link className='all_link' to={`/detail/${article.id}/`}>{article.title}</Link>
                     {article.title}
                   </Card.Title>
                   <Card.Text>
