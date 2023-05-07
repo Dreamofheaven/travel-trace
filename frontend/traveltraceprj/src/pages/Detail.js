@@ -9,6 +9,7 @@ import BookmarkBtn from '../components/BookmarkBtn';
 import LikeBtn from '../components/LikeBtn';
 import DeleteBtn from '../components/DeleteBtn';
 import UpdateBtn from '../components/UpdateBtn';
+import CommentLikeBtn from '../components/CommentLikeBtn';
 
 
 function CustomDropdownToggle(props) {
@@ -237,8 +238,8 @@ function Detail() {
               <p className="ms-auto me-3">{formatDate(comment.created_at)}</p>
             </div>
             <div className="d-flex align-items-center">
-              <p>{comment.content}</p>
-              <button className="btn btn-success ms-auto" style={{ backgroundColor: '#A0D468', border: 'none' }}>댓글 좋아요</button>
+              <p className='me-auto'>{comment.content}</p>
+              <CommentLikeBtn commentId={comment.id} />
             </div>
             <hr className="my-4" />
           </div>
