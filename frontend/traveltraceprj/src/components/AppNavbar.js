@@ -64,7 +64,6 @@ function AppNavbar() {
         </Nav.Item>
         <Nav.Item>
           <Navbar.Collapse id="basic-navbar-nav">
-            {isLoggedIn ? (
               <div className='d-flex align-items-center'>
                 <div className='pe-3 d-flex align-items-center'>
                   <Link className='my_profile' to={`/profile/${user_id}`}>
@@ -72,17 +71,18 @@ function AppNavbar() {
                     User님
                   </Link>
                 </div>
-                <Button className='logout_btn' onClick={handleLogout}>
-                  <Person className='person_icon' />
-                  로그아웃
-                </Button>
-              </div>
-            ) : (
-              <Button className='login_btn' onClick={handleLogin}>
-                <Person className='person_icon' />
-                로그인
-              </Button>
-            )}
+                {isLoggedIn ? (
+                  <Button className='logout_btn' onClick={handleLogout}>
+                    <Person className='person_icon' />
+                    로그아웃
+                  </Button>
+                    ) : (
+                  <Button className='login_btn' onClick={handleLogin}>
+                    <Person className='person_icon' />
+                    로그인
+                  </Button>
+                  )}
+                </div>
           </Navbar.Collapse>
         </Nav.Item>
       </Container>

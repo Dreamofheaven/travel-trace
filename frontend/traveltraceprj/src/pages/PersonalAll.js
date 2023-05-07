@@ -39,7 +39,7 @@ function PersonalAll() {
                   }
                   <Card.Body className='p-2'>
                     <Card.Title>
-                      <Link className='my_article_link' to="/detail">{myArticle.title}</Link>
+                      <Link className='my_article_link' to={`/detail/${myArticle.id}/`}>{myArticle.title}</Link>
                     </Card.Title>
                     <Card.Text>
                     </Card.Text>

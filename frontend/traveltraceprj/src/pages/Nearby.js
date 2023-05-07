@@ -6,7 +6,6 @@ import { Bookmark, Heart, PinMap ,Search } from 'react-bootstrap-icons'
 import defaultImg from '../assets/default_img.png';
 import { Link } from 'react-router-dom';
 
-
 function Nearby() {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -32,7 +31,6 @@ function Nearby() {
         setLoading(false);
       }
     };
-
     fetchArticles();
   }, []);
 
