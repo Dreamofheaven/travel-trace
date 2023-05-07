@@ -124,11 +124,11 @@ const Map2 = () => {
       },})
       .then(response => {
         console.log(response);
-        window.location.href = '/nearby';
+        window.location.href = '/opper';
       })
       .catch(error => {
         console.log(error);
-        window.location.href = '/nearby';
+        window.location.href = '/opper';
       });
 }
 

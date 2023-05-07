@@ -17,6 +17,7 @@ import PersonalAll from './pages/PersonalAll';
 // import Map from "./components/Map";
 import Map2 from "./components/Map2";
 import Test from "./pages/Test";
+import Opper from './pages/Opper';
 import { useParams } from 'react-router-dom';
 
 function App() {
@@ -52,10 +53,9 @@ function App() {
         <Route path="/edit_account" element={<EditAccount/>}/>
         <Route path="/bookmark" element={<Bookmark/>}/>
         <Route path="/personal_all" element={<PersonalAll/>}/>
-        {/* <Route path="/map" element={<Map/>}/> */}
         <Route path="/map_second" element={<Map2/>}/>
         <Route path="/test" element={<Test/>}/>
-        
+        <Route path="/opper" element={<Opper/>}/>
       </Routes>
       <Footer />
     </div>
