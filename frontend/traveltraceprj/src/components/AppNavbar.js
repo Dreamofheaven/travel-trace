@@ -6,6 +6,7 @@ import logo from '../assets/logo.png'
 import { Person } from 'react-bootstrap-icons'
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
+import NotificationDropdown from '../components/Notification';
 
 
 function AppNavbar() {
@@ -100,6 +101,9 @@ function AppNavbar() {
           <Navbar.Collapse id="basic-navbar-nav">
               <div className='d-flex align-items-center'>
                 <div className='pe-3 d-flex align-items-center'>
+                  {isLoggedIn ? (
+                    <div className='me-2'><NotificationDropdown /></div>
+                  ) : null}
                   {isLoggedIn ? (
                     <Link className='my_profile' to={`/profile/${user_id}`}>
                       <Person className='person_icon' />
