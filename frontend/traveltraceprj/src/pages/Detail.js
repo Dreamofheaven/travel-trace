@@ -216,10 +216,9 @@ function Detail() {
               />
               <button type="submit" className="btn btn-success ms-2" style={{ backgroundColor: '#A0D468', border: 'none' }}>등록</button>
             </div>
-            <hr className="my-4" />
+
           </Form>
         <div>
-          <p>=============댓글보기테스트===========</p>
           {newContent.map((item, index) => (
             <div key={index} className="d-flex mb-3">
             <p className="ms-3">{item.user}</p>

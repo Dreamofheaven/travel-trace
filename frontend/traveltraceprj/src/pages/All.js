@@ -14,9 +14,9 @@ function All() {
   const [selectedCategory, setSelectedCategory] = useState(undefined);
   const [sortBy, setSortBy] = useState("");
 
-  useEffect(() => {
-    handleNearbyClick(); // 컴포넌트 마운트 후 handleNearbyClick 함수 실행
-  }, []);
+  // useEffect(() => {
+  //   handleNearbyClick(); // 컴포넌트 마운트 후 handleNearbyClick 함수 실행
+  // }, []);
 
   const handleSearch = event => {
     setSearchTerm(event.target.value);
@@ -147,4 +147,4 @@ function All() {
   );
 }
 
-export default {All};
+export default All;
