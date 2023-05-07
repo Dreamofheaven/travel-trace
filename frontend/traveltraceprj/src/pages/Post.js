@@ -191,7 +191,7 @@ function Post() {
                     해당 장소를 마킹하고 등록해주세요
                   </Modal.Title>
                 </Modal.Header>
-                <Modal.Body className='d-flex flex-column align-items-center'>
+                <Modal.Body className='d-flex flex-column align-items-center modal_body'>
                   <>
                     <form className="inputForm mb-3" onSubmit={handleSubmit2}>
                       <input className='search_bar2' placeholder="검색어를 입력하세요" onChange={onChange} value={InputText} />

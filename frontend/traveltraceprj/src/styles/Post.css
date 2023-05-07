@@ -59,3 +59,7 @@
   font-weight: bold;
   margin-left: 10px;
 }
+
+.modal_body {
+  z-index: 9999;
+}
