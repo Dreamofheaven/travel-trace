@@ -40,7 +40,7 @@ function All() {
         if (article.image) {
           return {
             ...article,
-            image: `http://127.0.0.1:8000${article.image}`
+            image: article.image
           }
         } else {
           return article;
@@ -113,7 +113,7 @@ function All() {
           {filteredArticles.map(article => (
             <Col key={article.id}>
               <Card className='card_container'>
-                {article.images.length > 0 ? <Card.Img variant="top" src={article.images[0].image} style={{ objectFit: 'cover', height: '250px', padding: '3%' }} />
+                {article.images.length > 0 ? <Card.Img variant="top" src={article.image} style={{ objectFit: 'cover', height: '250px', padding: '3%' }} />
                 :
                 <Card.Img variant="top" src={defaultImg} style={{ objectFit: 'contain', height: '250px', padding: '3%' }} />
                 }
