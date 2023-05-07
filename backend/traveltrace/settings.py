@@ -16,9 +16,9 @@ from dotenv import load_dotenv
 
 load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-# BASE_DIR = Path(__file__).resolve().parent.parent
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-ROOT_DIR = os.path.dirname(BASE_DIR)
+BASE_DIR = Path(__file__).resolve().parent.parent
+# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# ROOT_DIR = os.path.dirname(BASE_DIR)
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
@@ -26,7 +26,7 @@ ROOT_DIR = os.path.dirname(BASE_DIR)
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -82,7 +82,7 @@ ROOT_URLCONF = 'traveltrace.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['client'],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -147,13 +147,13 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = [
-    # BASE_DIR / 'static',
-    # 실제 static 파일은 모두 client 측에서 소유
-    os.path.join(ROOT_DIR, 'build/static')
-]
+# STATICFILES_DIRS = [
+#     # BASE_DIR / 'static',
+#     # 실제 static 파일은 모두 client 측에서 소유
+#     os.path.join(ROOT_DIR, 'build/static')
+# ]
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_ROOT = BASE_DIR / 'media'
 
 MEDIA_URL = '/media/'
