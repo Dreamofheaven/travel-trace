@@ -22,6 +22,7 @@ class Article(models.Model):
     location = models.CharField(max_length=255, null=True, blank=True)
     latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True)
     longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True)
+    placename = models.CharField(max_length=100, null=True, blank=True)
     # 카테고리
     category = models.CharField(max_length=100, null=False, blank=False)
     # 조회수
