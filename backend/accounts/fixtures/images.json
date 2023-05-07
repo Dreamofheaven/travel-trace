@@ -1,0 +1,418 @@
+[
+{
+    "model": "articles.image",
+    "pk": 1,
+    "fields": {
+        "article": 1,
+        "image": "articles/2023/05/08/image-0_pMf4dS7.jpg"
+    }
+},
+{
+    "model": "articles.image",
+    "pk": 2,
+    "fields": {
+        "article": 1,
+        "image": "articles/2023/05/08/image-1_FZTTFOb.jpg"
+    }
+},
+{
+    "model": "articles.image",
+    "pk": 3,
+    "fields": {
+        "article": 1,
+        "image": "articles/2023/05/08/image-2.jpg"
+    }
+},
+{
+    "model": "articles.image",
+    "pk": 4,
+    "fields": {
+        "article": 2,
+        "image": "articles/2023/05/08/image-0_LjkjUpm.jpg"
+    }
+},
+{
+    "model": "articles.image",
+    "pk": 5,
+    "fields": {
+        "article": 2,
+        "image": "articles/2023/05/08/image-1_erzFdm1.jpg"
+    }
+},
+{
+    "model": "articles.image",
+    "pk": 6,
+    "fields": {
+        "article": 2,
+        "image": "articles/2023/05/08/image-2_rpwngoc.jpg"
+    }
+},
+{
+    "model": "articles.image",
+    "pk": 7,
+    "fields": {
+        "article": 3,
+        "image": "articles/2023/05/08/image-0_l5JNUMJ.jpg"
+    }
+},
+{
+    "model": "articles.image",
+    "pk": 8,
+    "fields": {
+        "article": 3,
+        "image": "articles/2023/05/08/image-1_HfpApJr.jpg"
+    }
+},
+{
+    "model": "articles.image",
+    "pk": 9,
+    "fields": {
+        "article": 3,
+        "image": "articles/2023/05/08/image-2_0iC0BSr.jpg"
+    }
+},
+{
+    "model": "articles.image",
+    "pk": 10,
+    "fields": {
+        "article": 4,
+        "image": "articles/2023/05/08/image-0_V0nFNgs.jpg"
+    }
+},
+{
+    "model": "articles.image",
+    "pk": 11,
+    "fields": {
+        "article": 4,
+        "image": "articles/2023/05/08/image-1_KSQ4TjR.jpg"
+    }
+},
+{
+    "model": "articles.image",
+    "pk": 12,
+    "fields": {
+        "article": 4,
+        "image": "articles/2023/05/08/image-2_S6S4Xfj.jpg"
+    }
+},
+{
+    "model": "articles.image",
+    "pk": 16,
+    "fields": {
+        "article": 6,
+        "image": "articles/2023/05/08/image-0_dUXgw3X.jpg"
+    }
+},
+{
+    "model": "articles.image",
+    "pk": 17,
+    "fields": {
+        "article": 6,
+        "image": "articles/2023/05/08/image-1_yKcr12c.jpg"
+    }
+},
+{
+    "model": "articles.image",
+    "pk": 18,
+    "fields": {
+        "article": 7,
+        "image": "articles/2023/05/08/image-0_b4eQrJr.jpg"
+    }
+},
+{
+    "model": "articles.image",
+    "pk": 19,
+    "fields": {
+        "article": 7,
+        "image": "articles/2023/05/08/image-1_7kWmdri.jpg"
+    }
+},
+{
+    "model": "articles.image",
+    "pk": 20,
+    "fields": {
+        "article": 7,
+        "image": "articles/2023/05/08/image-2_B7BsPRF.jpg"
+    }
+},
+{
+    "model": "articles.image",
+    "pk": 21,
+    "fields": {
+        "article": 8,
+        "image": "articles/2023/05/08/image-0_8MFz9fk.jpg"
+    }
+},
+{
+    "model": "articles.image",
+    "pk": 22,
+    "fields": {
+        "article": 8,
+        "image": "articles/2023/05/08/image-1_Jj7gZaM.jpg"
+    }
+},
+{
+    "model": "articles.image",
+    "pk": 23,
+    "fields": {
+        "article": 8,
+        "image": "articles/2023/05/08/image-2_Rc2uPam.jpg"
+    }
+},
+{
+    "model": "articles.image",
+    "pk": 24,
+    "fields": {
+        "article": 9,
+        "image": "articles/2023/05/08/image-0_4yB5Ivl.jpg"
+    }
+},
+{
+    "model": "articles.image",
+    "pk": 25,
+    "fields": {
+        "article": 9,
+        "image": "articles/2023/05/08/image-1_bsfxANM.jpg"
+    }
+},
+{
+    "model": "articles.image",
+    "pk": 26,
+    "fields": {
+        "article": 9,
+        "image": "articles/2023/05/08/image-2_F3d0mpD.jpg"
+    }
+},
+{
+    "model": "articles.image",
+    "pk": 27,
+    "fields": {
+        "article": 10,
+        "image": "articles/2023/05/08/image-0_lsBcjn5.jpg"
+    }
+},
+{
+    "model": "articles.image",
+    "pk": 28,
+    "fields": {
+        "article": 10,
+        "image": "articles/2023/05/08/image-1_HVF8nps.jpg"
+    }
+},
+{
+    "model": "articles.image",
+    "pk": 29,
+    "fields": {
+        "article": 10,
+        "image": "articles/2023/05/08/image-2_1hJz84T.jpg"
+    }
+},
+{
+    "model": "articles.image",
+    "pk": 34,
+    "fields": {
+        "article": 12,
+        "image": "articles/2023/05/08/image-0_LSqhti6.jpg"
+    }
+},
+{
+    "model": "articles.image",
+    "pk": 35,
+    "fields": {
+        "article": 12,
+        "image": "articles/2023/05/08/image-1_q8A7aaR.jpg"
+    }
+},
+{
+    "model": "articles.image",
+    "pk": 36,
+    "fields": {
+        "article": 12,
+        "image": "articles/2023/05/08/image-2_8XNOtmQ.jpg"
+    }
+},
+{
+    "model": "articles.image",
+    "pk": 37,
+    "fields": {
+        "article": 12,
+        "image": "articles/2023/05/08/image-3_IY3Pi0F.jpg"
+    }
+},
+{
+    "model": "articles.image",
+    "pk": 38,
+    "fields": {
+        "article": 13,
+        "image": "articles/2023/05/08/image-0_fEyznfc.jpg"
+    }
+},
+{
+    "model": "articles.image",
+    "pk": 39,
+    "fields": {
+        "article": 13,
+        "image": "articles/2023/05/08/image-1_dfyAlN1.jpg"
+    }
+},
+{
+    "model": "articles.image",
+    "pk": 40,
+    "fields": {
+        "article": 14,
+        "image": "articles/2023/05/08/image-0_trWS3Ki.jpg"
+    }
+},
+{
+    "model": "articles.image",
+    "pk": 41,
+    "fields": {
+        "article": 14,
+        "image": "articles/2023/05/08/image-1_iN6Nt9e.jpg"
+    }
+},
+{
+    "model": "articles.image",
+    "pk": 42,
+    "fields": {
+        "article": 14,
+        "image": "articles/2023/05/08/image-2_QUOviUB.jpg"
+    }
+},
+{
+    "model": "articles.image",
+    "pk": 43,
+    "fields": {
+        "article": 15,
+        "image": "articles/2023/05/08/image-0_XSl7LAW.jpg"
+    }
+},
+{
+    "model": "articles.image",
+    "pk": 44,
+    "fields": {
+        "article": 15,
+        "image": "articles/2023/05/08/image-1_dkdXq8A.jpg"
+    }
+},
+{
+    "model": "articles.image",
+    "pk": 45,
+    "fields": {
+        "article": 15,
+        "image": "articles/2023/05/08/image-2_icaleuP.jpg"
+    }
+},
+{
+    "model": "articles.image",
+    "pk": 48,
+    "fields": {
+        "article": 17,
+        "image": "articles/2023/05/08/image-0_8p01INe.jpg"
+    }
+},
+{
+    "model": "articles.image",
+    "pk": 49,
+    "fields": {
+        "article": 17,
+        "image": "articles/2023/05/08/image-1_5fp9ucf.jpg"
+    }
+},
+{
+    "model": "articles.image",
+    "pk": 52,
+    "fields": {
+        "article": 19,
+        "image": "articles/2023/05/08/image-0_mCHdoho.jpg"
+    }
+},
+{
+    "model": "articles.image",
+    "pk": 53,
+    "fields": {
+        "article": 19,
+        "image": "articles/2023/05/08/image-1_Xl9MvTw.jpg"
+    }
+},
+{
+    "model": "articles.image",
+    "pk": 54,
+    "fields": {
+        "article": 20,
+        "image": "articles/2023/05/08/image-0_QQd1Rhg.jpg"
+    }
+},
+{
+    "model": "articles.image",
+    "pk": 55,
+    "fields": {
+        "article": 20,
+        "image": "articles/2023/05/08/image-1_q6tgwix.jpg"
+    }
+},
+{
+    "model": "articles.image",
+    "pk": 58,
+    "fields": {
+        "article": 22,
+        "image": "articles/2023/05/08/image-0_fUzpS23.jpg"
+    }
+},
+{
+    "model": "articles.image",
+    "pk": 59,
+    "fields": {
+        "article": 22,
+        "image": "articles/2023/05/08/image-1_veNlLej.jpg"
+    }
+},
+{
+    "model": "articles.image",
+    "pk": 60,
+    "fields": {
+        "article": 23,
+        "image": "articles/2023/05/08/image-0_4aRqtHc.jpg"
+    }
+},
+{
+    "model": "articles.image",
+    "pk": 61,
+    "fields": {
+        "article": 23,
+        "image": "articles/2023/05/08/image-1_bjIN01V.jpg"
+    }
+},
+{
+    "model": "articles.image",
+    "pk": 62,
+    "fields": {
+        "article": 24,
+        "image": "articles/2023/05/08/image-0_WygMLHx.jpg"
+    }
+},
+{
+    "model": "articles.image",
+    "pk": 63,
+    "fields": {
+        "article": 24,
+        "image": "articles/2023/05/08/image-1_iy0CKo3.jpg"
+    }
+},
+{
+    "model": "articles.image",
+    "pk": 64,
+    "fields": {
+        "article": 25,
+        "image": "articles/2023/05/08/image-0_NmG6eP1.jpg"
+    }
+},
+{
+    "model": "articles.image",
+    "pk": 65,
+    "fields": {
+        "article": 25,
+        "image": "articles/2023/05/08/image-1_LWduHkQ.jpg"
+    }
+}
+]
