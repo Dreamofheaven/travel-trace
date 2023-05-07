@@ -18,6 +18,7 @@ from django.urls import path,include
 from . import views
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.generic import TemplateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -29,4 +30,6 @@ urlpatterns = [
 
     path('articles/',include('articles.urls')),
     path('', views.index),
+    # 모든 주소를 우선 client 쪽으로 연결 시킴
+    url(r'^$', TemplateView.as_view(template_name='index.html'),name='index'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
