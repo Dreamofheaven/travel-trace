@@ -7,7 +7,20 @@ import { useCookies } from 'react-cookie';
 import "../styles/Detail.css";
 import BookmarkBtn from '../components/BookmarkBtn';
 import LikeBtn from '../components/LikeBtn';
+import DeleteBtn from '../components/DeleteBtn';
 
+function CustomDropdownToggle(props) {
+  return (
+    <button
+      type="button"
+      className="btn btn-link border-0 p-0"
+      onClick={props.onClick}
+      style={{ outline: 'none', color: 'black' }}
+    >
+      <ThreeDotsVertical size={24} />
+    </button>
+  );
+}
 
 function Detail() {
   const [article, setArticle] = useState(null);
@@ -122,18 +135,15 @@ function Detail() {
             <div className='date'>{formatDate(article.created_at)}</div>
           </div>
           <div>
-            <div className='d-flex'>
+            <div className='d-flex align-items-center'>
               <div className='me-2'><LikeBtn articleId={article.id} /></div>
               <div><BookmarkBtn articleId={article.id}/></div>
               <div>
               <Dropdown>
-                <Dropdown.Toggle id="dropdown-basic">
-                  <ThreeDotsVertical />
-                </Dropdown.Toggle>
-
+                <Dropdown.Toggle as={CustomDropdownToggle} />
                 <Dropdown.Menu>
                   <Dropdown.Item href="#/action-1">수정</Dropdown.Item>
-                  <Dropdown.Item href="#/action-2">삭제</Dropdown.Item>
+                  <DeleteBtn articlePk={article.id} />
                 </Dropdown.Menu>
               </Dropdown>
               </div>
@@ -158,7 +168,7 @@ function Detail() {
                 </Carousel.Item>
               ))}
             </Carousel>
-           </Container>
+          </Container>
         </div>
           <div>
             <p className='m-3'>
