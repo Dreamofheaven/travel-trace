@@ -238,8 +238,8 @@ function Detail() {
               <p className="ms-auto me-3">{formatDate(comment.created_at)}</p>
             </div>
             <div className="d-flex align-items-center">
-              <p className='me-auto'>{comment.likeCount}</p>
-              <CommentLikeBtn commentId={comment.id} />
+              <p className='me-auto'>{comment.content}</p>
+              <CommentLikeBtn commentId={comment.id} />{comment.likeCount}
             </div>
             <hr className="my-4" />
           </div>
@@ -251,3 +251,6 @@ function Detail() {
 }
 
 export default Detail;
+
+// 규상님의 이미지 클래스네임
+// d-block mx-auto w-100
