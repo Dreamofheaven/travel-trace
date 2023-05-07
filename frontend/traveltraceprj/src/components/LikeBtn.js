@@ -45,7 +45,7 @@ const LikeBtn = ({ articleId }) => {
   return (
     <div onClick={handleLikedToggle}>
       {isLiked ? (
-        <HeartFill className='bookmark_btn2' color="red" size={24} />
+        <HeartFill color="red" size={24} />
       ) : (
         <Heart color="gray" size={24} />
       )}
