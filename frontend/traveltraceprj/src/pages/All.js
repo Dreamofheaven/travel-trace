@@ -5,7 +5,8 @@ import { Card, Col, Row, Button, ButtonGroup, Container, Badge, Form } from "rea
 import { Bookmark, Heart, PinMap ,Search, Eye } from 'react-bootstrap-icons'
 import defaultImg from '../assets/default_img.png';
 import { Link } from 'react-router-dom';
-
+import BookmarkBtn from '../components/BookmarkBtn';
+import LikeBtn from '../components/LikeBtn';
 
 
 function All() {
@@ -125,8 +126,8 @@ function All() {
                     <div className='d-flex justify-content-between align-items-center'>
                       <div>{article.location.split(' ')[0]} {article.location.split(' ')[1]}</div>
                       <div className='d-flex'>
-                        <div className='me-2'><Heart fill='grey' /></div>
-                        <div><Bookmark fill='grey'/></div>
+                        <div className='me-2'><LikeBtn articleId={article.id} /></div>
+                        <div><BookmarkBtn articleId={article.id}/></div>
                       </div>
                     </div>
                   </Card.Text>

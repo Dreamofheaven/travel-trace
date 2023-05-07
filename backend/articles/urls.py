@@ -12,7 +12,7 @@ urlpatterns = [
     path('<int:article_pk>/comments/<int:comment_pk>/', views.comment_detail),
     path('<int:article_pk>/comments/create/', views.comment_create),
 
-    path('<int:article_pk>/likes/',views.like_article),
+    path('<int:article_pk>/likes/',views.ArticleLikeAPIView.as_view()),
 
     path('<int:article_pk>/comments/<int:comment_pk>/likes/',views.like_comment),
 

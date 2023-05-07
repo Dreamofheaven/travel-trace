@@ -50,6 +50,13 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
 class BookmarkSerializer(serializers.ModelSerializer):
     article = ArticleSerializer()
+    is_bookmarked = serializers.SerializerMethodField()
+
+    def get_is_bookmarked(self, obj):
+        request = self.context.get('request')
+        if request is None or not request.user.is_authenticated:
+            return False
+        return Bookmark.objects.filter(user=request.user, article=obj.article).exists()
     class Meta:
         model = Bookmark
         fields = '__all__'

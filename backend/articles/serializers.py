@@ -110,6 +110,7 @@ class ArticleSerializer(serializers.ModelSerializer):
         instance.content = validated_data.get('content', instance.content)
         instance.rating = validated_data.get('rating', instance.rating)
         instance.category = validated_data.get('category', instance.category)
+        instance.placename = validated_data.get('placename', instance.placename)
         instance.save()
 
         content = validated_data.get('content')

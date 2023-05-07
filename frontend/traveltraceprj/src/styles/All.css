@@ -9,8 +9,15 @@
 .all_link {
   text-decoration: none;
   color: black;
-  /* font-weight: bold; */
+  display: inline-block;
+  max-width: 100%;
+  text-decoration: none;
+  color: black;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
+
 
 .button-wrapper {
   display: flex;
