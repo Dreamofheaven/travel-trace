@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import "../styles/All.css";
 import { Card, Col, Row, Button, ButtonGroup, Container, Badge, Form } from "react-bootstrap";
-import { Bookmark, Heart, PinMap ,Search, Eye } from 'react-bootstrap-icons'
+import { PinMap ,Search, Eye } from 'react-bootstrap-icons'
 import defaultImg from '../assets/default_img.png';
 import { Link } from 'react-router-dom';
 import BookmarkBtn from '../components/BookmarkBtn';

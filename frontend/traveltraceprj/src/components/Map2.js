@@ -29,7 +29,7 @@ const Map2 = () => {
           const lon = position.coords.longitude; // 경도
       
           const locPosition = new kakao.maps.LatLng(lat, lon); // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
-          const message = '<div style="padding:20px; border-line:none; font-size:15px;">상단의 주소를 클릭하면<br>근처 여행지를 추천해드려요!</div>'; // 인포윈도우에 표시될 내용입니다
+          const message = '<div style="padding:20px; border-line:none; font-size:15px; white-space:nowrap;">상단의 주소를 클릭하면<br>근처 여행지를 추천해드려요!</div>'; // 인포윈도우에 표시될 내용입니다
 
           // 마커와 인포윈도우를 표시합니다
           displayMarker(locPosition, message);
@@ -53,12 +53,12 @@ const Map2 = () => {
       // 마커를 생성합니다
       const marker = new kakao.maps.Marker({  
         map: map, 
-        position: locPosition
+        position: locPosition,
+        draggable: true
       }); 
-  
       const iwContent = message// 인포윈도우에 표시할 내용
       const iwRemoveable = true;
-
+  
       // 인포윈도우를 생성합니다
       const infowindow = new kakao.maps.InfoWindow({
           content : iwContent,
@@ -67,6 +67,21 @@ const Map2 = () => {
   
       // 인포윈도우를 마커위에 표시합니다 
       infowindow.open(map, marker);
+      
+      // 마커 드래그가 끝났을 때 이벤트를 등록합니다
+    kakao.maps.event.addListener(marker, 'dragend', function() {
+      infowindow.setPosition(marker.getPosition());
+      const coords = marker.getPosition(); // 마커의 위치 좌표를 얻습니다
+      searchAddrFromCoords(coords, function(result, status) {
+        if (status === kakao.maps.services.Status.OK) {
+          const infoDiv = document.getElementById('centerAddr');
+          setLocation(result[0].address_name);
+          infoDiv.innerHTML = result[0].address_name;
+        }
+      });
+    });
+      
+
   
       // 지도 중심좌표를 접속위치로 변경합니다
       map.setCenter(locPosition);    
@@ -120,7 +135,7 @@ const Map2 = () => {
   }
 
   return (
-    <Container className="d-flex justify-content-center">
+    <Container className="d-flex justify-content-center my-5">
       <div id='myMap' style={{
         width: '1000px', 
         height: '500px',
@@ -130,11 +145,11 @@ const Map2 = () => {
         <Button id="centerAddr" onClick={handleClicked}
           style={{
             position: 'absolute',
-            top: '20%',
-            left: '20%',
+            top: '15%',
+            left: '50%',
             transform: 'translate(-50%, -50%)',
             zIndex: '1',
-            backgroundColor: '#A0D468',
+            backgroundColor: 'darkgreen',
             border :'none',
             padding: '12px',
             borderRadius: '10px',

@@ -251,6 +251,3 @@ function Detail() {
 }
 
 export default Detail;
-
-// 규상님의 이미지 클래스네임
-// d-block mx-auto w-100

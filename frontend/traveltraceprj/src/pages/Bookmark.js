@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import "../styles/Bookmark.css";
 import { Link } from 'react-router-dom';
-import { Card, Col, Row, Button, ButtonGroup, Container, Badge } from "react-bootstrap";
+import { Card, Col, Row, Container } from "react-bootstrap";
 import { Trash3 } from "react-bootstrap-icons"
 import defaultImg from '../assets/default_img.png';
 
@@ -47,9 +47,6 @@ function Bookmark() {
                   :
                   <Card.Img variant="top" src={defaultImg} style={{ objectFit: 'contain', height: '250px', padding: '3%' }} />
                   }
-                  {/* <div style={{ position: 'absolute', top: 0, right: 0 }}>
-                    <Trash3 type="button" className="delete_btn" onClick={() => deleteBookmark(bookmark.article.id)} />
-                  </div> */}
                   <Card.Body className='p-2'>
                     <Card.Title>
                       <Link className='bookmark_link' to="/detail">{bookmark.article.title}</Link>
