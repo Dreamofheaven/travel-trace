@@ -15,19 +15,17 @@ function Profile() {
     const token = document.cookie.replace(/(?:(?:^|.*;\s*)access\s*\=\s*([^;]*).*$)|^.*$/, "$1");
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
-    const fetchData = axios.get(`http://127.0.0.1:8000/accounts/profile/${user_pk}`);
-    const fetchFollow = axios.get(`http://127.0.0.1:8000/accounts/follow/${user_pk}/`);
-    
-    Promise.all([fetchData, fetchFollow])
-    .then(([data, follow]) => {
-      setUser(data.data);
-      setIsFollowed(follow.data.is_followed);
-      console.log(data.data);
-      console.log(follow.data);
-    })
-    .catch(error => {
-      console.error(error);
-    });
+    const fetchData = async () => {
+      try {
+        const result = await axios.get(`http://127.0.0.1:8000/accounts/profile/${user_pk}`);
+        setUser(result.data);
+        console.log(result.data);
+      } catch (error) {
+        console.error(error);
+        console.log(user_pk);
+      }
+    };
+    fetchData();
     }, []);
 
     const handleFollow = () => {
@@ -35,6 +33,7 @@ function Profile() {
       axios.post(`http://127.0.0.1:8000/accounts/follow/${user_pk}/`)
         .then(response => setIsFollowed(response.data.is_followed))
         .catch(error => console.log(error));
+        console.log(user_pk);
     };
 
     const handleUnfollow = () => {
@@ -42,10 +41,9 @@ function Profile() {
       axios.delete(`http://127.0.0.1:8000/accounts/follow/${user_pk}/`)
         .then(response => setIsFollowed(response.data.is_followed))
         .catch(error => console.log(error));
+        console.log(user_pk);
     };
-
-
-  ///////////
+    
   return (
     <Container className="my-5 text-align-center">
       <Stack gap={4} className='Profile col-md-5 mx-auto text-center'>
@@ -67,7 +65,6 @@ function Profile() {
             <>
               <h2>{user.username}</h2>
               <p>{user.email}</p>
-              <p>{user.id}</p>
             </>
           </span>
           <span className='ps-3 align-self-center'>
@@ -76,10 +73,9 @@ function Profile() {
           </span>
         </div>
         <span className='user_follow'>
-          팔로워 0 / 팔로잉 7
+          팔로워 {user.followers ? user.followers.length : 0} / 팔로잉 {user.followings ? user.followings.length : 0}
         </span>
         <span className='user_info'>
-          “MBTI 극 P인 맛집 탐방가 ”
         </span>
         <div>
           <Link className='me-3' to="/personal_all">

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import { Container, Button, Form, Carousel, Dropdown } from 'react-bootstrap';
 import { ThreeDotsVertical } from 'react-bootstrap-icons';
@@ -10,8 +10,9 @@ import LikeBtn from '../components/LikeBtn';
 
 
 function Detail() {
-  const [article, setArticle] = useState(null);
   const { id } = useParams();
+  
+  const [article, setArticle] = useState(null);
   const [cookies] = useCookies(['access', 'refresh']);
   const [commentCount, setCommentCount] = useState(0);
   const [comments, setComments] = useState([]);
@@ -80,6 +81,7 @@ function Detail() {
       try {
         const response = await axios.get(`http://127.0.0.1:8000/articles/${id}/`);
         setArticle(response.data);
+        console.log(response.data);
       } catch (error) {
         console.error(error);
       }
@@ -118,7 +120,10 @@ function Detail() {
         </div>
         <div className="d-flex justify-content-between align-items-center">
           <div className='d-flex flex-column'> 
-            <div>{article.username}</div> 
+            <Link to={`/profile/${article.user}`}>
+              <div>{article.username}</div>
+            </Link> 
+              {/* <div>{article.username}</div> */}
             <div className='date'>{formatDate(article.created_at)}</div>
           </div>
           <div>
