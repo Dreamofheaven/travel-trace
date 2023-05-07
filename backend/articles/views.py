@@ -245,19 +245,36 @@ def comment_detail(request, comment_pk):
             serializer.save() 
             return Response(serializer.data)
 
-@api_view(['POST'])
-# @permission_classes([IsAuthenticated])
-def like_article(request, article_pk):
-    article = Article.objects.get(pk=article_pk)
-    user = request.user
-    if user in article.like_users.all():
-        article.like_users.remove(user)
-        is_liked = False
-    else:
-        article.like_users.add(user)
-        is_liked = True
-    serializer = ArticleSerializer(article)
-    return Response({'is_liked': is_liked, 'article': serializer.data})
+class ArticleLikeAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, article_pk):
+        article = Article.objects.get(pk=article_pk)
+        user = request.user
+        is_liked = user in article.like_users.all()
+        return Response({'is_liked': is_liked})
+    
+    def post(self, request, article_pk):
+        article = Article.objects.get(pk=article_pk)
+        user = request.user
+        if user in article.like_users.all():
+            article.like_users.remove(user)
+            is_liked = False
+        else:
+            article.like_users.add(user)
+            is_liked = True
+        serializer = ArticleSerializer(article)
+        return Response({'is_liked': is_liked, 'article': serializer.data})
+
+
+    def delete(self, request, article_pk):
+        article = Article.objects.get(pk=article_pk)
+        user = request.user
+        if user in article.like_users.all():
+            article.like_users.remove(user)
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['POST'])
 # @permission_classes([IsAuthenticated])
