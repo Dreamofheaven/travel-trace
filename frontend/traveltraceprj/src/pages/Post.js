@@ -18,7 +18,7 @@ function Post() {
   const [content, setContent] = useState('');
   const [category, setCategory] = useState(''); // 선택된 값을 상태로 유지
   const [location, setLocation] = useState('');
-  const [placeName, setPlaceName] = useState('');
+  const [placename, setPlaceName] = useState('');
  
   //쿠키
   const [cookies] = useCookies(['access', 'refresh']);
@@ -40,7 +40,7 @@ function Post() {
 
   const handleSaveLocation = () => {
     setLocation(location)
-    setPlaceName(placeName)
+    setPlaceName(placename)
     setLgShow(false) // 모달 닫기
   }
 
@@ -60,7 +60,7 @@ function Post() {
   }
   
 
-  async function createArticle(title, content, category, rating, images, location) {
+  async function createArticle(title, content, category, rating, images, location, placename) {
     const formData = new FormData();
   
     // 이미지 추가
@@ -116,6 +116,7 @@ function Post() {
       formData.append('category', category);
       formData.append('rating', rating);
       formData.append('location', location);
+      formData.append('placename', placename)
   
       // 게시글 생성
       const responseCreate = await axios.post('http://127.0.0.1:8000/articles/', formData, {
@@ -176,7 +177,7 @@ function Post() {
               <ImageFuntion images={images} setShowImages={setShowImages} />
               {/* <input type="file" id="profile-upload" accept="image/*" onChange={handleImagesChange} /> */}</div>
             <div className='d-flex justify-content-between mb-3'>
-              <div><p className='location_text'>{placeName}</p></div>
+              <div><p className='location_text'>{placename}</p></div>
               <div><Button className='location_btn' variant="primary" onClick={() => setLgShow(true)}>장소 선택</Button></div>
             </div>
             <>
@@ -198,7 +199,7 @@ function Post() {
                       <button className='button2' type="submit">검색</button>
                     </form>
                     <KakaoMap searchPlace={Place}  setLocation={setLocation} setPlaceName={setPlaceName}/>
-                    <p className='mt-3'>장소: { placeName }</p>
+                    <p className='mt-3'>장소: { placename }</p>
                     <p>주소: { location }</p>
                   </>
                 </Modal.Body>
