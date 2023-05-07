@@ -1,15 +1,13 @@
 // // 게시글 작성 페이지
 import React, { useState } from 'react';
 import Card from 'react-bootstrap/Card';
-// import DatePicker from '../components/DatePicker';
-import { Button, Container, InputGroup, Form, Row, Col, FormControl, Modal } from 'react-bootstrap';
+import { Button, Container, InputGroup, Form, Row, Col, Modal } from 'react-bootstrap';
 import ImageFuntion from '../components/Images';
 import Rating from '../components/Rating';
 import "../styles/Post.css";
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
 import KakaoMap  from '../kakao/KakaoMap';
-// import Map from '../components/Map';
 
 function Post() {
  
@@ -126,11 +124,13 @@ function Post() {
       });
   
       console.log(responseCreate.data);
+      window.location.href = '/all';
       // 게시글 작성 성공 후 처리할 작업
     } catch (error) {
       console.log(error);
       console.log(title, content, rating, '실패!', category, images, location);
       // 게시글 작성 실패 후 처리할 작업
+      window.location.href = '/all';
     }
   }
   return (
@@ -140,7 +140,6 @@ function Post() {
           <Form onSubmit={(e) => {
             e.preventDefault()
             createArticle(title, content, category, rating, images, location, placename);
-            window.location.href = '/';
           }}>
             <Row className="mb-3">
               <Col xs={9}>

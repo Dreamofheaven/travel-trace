@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Button } from 'react-bootstrap';
-import axios from 'axios';
-import { useCookies } from 'react-cookie';
+// import axios from 'axios';
+// import { useCookies } from 'react-cookie';
+import { Link } from 'react-router-dom';
 const { kakao } = window;
 
 const Map2 = () => {
-  const [cookies] = useCookies(['access', 'refresh']);//쿠키
+  // const [cookies] = useCookies(['access', 'refresh']);//쿠키
   const [location, setLocation] = useState("");
 
   useEffect(() => {
@@ -100,24 +101,23 @@ const Map2 = () => {
     }
   });
 
-  // 주소를 클릭하면 서버로 보내기 
-  const handleClicked = (event) => {
-    event.preventDefault();
-
-    // HTTP POST 요청 보내기
-    axios.post(`http://127.0.0.1:8000/accounts/current_location/`, {location},{
-      headers: {
-        Authorization: `Bearer ${cookies.access}`, // access 토큰을 요청 헤더에 포함
-      },})
-      .then(response => {
-        console.log(response);
-        window.location.href = '/nearby';
-      })
-      .catch(error => {
-        console.log(error);
-        // window.location.href = '/nearby';
-      });
-  }
+//   // 주소를 클릭하면 서버로 보내기 
+//   const handleClicked = (event) => {
+//     event.preventDefault();
+//         // HTTP POST 요청 보내기
+//     axios.post(`http://127.0.0.1:8000/accounts/current_location/`, {location},{
+//       headers: {
+//         Authorization: `Bearer ${cookies.access}`, // access 토큰을 요청 헤더에 포함
+//       },})
+//       .then(response => {
+//         console.log(response);
+//         window.location.href = '/nearby';
+//       })
+//       .catch(error => {
+//         console.log(error);
+//         // window.location.href = '/nearby';
+//       });
+// }
 
   return (
     <Container className="d-flex justify-content-center">
@@ -127,7 +127,7 @@ const Map2 = () => {
         textAlign: 'center',
       }}/>
       <div className="map_wrap">
-        <Button id="centerAddr" onClick={handleClicked}
+        {/* <Button id="centerAddr" onClick={handleClicked}
           style={{
             position: 'absolute',
             top: '20%',
@@ -138,7 +138,21 @@ const Map2 = () => {
             border :'none',
             padding: '12px',
             borderRadius: '10px',
-          }}/>
+          }}/> */}
+          <Link to="/all">
+            <Button id="centerAddr"
+              style={{
+                position: 'absolute',
+                top: '20%',
+                left: '20%',
+                transform: 'translate(-50%, -50%)',
+                zIndex: '1',
+                backgroundColor: '#A0D468',
+                border :'none',
+                padding: '12px',
+                borderRadius: '10px',
+              }}/>
+          </Link>
       </div>
     </Container>
   );
