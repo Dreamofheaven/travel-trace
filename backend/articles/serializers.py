@@ -35,19 +35,21 @@ class ArticleListSerializer(serializers.ModelSerializer):
     def get_username(self, obj):
         return obj.user.username
 
-
+class CommentInArticleSerializer(serializers.ModelSerializer):
+        user = serializers.CharField(source='user.username')
+        created_at = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S')
+        def get_user(self, obj):
+            return obj.user.username
+        class Meta:
+            model = Comment
+            fields = ('id', 'user', 'content', 'created_at')
+            read_only_fields = ('user',)
 
 class ArticleSerializer(serializers.ModelSerializer):
     images = ImageSerializer(many=True, required=False)
     views = serializers.IntegerField(read_only=True)
     username = serializers.SerializerMethodField()
-    class CommentInArticleSerializer(serializers.ModelSerializer):
-        user = serializers.CharField(source='user.username')
-        created_at = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S')
-        class Meta:
-            model = Comment
-            fields = ('id', 'user', 'content', 'created_at')
-            read_only_fields = ('user',)
+    
 
     comment_set = CommentInArticleSerializer(many=True, read_only=True)
     comment_count = serializers.IntegerField(source='comment_set.count', read_only=True)
@@ -126,7 +128,7 @@ class ArticleSerializer(serializers.ModelSerializer):
     
 class CommentSerializer(serializers.ModelSerializer):
     like_count = serializers.SerializerMethodField()
-    # user = serializers.CharField(source='user.username')
+
 
     class Meta:
         model = Comment
@@ -137,4 +139,7 @@ class CommentSerializer(serializers.ModelSerializer):
     def get_like_count(self, instance):
         return instance.like_users.count()
 
-
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['user'] = instance.user.username
+        return representation

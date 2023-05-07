@@ -27,7 +27,7 @@ function Detail() {
 
   const fetchComments = async () => {
     try {
-      const response = await axios.get(`http://127.0.0.1:8000/articles/${id}/comments/list/`);
+      const response = await axios.get(`http://127.0.0.1:8000/articles/${id}/comments/`);
       setComments(response.data);
     } catch (error) {
       console.error(error);
@@ -48,7 +48,7 @@ function Detail() {
     setContent('');
     console.log(content); // content 값 확인
     axios.post(
-      `http://127.0.0.1:8000/articles/${id}/comments/`,
+      `http://127.0.0.1:8000/articles/${id}/comments/create/`,
       { content },
       {
         headers: {
@@ -58,7 +58,10 @@ function Detail() {
     )
 
     .then((response) => {
-      setComments([...newContent, { content, user: article.username, created_at: new Date().toISOString() }]);
+      setComments((prevComments) => [
+        ...prevComments,
+        { content, user: article.username, created_at: new Date().toISOString() }
+      ]);
       setCommentCount(commentCount + 1);
       setContent('');
     })
@@ -192,7 +195,7 @@ function Detail() {
         {comments.map((comment) => (
           <div key={comment.id}>
             <div className="d-flex mb-3">
-              <p className="ms-3">{comment.user.username}</p>
+              <p className="ms-3">{comment.user}</p>
               <p className="ms-auto me-3">{formatDate(comment.created_at)}</p>
             </div>
             <div className="d-flex align-items-center">
