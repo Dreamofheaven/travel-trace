@@ -48,6 +48,7 @@ def upload_image(request):
     return Response({'fileUrls': file_urls})
 
 class NearbArticleListView(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self, request):
         # 로그인한 사용자를 가져옵니다.
         user = request.user
@@ -79,37 +80,6 @@ class NearbArticleListView(APIView):
         serializer = ArticleListSerializer(articles, many=True)
         return Response(serializer.data)
 
-
-
-
-# class NearbArticleListView(APIView):
-#     def get(self, request):
-#         user_latitude = request.query_params.get('user_latitude')
-#         user_longitude = request.query_params.get('user_longitude')
-#         # 유저 위치에서 가까운 게시글 순으로 정렬
-#         articles = Article.objects.filter(
-#             Q(latitude__isnull=False) &
-#             Q(longitude__isnull=False)
-#         ).annotate(
-#             distance=(
-#                 ((float(user_latitude) - float(latitude)) ** 2) +
-#                 ((float(user_longitude) - float(longitude)) ** 2)
-#             ) ** 0.5
-#         ).order_by('distance')  
-#         serializer = ArticleListSerializer(articles, many=True)
-#         return Response(serializer.data)    
-
-# class CustomTokenAuthentication(TokenAuthentication):
-#     def authenticate_credentials(self, key):
-#         try:
-#             token = self.get_model().objects.get(key=key)
-#         except self.get_model().DoesNotExist:
-#             raise AuthenticationFailed('Invalid token.')
-
-#         if not token.user.is_active:
-#             raise AuthenticationFailed('User inactive or deleted.')
-
-#         return (token.user, token)
 
 class ArticleListView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
@@ -175,8 +145,7 @@ class ArticleListView(generics.ListAPIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['GET', 'DELETE', 'PUT'])
-# @authentication_classes([SessionAuthentication, BasicAuthentication])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def article_detail(request, article_pk):
     try:
         article = Article.objects.get(pk=article_pk)
@@ -244,7 +213,7 @@ def comment_create(request, article_pk):
 
 @api_view(['GET', 'DELETE', 'PUT'])
 # @authentication_classes([SessionAuthentication, BasicAuthentication])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def comment_detail(request, comment_pk):
     comment = Comment.objects.get(pk=comment_pk)
     if request.method == 'GET':
@@ -293,7 +262,7 @@ class ArticleLikeAPIView(APIView):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['POST'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def like_comment(request, article_pk, comment_pk):
     comment = Comment.objects.get(pk=comment_pk)
     user = request.user

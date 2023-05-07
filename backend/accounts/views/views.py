@@ -338,8 +338,8 @@ class UserLocationView(APIView):
 
 
 class MyArticleListView(generics.ListAPIView):
-    serializer_class = MyArticleSerializer
     permission_classes = [IsAuthenticated]
+    serializer_class = MyArticleSerializer
 
     def get_queryset(self):
         user = self.request.user
