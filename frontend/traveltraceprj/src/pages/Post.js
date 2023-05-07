@@ -224,7 +224,10 @@ function Post() {
               {/* <Rating setScore={setScore} />  */}
               <Rating rating={rating} setCountStar={setCountStar} />
               {/* Rating 컴포넌트 추가 */}
-              <Button className='mt-2 create_btn' type="submit">후기 생성</Button>
+              <div className='d-flex justify-content-end'>
+              <Button className='mt-2 me-3 create_btn' type="submit">임시 저장</Button>
+              <Link type="button" className="btn mt-2 link3_btn btn-primary" to='/all'>후기 생성</Link>
+              </div>
           </Form>
         </Card.Body>
       </Card>

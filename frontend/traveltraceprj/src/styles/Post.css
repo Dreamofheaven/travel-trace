@@ -7,11 +7,19 @@
 }
 
 .create_btn {
-  margin-left: 88%;
   white-space: nowrap;
   background-color: #A0D468;
   border: 0;
   font-weight: bold;
+
+}
+
+.link3_btn {
+  white-space: nowrap;
+  color: white;
+  border: 0;
+  font-weight: bold;
+  text-decoration: none;
 
 }
 

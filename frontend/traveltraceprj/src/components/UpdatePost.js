@@ -5,6 +5,7 @@ import { Button, Container, InputGroup, Form, Row, Col, FormControl, Modal } fro
 import ImageFuntion from '../components/Images';
 import Rating from '../components/Rating';
 import "../styles/Post.css";
+import { Link, useNavigate} from 'react-router-dom';
 import KakaoMap  from '../kakao/KakaoMap';
 
 function UpdatePost(props) {
@@ -163,7 +164,10 @@ function UpdatePost(props) {
               {/* <Rating setScore={setScore} />  */}
               <Rating rating={rating} onChange={handleRatingChange} />
               {/* Rating 컴포넌트 추가 */}
-            <Button className='mt-2 create_btn' type="submit">후기 수정</Button>
+              <div className='d-flex justify-content-end'>
+                <Button className='mt-2 me-3 create_btn' type="submit">임시 저장</Button>
+                <Link type="button" className="btn mt-2 link3_btn btn-primary" to='/all'>후기 수정</Link>
+              </div>
           </Form>
         </Card.Body>
       </Card>
