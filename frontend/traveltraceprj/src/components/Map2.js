@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Button } from 'react-bootstrap';
-// import axios from 'axios';
-// import { useCookies } from 'react-cookie';
+import axios from 'axios';
+import { useCookies } from 'react-cookie';
 import { Link } from 'react-router-dom';
 const { kakao } = window;
 
 const Map2 = () => {
-  // const [cookies] = useCookies(['access', 'refresh']);//쿠키
+  const [cookies] = useCookies(['access', 'refresh']);//쿠키
   const [location, setLocation] = useState("");
 
   useEffect(() => {
@@ -82,8 +82,6 @@ const Map2 = () => {
       });
     });
       
-
-  
       // 지도 중심좌표를 접속위치로 변경합니다
       map.setCenter(locPosition);    
     }
@@ -116,23 +114,23 @@ const Map2 = () => {
     }
   });
 
-//   // 주소를 클릭하면 서버로 보내기 
-//   const handleClicked = (event) => {
-//     event.preventDefault();
-//         // HTTP POST 요청 보내기
-//     axios.post(`http://127.0.0.1:8000/accounts/current_location/`, {location},{
-//       headers: {
-//         Authorization: `Bearer ${cookies.access}`, // access 토큰을 요청 헤더에 포함
-//       },})
-//       .then(response => {
-//         console.log(response);
-//         window.location.href = '/nearby';
-//       })
-//       .catch(error => {
-//         console.log(error);
-//         // window.location.href = '/nearby';
-//       });
-// }
+  // 주소를 클릭하면 서버로 보내기 
+  const handleClicked = (event) => {
+    event.preventDefault();
+        // HTTP POST 요청 보내기
+    axios.post(`http://127.0.0.1:8000/accounts/current_location/`, {location},{
+      headers: {
+        Authorization: `Bearer ${cookies.access}`, // access 토큰을 요청 헤더에 포함
+      },})
+      .then(response => {
+        console.log(response);
+        window.location.href = '/nearby';
+      })
+      .catch(error => {
+        console.log(error);
+        window.location.href = '/nearby';
+      });
+}
 
   return (
     <Container className="d-flex justify-content-center my-5">
@@ -142,7 +140,7 @@ const Map2 = () => {
         textAlign: 'center',
       }}/>
       <div className="map_wrap">
-        {/* <Button id="centerAddr" onClick={handleClicked}
+        <Button id="centerAddr" onClick={handleClicked}
           style={{
             position: 'absolute',
             top: '15%',
@@ -153,8 +151,8 @@ const Map2 = () => {
             border :'none',
             padding: '12px',
             borderRadius: '10px',
-          }}/> */}
-          <Link to="/all">
+          }}/>
+          {/* <Link to="/all">
             <Button id="centerAddr"
               style={{
                 position: 'absolute',
@@ -167,7 +165,7 @@ const Map2 = () => {
                 padding: '12px',
                 borderRadius: '10px',
               }}/>
-          </Link>
+          </Link> */}
       </div>
     </Container>
   );
