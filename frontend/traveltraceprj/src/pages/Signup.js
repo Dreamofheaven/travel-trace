@@ -22,12 +22,11 @@ function SignUp() {
       setCookies('refresh', refresh, { secure: true, sameSite: 'strict' });
 
       console.log('Successfully signed up and loged in!');
-      window.location.href = '/';
+      window.location.href = '/login';
       // 리다이렉트 등 다른 작업 수행
     } catch (error) {
       console.error(error.response.data);
-      alert(error.response.data.email);
-      // 에러 처리
+      alert('회원가입을 실패했습니다.');
     }
   };
 

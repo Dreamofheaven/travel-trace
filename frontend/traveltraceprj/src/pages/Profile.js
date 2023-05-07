@@ -9,7 +9,9 @@ import { BookmarkHeartFill, PostcardHeartFill, PersonPlus, PlusSquareDotted } fr
 function Profile() {
   const [user, setUser] = useState({});
   const { user_pk } = useParams(); // URL 파라미터에서 user_pk 가져오기
-  const [isFollowed, setIsFollowed] = useState(false);
+  const [isFollowed, setIsFollowed] = useState(null);
+
+  const [followArray, setFollowArray] = useState([]);
 
   useEffect(() => {
     const token = document.cookie.replace(/(?:(?:^|.*;\s*)access\s*\=\s*([^;]*).*$)|^.*$/, "$1");
@@ -20,6 +22,9 @@ function Profile() {
         const result = await axios.get(`http://127.0.0.1:8000/accounts/profile/${user_pk}`);
         setUser(result.data);
         console.log(result.data);
+        const followings = result.data.followings;
+        console.log(followings)
+        setFollowArray(followings)
       } catch (error) {
         console.error(error);
         console.log(user_pk);
@@ -34,6 +39,14 @@ function Profile() {
         .then(response => setIsFollowed(response.data.is_followed))
         .catch(error => console.log(error));
         console.log(user_pk);
+
+        const isMatch = followArray.map(following => following === user_pk).includes(true);
+        if (isMatch) {
+          setIsFollowed(true);
+        } else {
+          setIsFollowed(false);
+        }
+        console.log(followArray)
     };
 
     const handleUnfollow = () => {
@@ -68,8 +81,9 @@ function Profile() {
             </>
           </span>
           <span className='ps-3 align-self-center'>
-            <PersonPlus className='follow_icon'onClick={isFollowed ? handleUnfollow : handleFollow} />
-            <span>{isFollowed ? '언팔로우' : '팔로우'}</span>
+            <PersonPlus className='follow_icon'
+              onClick={isFollowed ? handleUnfollow : handleFollow} />
+              <span>{isFollowed ? '언팔로우' : '팔로우'}</span>
           </span>
         </div>
         <span className='user_follow'>
@@ -94,6 +108,26 @@ function Profile() {
 }
 
 export default Profile;
+
+
+
+// 잠시 주석
+
+// const handleFollowToggle = () => {
+//   if (isFollowed) {
+//     // 팔로우 API 호출
+//     axios.post(`http://127.0.0.1:8000/accounts/follow/${user_pk}/`)
+//       .then(response => setIsFollowed(response.data.is_followed))
+//       .catch(error => setIsFollowed(false));
+//       console.log(user_pk);
+//   } else {
+//     // 언팔로우 API 호출
+//     axios.delete(`http://127.0.0.1:8000/accounts/follow/${user_pk}/`)
+//       .then(response => setIsFollowed(true))
+//       .catch(error => console.log(error));
+//       console.log(user_pk);
+//   }
+// }
 
 
 

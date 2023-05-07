@@ -1,19 +1,22 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import "../styles/All.css";
-import { Card, Col, Row, Button, ButtonGroup, Container, Badge, Form } from "react-bootstrap";
+import { Card, Col, Row, Button, Container, Form } from "react-bootstrap";
 import { PinMap ,Search, Eye } from 'react-bootstrap-icons'
 import defaultImg from '../assets/default_img.png';
 import { Link } from 'react-router-dom';
 import BookmarkBtn from '../components/BookmarkBtn';
 import LikeBtn from '../components/LikeBtn';
 
-
 function All() {
   const [articles, setArticles] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState(undefined);
   const [sortBy, setSortBy] = useState("");
+
+  useEffect(() => {
+    handleNearbyClick(); // 컴포넌트 마운트 후 handleNearbyClick 함수 실행
+  }, []);
 
   const handleSearch = event => {
     setSearchTerm(event.target.value);
@@ -144,4 +147,4 @@ function All() {
   );
 }
 
-export default All;
+export default {All};

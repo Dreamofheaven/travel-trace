@@ -24,6 +24,8 @@ function App() {
 
   const { id } = useParams();
   const { user_pk } = useParams();
+  console.log("id:" + id)
+  console.log("user_pk:" + user_pk)
 
   useEffect(() => {
     const access_token = localStorage.getItem('access');

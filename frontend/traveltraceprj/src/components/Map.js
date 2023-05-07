@@ -2,12 +2,11 @@
 // 맵 2탄 + 가라로 해보는 것
 import React, { useState, useEffect } from 'react';
 import { Container, Button } from 'react-bootstrap';
-import axios from 'axios';
-import { useCookies } from 'react-cookie';
+
 const { kakao } = window;
 
 const Map = () => {
-  const [cookies] = useCookies(['access', 'refresh']);//쿠키
+
   const [location, setLocation] = useState("");
 
   useEffect(() => {
