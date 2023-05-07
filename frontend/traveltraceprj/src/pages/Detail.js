@@ -183,9 +183,9 @@ function Detail() {
           <p>=============댓글보기테스트===========</p>
           {newContent.map((item, index) => (
             <div key={index} className="d-flex mb-3">
-            <p className="ms-3">{article.username}</p>
+            <p className="ms-3">{item.user}</p>
             <p className="ms-auto me-3">{formatDate(new Date().toISOString())}</p>
-            <p>{item}</p>
+            <p>{item.content}</p>
             <button className="btn btn-success ms-auto" style={{ backgroundColor: '#A0D468', border: 'none' }}>댓글 좋아요</button>
             </div>
           ))}
