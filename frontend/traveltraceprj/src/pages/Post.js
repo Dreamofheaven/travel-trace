@@ -140,6 +140,7 @@ function Post() {
           <Form onSubmit={(e) => {
             e.preventDefault()
             createArticle(title, content, category, rating, images, location, placename);
+            window.location.href = '/';
           }}>
             <Row className="mb-3">
               <Col xs={9}>

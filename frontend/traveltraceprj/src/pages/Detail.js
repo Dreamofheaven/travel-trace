@@ -8,6 +8,8 @@ import "../styles/Detail.css";
 import BookmarkBtn from '../components/BookmarkBtn';
 import LikeBtn from '../components/LikeBtn';
 import DeleteBtn from '../components/DeleteBtn';
+import UpdateBtn from '../components/UpdateBtn';
+
 
 function CustomDropdownToggle(props) {
   return (
@@ -30,6 +32,11 @@ function Detail() {
   const [comments, setComments] = useState([]);
   const [content, setContent] = useState('');
   const [newContent, setNewContent] = useState([]);
+
+
+  const handleUpdate = (updatedArticle) => {
+    setArticle(updatedArticle);
+  };
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -142,7 +149,7 @@ function Detail() {
               <Dropdown>
                 <Dropdown.Toggle as={CustomDropdownToggle} />
                 <Dropdown.Menu>
-                  <Dropdown.Item href="#/action-1">수정</Dropdown.Item>
+                  <UpdateBtn article={article} onUpdate={handleUpdate} />
                   <DeleteBtn articlePk={article.id} />
                 </Dropdown.Menu>
               </Dropdown>
