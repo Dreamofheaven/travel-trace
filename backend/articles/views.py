@@ -266,14 +266,16 @@ class ArticleLikeAPIView(APIView):
         article = Article.objects.get(pk=article_pk)
         user = request.user
         if user in article.like_users.all():
-            article.like_users.remove(user)
-            is_liked = False
+            return Response({
+                'message': 'already exists'
+            },
+            status=status.HTTP_200_OK)
+
         else:
             article.like_users.add(user)
             is_liked = True
         serializer = ArticleSerializer(article)
         return Response({'is_liked': is_liked, 'article': serializer.data})
-
 
     def delete(self, request, article_pk):
         article = Article.objects.get(pk=article_pk)
