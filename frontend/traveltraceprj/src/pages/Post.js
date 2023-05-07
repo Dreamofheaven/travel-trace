@@ -18,7 +18,7 @@ function Post() {
   const [content, setContent] = useState('');
   const [category, setCategory] = useState(''); // 선택된 값을 상태로 유지
   const [location, setLocation] = useState('');
-  const [placeName, setPlaceName] = useState('');
+  const [placename, setPlaceName] = useState('');
  
   //쿠키
   const [cookies] = useCookies(['access', 'refresh']);
@@ -40,7 +40,7 @@ function Post() {
 
   const handleSaveLocation = () => {
     setLocation(location)
-    setPlaceName(placeName)
+    setPlaceName(placename)
     setLgShow(false) // 모달 닫기
   }
 
@@ -60,7 +60,7 @@ function Post() {
   }
   
 
-  async function createArticle(title, content, category, rating, images, location) {
+  async function createArticle(title, content, category, rating, images, location, placename) {
     const formData = new FormData();
   
     // 이미지 추가
@@ -116,6 +116,7 @@ function Post() {
       formData.append('category', category);
       formData.append('rating', rating);
       formData.append('location', location);
+      formData.append('placename', placename)
   
       // 게시글 생성
       const responseCreate = await axios.post('http://127.0.0.1:8000/articles/', formData, {
@@ -129,12 +130,6 @@ function Post() {
     } catch (error) {
       console.log(error);
       console.log(title, content, rating, '실패!', category, images, location);
-      console.log(title, typeof(title))
-      console.log(content, typeof(content))
-      console.log(category, typeof(category))
-      console.log(images, typeof(images))
-      console.log(location, typeof(location))
-      console.log(rating, typeof(rating))
       // 게시글 작성 실패 후 처리할 작업
     }
   }
@@ -144,7 +139,7 @@ function Post() {
         <Card.Body>
           <Form onSubmit={(e) => {
             e.preventDefault()
-            createArticle(title, content, category, rating, images, location);
+            createArticle(title, content, category, rating, images, location, placename);
           }}>
             <Row className="mb-3">
               <Col xs={9}>
@@ -164,10 +159,10 @@ function Post() {
                   <InputGroup.Text id="basic-addon1">카테고리</InputGroup.Text>
                   <Form.Select aria-label='Default select example' onChange={handleCategoryChange}>
                     <option>---</option>
-                    <option value="1">힐링</option>
-                    <option value="2">관광</option>
-                    <option value="3">맛집/카페</option>
-                    <option value="4">액티비티</option>
+                    <option value="힐링">힐링</option>
+                    <option value="관광">관광</option>
+                    <option value="맛집,카페">맛집/카페</option>
+                    <option value="액티비티">액티비티</option>
                   </Form.Select>
                 </InputGroup>
               </Col>
@@ -176,7 +171,7 @@ function Post() {
               <ImageFuntion images={images} setShowImages={setShowImages} />
               {/* <input type="file" id="profile-upload" accept="image/*" onChange={handleImagesChange} /> */}</div>
             <div className='d-flex justify-content-between mb-3'>
-              <div><p className='location_text'>{placeName}</p></div>
+              <div><p className='location_text'>{placename}</p></div>
               <div><Button className='location_btn' variant="primary" onClick={() => setLgShow(true)}>장소 선택</Button></div>
             </div>
             <>
@@ -191,14 +186,14 @@ function Post() {
                     해당 장소를 마킹하고 등록해주세요
                   </Modal.Title>
                 </Modal.Header>
-                <Modal.Body className='d-flex flex-column align-items-center'>
+                <Modal.Body className='d-flex flex-column align-items-center modal_body'>
                   <>
                     <form className="inputForm mb-3" onSubmit={handleSubmit2}>
                       <input className='search_bar2' placeholder="검색어를 입력하세요" onChange={onChange} value={InputText} />
                       <button className='button2' type="submit">검색</button>
                     </form>
                     <KakaoMap searchPlace={Place}  setLocation={setLocation} setPlaceName={setPlaceName}/>
-                    <p className='mt-3'>장소: { placeName }</p>
+                    <p className='mt-3'>장소: { placename }</p>
                     <p>주소: { location }</p>
                   </>
                 </Modal.Body>

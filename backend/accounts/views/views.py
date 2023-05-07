@@ -147,8 +147,26 @@ class BookmarkListView(APIView):
     
 
 class BookmarkView(APIView):
-    permission_classes = [IsAuthenticated]   
-    # 북마크 생성
+    permission_classes = [IsAuthenticated]
+
+    def get_article(self, article_pk):
+        try:
+            article = Article.objects.get(pk=article_pk)
+        except Article.DoesNotExist:
+            raise status.HTTP_404_NOT_FOUND
+        return article
+
+    def get_is_bookmarked(self, request, article_pk):
+        if not request.user.is_authenticated:
+            return False
+        return Bookmark.objects.filter(user=request.user, article__pk=article_pk).exists()
+
+    def get(self, request, article_pk):
+        article = self.get_article(article_pk)
+        is_bookmarked = self.get_is_bookmarked(request, article.pk)
+        data = {'is_bookmarked': is_bookmarked}
+        return Response(data, status=status.HTTP_200_OK)
+    
     def post(self, request, article_pk):
         # 북마크를 할 게시글을 조회한다.
         article = Article.objects.get(pk=article_pk)
@@ -157,10 +175,12 @@ class BookmarkView(APIView):
         # get_or_create: 장고 쿼리셋 api 중 하나. 이미 있는 객체라면 가져오고 없으면 생성하라.
         # get_or_create()는 두 개의 값을 리턴합니다. 첫 번째 값은 해당 조건으로 필터링한 객체를 리턴하며, 두 번째 값은 객체가 새로 생성되었는지 아닌지를 나타내는 boolean 값입니다
         bookmark, created = Bookmark.objects.get_or_create(user=request.user, article=article)
-        serializer = BookmarkSerializer(bookmark)
-        
+        serializer = BookmarkSerializer(bookmark, context={'request': request})
+
         # 없을 경우, 새로운 북마크를 생성한다.
         if created:
+            article.is_bookmarked = True
+            article.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         # 있을 경우, 아무런 행동도 취하지 않는다.
         else:
@@ -174,8 +194,10 @@ class BookmarkView(APIView):
         article = Article.objects.get(pk=article_pk)
         # 해당 게시글 & 해당 유저의 북마크 지우기
         Bookmark.objects.filter(user=request.user, article=article).delete()
+        # 해당 게시글의 북마크 상태를 업데이트한다.
+        article.is_bookmarked = False
+        article.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
-    
 
 class FollowView(APIView):
     permission_classes = [IsAuthenticated]

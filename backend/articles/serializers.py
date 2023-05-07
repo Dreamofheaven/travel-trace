@@ -4,6 +4,7 @@ from rest_framework.response import Response
 
 
 class ImageSerializer(serializers.ModelSerializer):
+    
     class Meta:
         model = Image
         fields = ('image',)
@@ -28,22 +29,27 @@ class ArticleListSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Article
-        fields = ('user', 'username', 'id', 'title','content','location', 'rating','category','like_count','views', 'images')
-        read_only_fields = ('user', 'location', 'latitude', 'logitude')
+        fields = ('user', 'username', 'id', 'title','content','location', 'rating','category','like_count','views', 'images', 'placename')
+        read_only_fields = ('user', 'location', 'latitude', 'logitude', 'placename')
 
     def get_username(self, obj):
         return obj.user.username
 
+class CommentInArticleSerializer(serializers.ModelSerializer):
+        user = serializers.CharField(source='user.username')
+        created_at = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S')
+        def get_user(self, obj):
+            return obj.user.username
+        class Meta:
+            model = Comment
+            fields = ('id', 'user', 'content', 'created_at')
+            read_only_fields = ('user',)
 
 class ArticleSerializer(serializers.ModelSerializer):
     images = ImageSerializer(many=True, required=False)
     views = serializers.IntegerField(read_only=True)
     username = serializers.SerializerMethodField()
-    class CommentInArticleSerializer(serializers.ModelSerializer):
-        class Meta:
-            model = Comment
-            fields = ('content',)
-            read_only_fields = ('user',)
+    
 
     comment_set = CommentInArticleSerializer(many=True, read_only=True)
     comment_count = serializers.IntegerField(source='comment_set.count', read_only=True)
@@ -104,6 +110,7 @@ class ArticleSerializer(serializers.ModelSerializer):
         instance.content = validated_data.get('content', instance.content)
         instance.rating = validated_data.get('rating', instance.rating)
         instance.category = validated_data.get('category', instance.category)
+        instance.placename = validated_data.get('placename', instance.placename)
         instance.save()
 
         content = validated_data.get('content')
@@ -123,6 +130,7 @@ class ArticleSerializer(serializers.ModelSerializer):
 class CommentSerializer(serializers.ModelSerializer):
     like_count = serializers.SerializerMethodField()
 
+
     class Meta:
         model = Comment
         fields = '__all__'
@@ -132,4 +140,7 @@ class CommentSerializer(serializers.ModelSerializer):
     def get_like_count(self, instance):
         return instance.like_users.count()
 
-
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['user'] = instance.user.username
+        return representation
