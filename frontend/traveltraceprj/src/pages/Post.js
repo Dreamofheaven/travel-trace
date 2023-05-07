@@ -8,6 +8,7 @@ import "../styles/Post.css";
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
 import KakaoMap  from '../kakao/KakaoMap';
+import { Link, useNavigate} from 'react-router-dom';
 
 function Post() {
  
@@ -46,7 +47,7 @@ function Post() {
     setInputText(e.target.value)
   }
 
-  const handleSubmit2 = (e) => {
+  const Submit = (e) => {
     e.preventDefault()
     setPlace(InputText)
     setInputText('')
@@ -56,7 +57,7 @@ function Post() {
   const handleCategoryChange = (event) => {
     setCategory(event.target.value); // 선택된 값으로 상태 업데이트
   }
-  
+
 
   async function createArticle(title, content, category, rating, images, location, placename) {
     const formData = new FormData();
@@ -188,7 +189,7 @@ function Post() {
                 </Modal.Header>
                 <Modal.Body className='d-flex flex-column align-items-center modal_body'>
                   <>
-                    <form className="inputForm mb-3" onSubmit={handleSubmit2}>
+                    <form className="inputForm mb-3" onSubmit={Submit}>
                       <input className='search_bar2' placeholder="검색어를 입력하세요" onChange={onChange} value={InputText} />
                       <button className='button2' type="submit">검색</button>
                     </form>
@@ -223,7 +224,7 @@ function Post() {
               {/* <Rating setScore={setScore} />  */}
               <Rating rating={rating} setCountStar={setCountStar} />
               {/* Rating 컴포넌트 추가 */}
-            <Button className='mt-2 create_btn' type="submit">후기 생성</Button>
+              <Button className='mt-2 create_btn' type="submit">후기 생성</Button>
           </Form>
         </Card.Body>
       </Card>
