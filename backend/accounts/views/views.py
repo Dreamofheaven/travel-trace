@@ -47,7 +47,7 @@ class SignUpView(APIView):
 class UserView(APIView):
     # 유저 정보 확인
     def get(self, request):
-        print(request)
+        # print(request)
         try:
             # access token을 decode 해서 유저 id 추출 => 유저 식별
             access = request.COOKIES['access']
