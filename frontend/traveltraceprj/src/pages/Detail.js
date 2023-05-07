@@ -6,6 +6,7 @@ import { Bookmark, Heart } from 'react-bootstrap-icons';
 import { useCookies } from 'react-cookie';
 import "../styles/Detail.css";
 import BookmarkBtn from '../components/BookmarkBtn';
+import LikeBtn from '../components/LikeBtn';
 
 
 function Detail() {
@@ -119,7 +120,7 @@ function Detail() {
           </div>
           <div>
             <div className='d-flex'>
-              <div className='me-2'><Heart fill='grey' /></div>
+              <div className='me-2'><LikeBtn articleId={article.id} /></div>
               <div><BookmarkBtn articleId={article.id}/></div>
             </div>
           </div>
