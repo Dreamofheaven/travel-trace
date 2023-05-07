@@ -4,6 +4,7 @@ from rest_framework.response import Response
 
 
 class ImageSerializer(serializers.ModelSerializer):
+    
     class Meta:
         model = Image
         fields = ('image',)
@@ -28,8 +29,8 @@ class ArticleListSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Article
-        fields = ('user', 'username', 'id', 'title','content','location', 'rating','category','like_count','views', 'images')
-        read_only_fields = ('user', 'location', 'latitude', 'logitude')
+        fields = ('user', 'username', 'id', 'title','content','location', 'rating','category','like_count','views', 'images', 'placename')
+        read_only_fields = ('user', 'location', 'latitude', 'logitude', 'placename')
 
     def get_username(self, obj):
         return obj.user.username
