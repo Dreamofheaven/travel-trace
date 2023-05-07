@@ -4,13 +4,10 @@ import axios from 'axios';
 import { Container, Button, Form, Carousel } from 'react-bootstrap';
 import { Bookmark, Heart } from 'react-bootstrap-icons';
 import { useCookies } from 'react-cookie';
-
 function Detail() {
   const [article, setArticle] = useState(null);
-
   const { id } = useParams();
   const [cookies] = useCookies(['access', 'refresh']);
-  
   const [commentCount, setCommentCount] = useState(0);
   const [comments, setComments] = useState([]);
   const [content, setContent] = useState('');
@@ -30,7 +27,7 @@ function Detail() {
 
   const fetchComments = async () => {
     try {
-      const response = await axios.get(`http://127.0.0.1:8000/articles/${id}/comments`);
+      const response = await axios.get(`http://127.0.0.1:8000/articles/${id}/comments/list/`);
       setComments(response.data);
     } catch (error) {
       console.error(error);
@@ -59,9 +56,9 @@ function Detail() {
         },
       }
     )
-    
+
     .then((response) => {
-      setComments([...comments, { content, user: article.username, created_at: new Date().toISOString() }]);
+      setComments([...newContent, { content, user: article.username, created_at: new Date().toISOString() }]);
       setCommentCount(commentCount + 1);
       setContent('');
     })
@@ -79,18 +76,33 @@ function Detail() {
         console.error(error);
       }
     };
-
+    const fetchCommentCount = async () => {
+      try {
+        const response = await axios.get(`http://127.0.0.1:8000/articles/${id}/`);
+        setCommentCount(response.data.comment_count);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    const fetchComments = async () => {
+      try {
+        const response = await axios.get(`http://127.0.0.1:8000/articles/${id}/comments/`);
+        setComments(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+  
     fetchArticle();
     fetchCommentCount();
     fetchComments();
-  }, []);
+  }, [id]);
 
   if (!article) {
     return <div>Loading...</div>;
-  }
-
+    }
     return (
-    <Container className="mt-5">
+      <Container className="mt-5">
       <div className="border p-4">
         <div className='d-flex justify-content-between align-items-center'>
           <h3>{article.title}</h3>
@@ -109,6 +121,7 @@ function Detail() {
             </div>
           </div>
         </div>
+      </div>
         <hr className="my-4" />
         <Form>
           {/* Form 내용을 추가하거나 수정할 수 있습니다 */}
@@ -126,7 +139,6 @@ function Detail() {
                 </Carousel.Item>
               ))}
             </Carousel>
-
            </Container>
         </div>
           <div>
@@ -147,24 +159,23 @@ function Detail() {
             </p>
           </div>
         <div className="mt-4">
-        <hr className="my-4" />
-        <div className="d-flex justify-content-between align-items-center mb-2">
-          <p>댓글 개수: {commentCount}</p>
-        </div>
-
-        <Form onSubmit={handleSubmit}>
-          <div className="mb-3 d-flex justify-content-center align-items-center" style={{ marginBottom: '10px' }}>
-            <input 
-              type="text" 
-              className="form-control flex-grow-1" 
-              placeholder="댓글 입력" 
-              style={{ height: 'auto', minWidth: '70%', maxWidth: '90%' }}
-              onChange={handleCommentChange}
-            />
-            <button type="submit" className="btn btn-success ms-2" style={{ backgroundColor: '#A0D468', border: 'none' }}>등록</button>
-          </div>
           <hr className="my-4" />
-        </Form>
+          <div className="d-flex justify-content-between align-items-center mb-2">
+            <p>댓글 개수: {commentCount}</p>
+          </div>
+          <Form onSubmit={handleSubmit}>
+            <div className="mb-3 d-flex justify-content-center align-items-center" style={{ marginBottom: '10px' }}>
+              <input 
+                type="text" 
+                className="form-control flex-grow-1" 
+                placeholder="댓글 입력" 
+                style={{ height: 'auto', minWidth: '70%', maxWidth: '90%' }}
+                onChange={handleCommentChange}
+              />
+              <button type="submit" className="btn btn-success ms-2" style={{ backgroundColor: '#A0D468', border: 'none' }}>등록</button>
+            </div>
+            <hr className="my-4" />
+          </Form>
         <div>
           <p>=============댓글보기테스트===========</p>
           {newContent.map((item, index) => (
@@ -173,26 +184,26 @@ function Detail() {
             <p className="ms-auto me-3">{formatDate(new Date().toISOString())}</p>
             <p>{item}</p>
             <button className="btn btn-success ms-auto" style={{ backgroundColor: '#A0D468', border: 'none' }}>댓글 좋아요</button>
+            </div>
+          ))}
+        </div>
+        <div>
+        <hr className="my-4" />
+        {comments.map((comment) => (
+          <div key={comment.id}>
+            <div className="d-flex mb-3">
+              <p className="ms-3">{comment.user.username}</p>
+              <p className="ms-auto me-3">{formatDate(comment.created_at)}</p>
+            </div>
+            <div className="d-flex align-items-center">
+              <p>{comment.content}</p>
+              <button className="btn btn-success ms-auto" style={{ backgroundColor: '#A0D468', border: 'none' }}>댓글 좋아요</button>
+            </div>
+            <hr className="my-4" />
           </div>
         ))}
       </div>
-    
-      {comments.map((comment) => (
-        <div key={comment.id}>
-          <div className="d-flex mb-3">
-            <p className="ms-3">{comment.user}</p>
-            <p className="ms-auto me-3">{formatDate(comment.created_at)}</p>
-          </div>
-          <div className="d-flex align-items-center">
-            <p>{comment.content}</p>
-            <button className="btn btn-success ms-auto" style={{ backgroundColor: '#A0D468', border: 'none' }}>댓글 좋아요</button>
-          </div>
-          <hr className="my-4" />
-        </div>
-      ))}
-    </div>
       </div>
-  
     </Container>
   );
 }
