@@ -10,10 +10,11 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Detail from './pages/Detail';
 import All from './pages/All';
+import Nearby from './pages/Nearby';
 import EditAccount from './pages/EditAccount';
 import Bookmark from './pages/Bookmark';
 import PersonalAll from './pages/PersonalAll';
-import Map from "./components/Map";
+// import Map from "./components/Map";
 import Map2 from "./components/Map2";
 import Test from "./pages/Test";
 import { useParams } from 'react-router-dom';
@@ -22,6 +23,7 @@ function App() {
   const [loggedIn, setLoggedIn] = useState(false);
 
   const { id } = useParams();
+  const { user_pk } = useParams();
 
   useEffect(() => {
     const access_token = localStorage.getItem('access');
@@ -38,16 +40,17 @@ function App() {
       <AppNavbar />
       <Routes>
         <Route path="/" element={<MainPage />} />
-        <Route path="/profile" element={<Profile />} />
+        <Route path="/profile/:user_pk/" element={<Profile />} />
         <Route path="/post" element={<Post/>}/>
         <Route path="/login" element={<Login/>}/>
         <Route path="/signup" element={<Signup/>}/>
         <Route path="/detail/:id" element={<Detail/>}/>
         <Route path="/all" element={<All/>}/>
+        <Route path="/nearby" element={<Nearby/>}/>
         <Route path="/edit_account" element={<EditAccount/>}/>
         <Route path="/bookmark" element={<Bookmark/>}/>
         <Route path="/personal_all" element={<PersonalAll/>}/>
-        <Route path="/map" element={<Map/>}/>
+        {/* <Route path="/map" element={<Map/>}/> */}
         <Route path="/map_second" element={<Map2/>}/>
         <Route path="/test" element={<Test/>}/>
         

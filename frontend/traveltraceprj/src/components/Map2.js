@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container } from 'react-bootstrap';
+import { Container, Button } from 'react-bootstrap';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
 const { kakao } = window;
@@ -29,7 +29,7 @@ const Map2 = () => {
           const lon = position.coords.longitude; // 경도
       
           const locPosition = new kakao.maps.LatLng(lat, lon); // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
-          const message = '<div style="padding:5px;">여기에 계신가요?!</div>'; // 인포윈도우에 표시될 내용입니다
+          const message = '<div style="padding:20px; border-line:none; font-size:15px;">상단의 주소를 클릭하면<br>근처 여행지를 추천해드려요!</div>'; // 인포윈도우에 표시될 내용입니다
 
           // 마커와 인포윈도우를 표시합니다
           displayMarker(locPosition, message);
@@ -96,33 +96,28 @@ const Map2 = () => {
               break;
           }
         }
-
-        // HTTP POST 요청 보내기
-        axios.post(`http://127.0.0.1:8000/accounts/current_location/`, {location},{
-          headers: {
-            Authorization: `Bearer ${cookies.access}`, // access 토큰을 요청 헤더에 포함
-          },})
-          .then(response => {
-            console.log(response);
-            setTimeout(() => {
-              const confirmed = window.confirm('근처 여행지를 추천해 드릴까요?');
-              if (confirmed) {
-                window.location.href = '/all';
-              }
-            }, 3000); // 3초의 delay
-          })
-          .catch(error => {
-            console.log(error);
-            setTimeout(() => {
-              const confirmed = window.confirm('근처 여행지를 추천해 드릴까요?');
-              if (confirmed) {
-                window.location.href = '/all';
-              }
-            }, 3000); // 3초의 delay
-        });
       }
     }
   });
+
+  // 주소를 클릭하면 서버로 보내기 
+  const handleClicked = (event) => {
+    event.preventDefault();
+
+    // HTTP POST 요청 보내기
+    axios.post(`http://127.0.0.1:8000/accounts/current_location/`, {location},{
+      headers: {
+        Authorization: `Bearer ${cookies.access}`, // access 토큰을 요청 헤더에 포함
+      },})
+      .then(response => {
+        console.log(response);
+        window.location.href = '/nearby';
+      })
+      .catch(error => {
+        console.log(error);
+        // window.location.href = '/nearby';
+      });
+  }
 
   return (
     <Container className="d-flex justify-content-center">
@@ -131,11 +126,23 @@ const Map2 = () => {
         height: '500px',
         textAlign: 'center',
       }}/>
-      <div class="map_wrap">
-          <span id="centerAddr"></span>
+      <div className="map_wrap">
+        <Button id="centerAddr" onClick={handleClicked}
+          style={{
+            position: 'absolute',
+            top: '20%',
+            left: '20%',
+            transform: 'translate(-50%, -50%)',
+            zIndex: '1',
+            backgroundColor: '#A0D468',
+            border :'none',
+            padding: '12px',
+            borderRadius: '10px',
+          }}/>
       </div>
     </Container>
   );
 }
 
 export default Map2; 
+

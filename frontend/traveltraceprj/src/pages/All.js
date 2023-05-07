@@ -63,7 +63,6 @@ function All() {
     setSortBy(selectedSortBy);
   };
 
-
   useEffect(() => {
     const token = document.cookie.replace(/(?:(?:^|.*;\s*)access\s*\=\s*([^;]*).*$)|^.*$/, "$1");
     // console.log(token)

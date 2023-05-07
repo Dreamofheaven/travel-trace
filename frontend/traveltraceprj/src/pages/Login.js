@@ -23,6 +23,7 @@ function Login() {
         setCookies("access", response.data.token.access, { path: "/" });
         setCookies("refresh", response.data.token.refresh, { path: "/" });
         console.log('Successfully logged in!');
+        localStorage.setItem('user_id', response.data.user.id);
         console.log(email, password);
         console.log(response.data);
         console.log(response.data.user.id);
