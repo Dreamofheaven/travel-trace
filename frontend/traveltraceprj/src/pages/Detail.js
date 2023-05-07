@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import { Container, Button, Form, Carousel } from 'react-bootstrap';
-import { Bookmark, Heart } from 'react-bootstrap-icons';
+import { Container, Button, Form, Carousel, Dropdown } from 'react-bootstrap';
+import { ThreeDotsVertical } from 'react-bootstrap-icons';
 import { useCookies } from 'react-cookie';
 import "../styles/Detail.css";
 import BookmarkBtn from '../components/BookmarkBtn';
@@ -125,6 +125,18 @@ function Detail() {
             <div className='d-flex'>
               <div className='me-2'><LikeBtn articleId={article.id} /></div>
               <div><BookmarkBtn articleId={article.id}/></div>
+              <div>
+              <Dropdown>
+                <Dropdown.Toggle id="dropdown-basic">
+                  <ThreeDotsVertical />
+                </Dropdown.Toggle>
+
+                <Dropdown.Menu>
+                  <Dropdown.Item href="#/action-1">수정</Dropdown.Item>
+                  <Dropdown.Item href="#/action-2">삭제</Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+              </div>
             </div>
           </div>
         </div>
