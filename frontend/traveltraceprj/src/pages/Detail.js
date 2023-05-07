@@ -4,6 +4,10 @@ import axios from 'axios';
 import { Container, Button, Form, Carousel } from 'react-bootstrap';
 import { Bookmark, Heart } from 'react-bootstrap-icons';
 import { useCookies } from 'react-cookie';
+import "../styles/Detail.css";
+
+
+
 function Detail() {
   const [article, setArticle] = useState(null);
   const { id } = useParams();
@@ -106,13 +110,12 @@ function Detail() {
       <div className="border p-4">
         <div className='d-flex justify-content-between align-items-center'>
           <h3>{article.title}</h3>
-          <p className="me-3">{article.location}</p>
+          <p className="me-3">{article.placename} / {article.location.split(' ')[0]} {article.location.split(' ')[1]}</p>
         </div>
         <div className="d-flex justify-content-between align-items-center">
-          <div>
-            
-          {article.username} {formatDate(article.created_at)}
-            
+          <div className='d-flex flex-column'> 
+            <div>{article.username}</div> 
+            <div className='date'>{formatDate(article.created_at)}</div>
           </div>
           <div>
             <div className='d-flex'>
@@ -130,9 +133,9 @@ function Detail() {
           <Container style={{ maxWidth: '600px' }}>
             <Carousel>
               {article.images.map((image, index) => (
-                <Carousel.Item key={index}>
+                <Carousel.Item className='img_container2' key={index}>
                   <img
-                    className="d-block w-100 mx-auto"
+                    className="img2"
                     src={`http://127.0.0.1:8000${image.image}`}
                     alt={`이미지 ${index + 1}`}
                   />
@@ -209,3 +212,6 @@ function Detail() {
 }
 
 export default Detail;
+
+// 규상님의 이미지 클래스네임
+// d-block mx-auto w-100

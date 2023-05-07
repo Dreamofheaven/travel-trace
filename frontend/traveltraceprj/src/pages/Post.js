@@ -130,12 +130,6 @@ function Post() {
     } catch (error) {
       console.log(error);
       console.log(title, content, rating, '실패!', category, images, location);
-      console.log(title, typeof(title))
-      console.log(content, typeof(content))
-      console.log(category, typeof(category))
-      console.log(images, typeof(images))
-      console.log(location, typeof(location))
-      console.log(rating, typeof(rating))
       // 게시글 작성 실패 후 처리할 작업
     }
   }
@@ -145,7 +139,7 @@ function Post() {
         <Card.Body>
           <Form onSubmit={(e) => {
             e.preventDefault()
-            createArticle(title, content, category, rating, images, location);
+            createArticle(title, content, category, rating, images, location, placename);
           }}>
             <Row className="mb-3">
               <Col xs={9}>

@@ -3,3 +3,21 @@
 .btn_color {
     background-color: #A0D468;
 }
+
+.date {
+    font-size: 15px;
+}
+
+.img_container2 {
+    overflow: hidden; /* div의 내부 컨텐츠가 넘칠 경우 숨김 처리 */
+    /* display: flex;   
+    justify-content: center;
+    align-items: center; */
+    margin-bottom: 50px;
+}
+
+.img2 {
+    width: 600px;
+    height: 500px;
+    object-fit: cover; /* 이미지를 div에 꽉 채우도록 설정 */
+}
