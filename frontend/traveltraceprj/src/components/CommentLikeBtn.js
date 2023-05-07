@@ -18,17 +18,20 @@ function CommentLikeBtn({ commentId }) {
   };
 
   return (
-    <button
-      className="btn btn-success ms-auto"
-      style={{ backgroundColor: 'transparent', border: 'none' }}
-      onClick={handleLike}
-    >
-      {liked ? (
-        <HandThumbsUpFill size={20} style={{ color: '#A0D468' }} />
-      ) : (
-        <HandThumbsUp size={20} style={{ color: '#A0D468' }} />
-      )}
-    </button>
+    <div>
+      <button
+        className="btn btn-success ms-auto"
+        style={{ backgroundColor: 'transparent', border: 'none' }}
+        onClick={handleLike}
+      >
+        {liked ? (
+          <HandThumbsUpFill size={20} style={{ color: '#A0D468' }} />
+        ) : (
+          <HandThumbsUp size={20} style={{ color: '#A0D468' }} />
+        )}
+      </button>
+      <span className="ms-2">{likeCount}</span>
+    </div>
   );
 }
 

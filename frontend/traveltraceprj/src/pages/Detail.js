@@ -238,7 +238,7 @@ function Detail() {
               <p className="ms-auto me-3">{formatDate(comment.created_at)}</p>
             </div>
             <div className="d-flex align-items-center">
-              <p className='me-auto'>{comment.content}</p>
+              <p className='me-auto'>{comment.likeCount}</p>
               <CommentLikeBtn commentId={comment.id} />
             </div>
             <hr className="my-4" />
