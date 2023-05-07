@@ -17,6 +17,7 @@ function Bookmark() {
     const fetchData = async () => {
       const result = await axios.get('http://127.0.0.1:8000/accounts/bookmark/my_bookmark/');
       setBookmarks(result.data);
+      console.log(result.data)
     };
 
     fetchData();
@@ -42,7 +43,7 @@ function Bookmark() {
             {bookmarks.map(bookmark => (
               <Col key={bookmark.id}>
                 <Card className='card_container2'>
-                  {bookmark.article.images.length > 0 ? <Card.Img variant="top" src={bookmark.article.images[0].image} style={{ objectFit: 'cover', height: '250px', padding: '3%' }} />
+                  {bookmark.article.images.length > 0 ? <Card.Img variant="top" src={bookmark.image} style={{ objectFit: 'cover', height: '250px', padding: '3%' }} />
                   :
                   <Card.Img variant="top" src={defaultImg} style={{ objectFit: 'contain', height: '250px', padding: '3%' }} />
                   }
