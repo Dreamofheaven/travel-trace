@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import { Navbar, Nav, Form, Button, Stack, Container, Badge } from "react-bootstrap";
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import '../styles/AppNavbar.css'
@@ -12,30 +12,64 @@ function AppNavbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate(); // useNavigate 훅 사용
   const user_id = localStorage.getItem('user_id');
+  // 수정
+  const [cookies, setCookie, removeCookie] = useCookies(['access', 'refresh']);
+  const [username, setUsername] = useState(''); // 사용자 이름 상태 추가
 
+  //
+  // useEffect(() => {
+  //   const accessCookie = cookies.access;
+  //   const refreshCookie = cookies.refresh;
+  
+  //   if (accessCookie && refreshCookie) {
+  //     setIsLoggedIn(true);
+  //   }
+  // }, [cookies]);
+  useEffect(() => {
+    const accessCookie = cookies.access;
+    const refreshCookie = cookies.refresh;
+  
+    if (accessCookie && refreshCookie) {
+      setIsLoggedIn(true);
+      // 로그인 상태인 경우에만 API 호출
+      const fetchUsername = async () => {
+        try {
+          const response = await axios.get('http://127.0.0.1:8000/accounts/');
+          const userData = response.data;
+          setUsername(userData.username);
+        } catch (error) {
+          console.error(error);
+        }
+      };
+  
+      // setIsLoggedIn(true);
+      fetchUsername();
+    }
+  }, [cookies]);
   const handleLogin = (e) => {
     e.preventDefault();
-    setIsLoggedIn(true);
+    // setIsLoggedIn(true);
     navigate('/login'); // 페이지 이동
   };
   
-  const [cookies, setCookie, removeCookie] = useCookies(['access', 'refresh']);
   
   const handleLogout = () => {
-    setIsLoggedIn(false);
+    // setIsLoggedIn(false);
 
     axios.delete('http://127.0.0.1:8000/accounts/')
     .then(() => {
       removeCookie('access');
       removeCookie('refresh');
       // 로그아웃 후 처리할 작업이 있다면 여기에 추가
+      setIsLoggedIn(false);
       console.log('로그아웃 성공')
+      navigate('/');
     })
     .catch(error => {
       console.error(error);
     });
   };
-
+  
   return (
     <Navbar bg='light' sticky='top' variant="tabs" defaultactivekey="/home">
       <Container fluid>
@@ -66,10 +100,16 @@ function AppNavbar() {
           <Navbar.Collapse id="basic-navbar-nav">
               <div className='d-flex align-items-center'>
                 <div className='pe-3 d-flex align-items-center'>
-                  <Link className='my_profile' to={`/profile/${user_id}`}>
+                  {isLoggedIn ? (
+                    <Link className='my_profile' to={`/profile/${user_id}`}>
+                      <Person className='person_icon' />
+                      {username && `${username}님`}
+                    </Link>
+                  ) : null}
+                  {/* <Link className='my_profile' to={`/profile/${user_id}`}>
                     <Person className='person_icon' />
                     User님
-                  </Link>
+                  </Link> */}
                 </div>
                 {isLoggedIn ? (
                   <Button className='logout_btn' onClick={handleLogout}>
