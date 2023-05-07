@@ -1,0 +1,384 @@
+[
+{
+    "model": "articles.article",
+    "pk": 1,
+    "fields": {
+        "user": 7,
+        "title": "힐링이 되는 제주도 여행",
+        "content": "비행기타고 당일치기로 아침에가서 저녁에 돌아오는코스로!!\r\n배타는 낭만도 있지만 시간이 중요해서!!\r\n제주도 바닷가를 둘러보러 힐링도 하고 \r\n조각상과 돌하루방도 보고~\r\n너무 즐거운 제주도 여행이었어요 ^^",
+        "created_at": "2023-05-07T17:10:38.308Z",
+        "updated_at": "2023-05-07T17:10:38.892Z",
+        "rating": "5",
+        "location": "제주특별자치도 제주시 도두일동 1859-2",
+        "latitude": "33.505501",
+        "longitude": "126.472588",
+        "placename": "올레길 17코스(광령-제주원도심 올레)",
+        "category": "힐링",
+        "views": 0,
+        "like_users": []
+    }
+},
+{
+    "model": "articles.article",
+    "pk": 2,
+    "fields": {
+        "user": 8,
+        "title": "한국의 문경새재!!",
+        "content": "서울에서도 멀지 않고 당일치기로 다녀오기 좋은 문경새재\r\n멋진 풍경과 성문도 보이고 ㅎ\r\n사진은 못찍었지만 영화찍는 민속촌 세트장도 있고\r\n너무 볼께 많았어요.\r\n그러나 많이 걸어야한다는거 ㅎ\r\n건강을 위해 걸어야죠~~\r\n문경새재 추천합니다!!",
+        "created_at": "2023-05-07T17:13:05.746Z",
+        "updated_at": "2023-05-07T17:13:05.768Z",
+        "rating": "5",
+        "location": "",
+        "latitude": null,
+        "longitude": null,
+        "placename": "",
+        "category": "관광",
+        "views": 0,
+        "like_users": []
+    }
+},
+{
+    "model": "articles.article",
+    "pk": 3,
+    "fields": {
+        "user": 9,
+        "title": "서울의 놀이동산 롯데월드!",
+        "content": "잠실에 위치한 롯데월드!!\r\n스릴넘치는 놀이기구와 퍼레이드 같은 볼거리가 많은 놀이동산!!\r\n역시 놀이기구는 재밋어!!\r\n쉬는날에 롯데월드 한번 어떄요??",
+        "created_at": "2023-05-07T17:16:31.952Z",
+        "updated_at": "2023-05-07T17:16:31.985Z",
+        "rating": "5",
+        "location": "",
+        "latitude": null,
+        "longitude": null,
+        "placename": "",
+        "category": "액티비티",
+        "views": 0,
+        "like_users": []
+    }
+},
+{
+    "model": "articles.article",
+    "pk": 4,
+    "fields": {
+        "user": 9,
+        "title": "대구 서문시장!",
+        "content": "서문시장에서 맛집투어!!\r\n입장하자말자 분식!!\r\n역시 떡볶이는 누구나 좋아하는 음식~~\r\n시장 한바퀴 둘러보고 근처에서 먹는 곱창과 막창은 역시\r\n막창으로 유명한 대구\r\n시장 한바퀴 돌고 막창 먹는 코스로 추천!!",
+        "created_at": "2023-05-07T17:18:25.933Z",
+        "updated_at": "2023-05-07T17:18:25.955Z",
+        "rating": "0",
+        "location": "",
+        "latitude": null,
+        "longitude": null,
+        "placename": "",
+        "category": "맛집,카페",
+        "views": 0,
+        "like_users": []
+    }
+},
+{
+    "model": "articles.article",
+    "pk": 6,
+    "fields": {
+        "user": 9,
+        "title": "서울 인근 카페~",
+        "content": "서울에서 한시간 거리에 있는 카페!!\r\n라떼 맛집이라 방문했는데 마카롱과 같이 먹으니\r\n궁합이 너무 잘맞아요~~\r\n라떼 아트도 이쁘게 해주시고 \r\n직원분도 친절!!\r\n꼭 강추 드립니다",
+        "created_at": "2023-05-07T17:19:59.512Z",
+        "updated_at": "2023-05-07T17:19:59.570Z",
+        "rating": "5",
+        "location": "",
+        "latitude": null,
+        "longitude": null,
+        "placename": "",
+        "category": "맛집,카페",
+        "views": 0,
+        "like_users": []
+    }
+},
+{
+    "model": "articles.article",
+    "pk": 7,
+    "fields": {
+        "user": 9,
+        "title": "서울의 쇼핑메카~!",
+        "content": "서울의 명동에서 쇼핑을 즐겨보시는건 어떤가요???\r\n외국인들이 쇼핑하러 오는 명동!!\r\n그 이유가 있겠죠???\r\n마지막으론 명동교자로 밥한끼!!!\r\n그럼 끝!!!!",
+        "created_at": "2023-05-07T17:21:36.768Z",
+        "updated_at": "2023-05-07T17:21:36.789Z",
+        "rating": "5",
+        "location": "",
+        "latitude": null,
+        "longitude": null,
+        "placename": "",
+        "category": "힐링",
+        "views": 0,
+        "like_users": []
+    }
+},
+{
+    "model": "articles.article",
+    "pk": 8,
+    "fields": {
+        "user": 7,
+        "title": "보령 녹차밭 투어",
+        "content": "보령 녹차밭을 다녀왔어요~~\r\n보령 녹차밭을 가서 녹차향을 엄청 맡고 왔어요~\r\n그리고 녹차를 직접 재배하는거까지 해보고 ㅎ\r\n마지막은 재배한 녹차를 맛보는 시간까지 ㅎ\r\n너무 좋은 코스로 즐기다 가요\r\n보령 추천!!",
+        "created_at": "2023-05-07T17:23:40.354Z",
+        "updated_at": "2023-05-07T17:23:40.384Z",
+        "rating": "5",
+        "location": "",
+        "latitude": null,
+        "longitude": null,
+        "placename": "",
+        "category": "관광",
+        "views": 0,
+        "like_users": []
+    }
+},
+{
+    "model": "articles.article",
+    "pk": 9,
+    "fields": {
+        "user": 8,
+        "title": "문화재의 도시 경주!!",
+        "content": "문화재가 넘치는 경주를 다녀왔어요!\r\n불국사도 들리고~\r\n첨성대도 들리고~\r\n저녁에 특히 뷰가 좋은 안압지까지~\r\n그리고 맛있는 음식들도!!!\r\n우리나라 선조들의 대단함을 느껴집니다!!",
+        "created_at": "2023-05-07T17:26:35.898Z",
+        "updated_at": "2023-05-07T17:26:35.923Z",
+        "rating": "5",
+        "location": "",
+        "latitude": null,
+        "longitude": null,
+        "placename": "",
+        "category": "힐링",
+        "views": 0,
+        "like_users": []
+    }
+},
+{
+    "model": "articles.article",
+    "pk": 10,
+    "fields": {
+        "user": 7,
+        "title": "부산 맛집 투어!!!",
+        "content": "부산에서 즐기는 맛집투어!!\r\n부산 도착후 돼지국밥으로 든든하게 채우고!!\r\n간단히 부산 구경을 하고 밀면으로 시원하게 !!\r\n그리고 저녁은 바다가 보이는 뷰에서 스테이크까지!!\r\n너무 배부른 하루였어요!!\r\n역시 부산 대표 음식들은 너무 맛있어!",
+        "created_at": "2023-05-07T17:28:17.388Z",
+        "updated_at": "2023-05-07T17:33:04.511Z",
+        "rating": "5",
+        "location": "",
+        "latitude": null,
+        "longitude": null,
+        "placename": "부산역",
+        "category": "맛집,카페",
+        "views": 4,
+        "like_users": []
+    }
+},
+{
+    "model": "articles.article",
+    "pk": 12,
+    "fields": {
+        "user": 7,
+        "title": "서울 광화문 여행기`",
+        "content": "서울의 중심 광화문에서 여행을??\r\n세종대왕님께 안부인사 드릴겸 찾아갔습니다~!\r\n광화문에 한복을 입고 돌아다니니 조선시대에 온거 같았어요\r\n너무 좋았던 경험이었어요~",
+        "created_at": "2023-05-07T17:32:21.802Z",
+        "updated_at": "2023-05-07T17:32:22.336Z",
+        "rating": "5",
+        "location": "서울 종로구 세종로 1-1",
+        "latitude": "37.580848",
+        "longitude": "126.976851",
+        "placename": "광화문",
+        "category": "힐링",
+        "views": 0,
+        "like_users": []
+    }
+},
+{
+    "model": "articles.article",
+    "pk": 13,
+    "fields": {
+        "user": 9,
+        "title": "부산 해동용궁사!!",
+        "content": "바닷가에 절이???\r\n부산에는 바닷가에 절이 있어요~~\r\n너무 경치가 좋아서 힐링이 되었어요\r\n용궁사 다녀와서 해운대에서 물놀이도!!\r\n즐거운 하루를 보내고 왔습니다 !",
+        "created_at": "2023-05-07T17:35:05.761Z",
+        "updated_at": "2023-05-07T17:35:05.938Z",
+        "rating": "5",
+        "location": "부산 기장군 기장읍 시랑리 416-3",
+        "latitude": "35.188368",
+        "longitude": "129.223334",
+        "placename": "해동용궁사",
+        "category": "힐링",
+        "views": 0,
+        "like_users": []
+    }
+},
+{
+    "model": "articles.article",
+    "pk": 14,
+    "fields": {
+        "user": 10,
+        "title": "정동진 일몰 !!",
+        "content": "정동진의 일몰을 보러 기차를 타고 출발!!\r\n일출도 좋지만 올빼미형 인간이라 아침에 일어나는건 너무 힘들어서...\r\n일몰로 결정 후 기차여행!!\r\n기차에서 삶은계란도 먹고 \r\n바닷가 구경도 하면서 일몰까지 보면 완벽한 하루!!!",
+        "created_at": "2023-05-07T17:37:09.464Z",
+        "updated_at": "2023-05-07T17:37:09.483Z",
+        "rating": "5",
+        "location": "",
+        "latitude": null,
+        "longitude": null,
+        "placename": "정동진해변",
+        "category": "관광",
+        "views": 0,
+        "like_users": []
+    }
+},
+{
+    "model": "articles.article",
+    "pk": 15,
+    "fields": {
+        "user": 7,
+        "title": "설악산 등반하기!!",
+        "content": "설악산을 등반하기로 마음먹고 \r\n준비를 마친후 출발 ~~\r\n풍경에 놀라고 귀여운 돌탑에 웃기도 하고\r\n힘들었지만 정상에서 보는 풍경은 말로 표현할수 없는!!\r\n등산 좋아하시는 분들 설악산 추천드려요!!!",
+        "created_at": "2023-05-07T17:38:53.176Z",
+        "updated_at": "2023-05-07T17:38:53.368Z",
+        "rating": "5",
+        "location": "강원 속초시 설악동 산 41",
+        "latitude": "38.155640",
+        "longitude": "128.469418",
+        "placename": "설악산 천연보호구역",
+        "category": "액티비티",
+        "views": 0,
+        "like_users": []
+    }
+},
+{
+    "model": "articles.article",
+    "pk": 17,
+    "fields": {
+        "user": 9,
+        "title": "남산타워~~~",
+        "content": "서울에서 서울야경을 보고싶을때 마다 들리는 남산타워!!\r\n역시 높이 있으니 서울이 한눈에!!\r\n너무 아름다운 서울\r\n내가 이곳에 살고 있다니 너무 뿌듯 ~~\r\n남산타워 추천해요!",
+        "created_at": "2023-05-07T17:41:06.374Z",
+        "updated_at": "2023-05-07T17:41:06.555Z",
+        "rating": "5",
+        "location": "서울 중구 예장동 8-1",
+        "latitude": "37.551791",
+        "longitude": "126.987632",
+        "placename": "남산봉수의식",
+        "category": "관광",
+        "views": 0,
+        "like_users": []
+    }
+},
+{
+    "model": "articles.article",
+    "pk": 19,
+    "fields": {
+        "user": 8,
+        "title": "서울 인근 광명동굴!!",
+        "content": "서울 인근에 이런 동굴이?!!\r\n불빛들이 가득히 차있는 동굴을 걷고 있으면~~\r\n눈이 호강하는 느낌~!!\r\n여름에 시원하기도 하고 !!\r\n광명동굴 추천해요!",
+        "created_at": "2023-05-07T17:44:10.561Z",
+        "updated_at": "2023-05-07T17:44:10.770Z",
+        "rating": "5",
+        "location": "경기 광명시 가학동 10-4",
+        "latitude": "37.423688",
+        "longitude": "126.865270",
+        "placename": "광명동굴 제1주차장",
+        "category": "관광",
+        "views": 0,
+        "like_users": []
+    }
+},
+{
+    "model": "articles.article",
+    "pk": 20,
+    "fields": {
+        "user": 10,
+        "title": "영종도에 있는 카페!",
+        "content": "맛있는 딸기 라떼에 \r\n맛있는 머핀까지!!\r\n그리고 주위에 멋있는 영종도에 !!!!\r\n엄청 좋은 시간이었어요~~~",
+        "created_at": "2023-05-07T17:45:45.771Z",
+        "updated_at": "2023-05-07T17:45:45.940Z",
+        "rating": "5",
+        "location": "인천 중구 운남동 619-23",
+        "latitude": "37.502861",
+        "longitude": "126.531668",
+        "placename": "영종도",
+        "category": "맛집,카페",
+        "views": 0,
+        "like_users": []
+    }
+},
+{
+    "model": "articles.article",
+    "pk": 22,
+    "fields": {
+        "user": 10,
+        "title": "맛있는 티와 베이커리 맛집~",
+        "content": "맛있는 베이커리와 티로 유명하다고 해서 찾아간 카페!!\r\n역시 티는 향이 너무나도 좋았고\r\n베이커리는 입에서 녹는느낌!!\r\n너무 맛있게 잘먹었어요!!",
+        "created_at": "2023-05-07T17:47:28.391Z",
+        "updated_at": "2023-05-07T17:47:28.562Z",
+        "rating": "5",
+        "location": "경기 남양주시 금곡동 437",
+        "latitude": "37.631765",
+        "longitude": "127.206236",
+        "placename": "홍유릉",
+        "category": "맛집,카페",
+        "views": 0,
+        "like_users": []
+    }
+},
+{
+    "model": "articles.article",
+    "pk": 23,
+    "fields": {
+        "user": 7,
+        "title": "부산 자갈치 시장!!",
+        "content": "맛있는 해산물을 이가격에??\r\n가성비 맛집!!\r\n맛있는 회와 해산물 한상!!!\r\n여기에 소주 한잔이면 캬~~~\r\n자갈치 시장 가시면 추천드려요!!",
+        "created_at": "2023-05-07T17:49:01.462Z",
+        "updated_at": "2023-05-07T17:49:01.632Z",
+        "rating": "5",
+        "location": "부산 중구 남포동4가 37-1",
+        "latitude": "35.096719",
+        "longitude": "129.031120",
+        "placename": "해왕상회",
+        "category": "맛집,카페",
+        "views": 0,
+        "like_users": []
+    }
+},
+{
+    "model": "articles.article",
+    "pk": 24,
+    "fields": {
+        "user": 9,
+        "title": "북촌 한옥마을 !!!",
+        "content": "서울 한가운데 있는 한옥마을\r\n한국의 풍경을 느낄수 있고 \r\n조용하고 힐링도 되는 느낌!!\r\n그리고 저녁엔 막걸리도 좋지만 오늘은 럼주로 한잔!!\r\n추천드려요!",
+        "created_at": "2023-05-07T17:50:48.217Z",
+        "updated_at": "2023-05-07T17:54:09.532Z",
+        "rating": "5",
+        "location": "서울 종로구 가회동 30-2",
+        "latitude": "37.581809",
+        "longitude": "126.984723",
+        "placename": "북촌한옥마을",
+        "category": "관광",
+        "views": 4,
+        "like_users": [
+            10
+        ]
+    }
+},
+{
+    "model": "articles.article",
+    "pk": 25,
+    "fields": {
+        "user": 10,
+        "title": "아메리카노와 케익이 맛있는 카페!!",
+        "content": "어린이대공원 근처에 있는 카페!!!\r\n아메리카노와 조각케익이 너무 맛있는 카페!!\r\n특히 아메리카노는 마실수록 더욱더 진해지는 !!\r\n역시 카페는 힐링의 공간!!",
+        "created_at": "2023-05-07T17:53:40.697Z",
+        "updated_at": "2023-05-07T17:53:40.850Z",
+        "rating": "5",
+        "location": "서울 광진구 능동 18",
+        "latitude": "37.549561",
+        "longitude": "127.081029",
+        "placename": "서울어린이대공원 놀이동산",
+        "category": "맛집,카페",
+        "views": 0,
+        "like_users": []
+    }
+}
+]

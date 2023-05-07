@@ -1,0 +1,134 @@
+[
+{
+    "model": "accounts.user",
+    "pk": 1,
+    "fields": {
+        "password": "pbkdf2_sha256$260000$l1UnBQBbcK7ntcufSTaeL4$e9o6vnCQQ9n+UMmisJkwwwIKAIty1TRe9PUuuo0vuFw=",
+        "last_login": null,
+        "is_superuser": false,
+        "first_name": "",
+        "last_name": "",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2023-04-29T13:46:49.647Z",
+        "username": "hany1",
+        "email": "hany@travel.com",
+        "profile_img": "",
+        "info": "",
+        "location": null,
+        "groups": [],
+        "user_permissions": [],
+        "followings": []
+    }
+},
+{
+    "model": "accounts.user",
+    "pk": 2,
+    "fields": {
+        "password": "pbkdf2_sha256$260000$xGCa167hG4Jj86vM7keSqs$vPSSrMqh0IGt3dzCMLYJNTeFeMk9EDbttwgQh/KHALM=",
+        "last_login": "2023-05-01T13:26:17.300Z",
+        "is_superuser": true,
+        "first_name": "",
+        "last_name": "",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2023-04-29T14:20:17.550Z",
+        "username": "hanui",
+        "email": "hany0147@naver.com",
+        "profile_img": "",
+        "info": "",
+        "location": null,
+        "groups": [],
+        "user_permissions": [],
+        "followings": []
+    }
+},
+{
+    "model": "accounts.user",
+    "pk": 3,
+    "fields": {
+        "password": "pbkdf2_sha256$260000$nDYrYQNWkBE0y5hXdcQWpt$/Wg1HfI02fmDpidkxpqf25LyBP5os6IYi/PFBu3rNu8=",
+        "last_login": null,
+        "is_superuser": false,
+        "first_name": "",
+        "last_name": "",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2023-04-29T14:47:01.697Z",
+        "username": "hany2",
+        "email": "hany2@travel.com",
+        "profile_img": "",
+        "info": "",
+        "location": null,
+        "groups": [],
+        "user_permissions": [],
+        "followings": []
+    }
+},
+{
+    "model": "accounts.user",
+    "pk": 4,
+    "fields": {
+        "password": "pbkdf2_sha256$260000$KuiOknilPbt0mfCf2s0Jlu$cjXbJCLzMENmyG5uP8yIpHtbSzB9/dW83FaNifBqmKQ=",
+        "last_login": null,
+        "is_superuser": false,
+        "first_name": "",
+        "last_name": "",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2023-05-01T12:13:38.855Z",
+        "username": "hany0147",
+        "email": "3353@dae.kr",
+        "profile_img": "",
+        "info": "",
+        "location": null,
+        "groups": [],
+        "user_permissions": [],
+        "followings": []
+    }
+},
+{
+    "model": "accounts.user",
+    "pk": 5,
+    "fields": {
+        "password": "pbkdf2_sha256$260000$bn65I5azCXN0ypJa6jzxpx$6AuBhbo+uz4XXfaz1L5Fo2ZN80I24xRQlYZH3iqOmPk=",
+        "last_login": null,
+        "is_superuser": false,
+        "first_name": "",
+        "last_name": "",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2023-05-01T12:18:19.806Z",
+        "username": "hany01478",
+        "email": "33533@dae.kr",
+        "profile_img": "",
+        "info": "",
+        "location": null,
+        "groups": [],
+        "user_permissions": [],
+        "followings": []
+    }
+},
+{
+    "model": "accounts.user",
+    "pk": 6,
+    "fields": {
+        "password": "pbkdf2_sha256$260000$Vys18Hx1uZqMFu3Zw9pGpJ$WiLA1zX/COtYTdUggoyaydjJYxJB7sRQjp7tHzeddOk=",
+        "last_login": null,
+        "is_superuser": false,
+        "first_name": "",
+        "last_name": "",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2023-05-01T13:14:42.439Z",
+        "username": "hany0147832",
+        "email": "33123533@dae.kr",
+        "profile_img": "",
+        "info": "",
+        "location": null,
+        "groups": [],
+        "user_permissions": [],
+        "followings": []
+    }
+}
+]
