@@ -164,10 +164,10 @@ function Post() {
                   <InputGroup.Text id="basic-addon1">카테고리</InputGroup.Text>
                   <Form.Select aria-label='Default select example' onChange={handleCategoryChange}>
                     <option>---</option>
-                    <option value="1">힐링</option>
-                    <option value="2">관광</option>
-                    <option value="3">맛집,카페</option>
-                    <option value="4">액티비티</option>
+                    <option value="힐링">힐링</option>
+                    <option value="관광">관광</option>
+                    <option value="맛집,카페">맛집/카페</option>
+                    <option value="액티비티">액티비티</option>
                   </Form.Select>
                 </InputGroup>
               </Col>
