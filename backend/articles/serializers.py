@@ -15,6 +15,9 @@ class ArticleListSerializer(serializers.ModelSerializer):
     username = serializers.SerializerMethodField()
     images = ImageSerializer(many=True)
 
+    # image 필드 추가
+    image = serializers.SerializerMethodField()
+
     def get_like_count(self, instance):
         return instance.like_users.count()
 
@@ -29,8 +32,14 @@ class ArticleListSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Article
-        fields = ('user', 'username', 'id', 'title','content','location', 'rating','category','like_count','views', 'images', 'placename')
+        fields = ('user', 'username', 'id', 'title','content','location', 'rating','category','like_count','views', 'images', 'image', 'placename')
         read_only_fields = ('user', 'location', 'latitude', 'logitude', 'placename')
+
+        # image 필드 값 설정
+    def get_image(self, article):
+        if article.images.first():
+            return f"http://127.0.0.1:8000{article.images.first().image.url}"
+        return None    
 
     def get_username(self, obj):
         return obj.user.username

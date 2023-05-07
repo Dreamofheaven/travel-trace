@@ -69,6 +69,12 @@ class NearbArticleListView(APIView):
                 (F('longitude') - float(user_longitude)) ** 2
             ), output_field=models.DecimalField())
         ).order_by('distance')
+
+        # 이미지 경로 앞에 'http://127.0.0.1:8000'를 추가합니다.
+        for article in articles:
+            images = article.images.all()
+            if images.exists():
+                article.image = f"http://127.0.0.1:8000{images[0].image.url}"
         
         serializer = ArticleListSerializer(articles, many=True)
         return Response(serializer.data)
