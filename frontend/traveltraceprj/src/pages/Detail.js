@@ -5,7 +5,7 @@ import { Container, Button, Form, Carousel } from 'react-bootstrap';
 import { Bookmark, Heart } from 'react-bootstrap-icons';
 import { useCookies } from 'react-cookie';
 import "../styles/Detail.css";
-
+import BookmarkBtn from '../components/BookmarkBtn';
 
 
 function Detail() {
@@ -120,7 +120,7 @@ function Detail() {
           <div>
             <div className='d-flex'>
               <div className='me-2'><Heart fill='grey' /></div>
-              <div><Bookmark fill='grey'/></div>
+              <div><BookmarkBtn articleId={article.id}/></div>
             </div>
           </div>
         </div>
