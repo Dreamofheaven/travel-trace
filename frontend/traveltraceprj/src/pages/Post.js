@@ -124,13 +124,13 @@ function Post() {
       });
   
       console.log(responseCreate.data);
-      window.location.href = '/all';
+      // window.location.href = '/all';
       // 게시글 작성 성공 후 처리할 작업
     } catch (error) {
       console.log(error);
       console.log(title, content, rating, '실패!', category, images, location);
       // 게시글 작성 실패 후 처리할 작업
-      window.location.href = '/all';
+      // window.location.href = '/all';
     }
   }
   return (
