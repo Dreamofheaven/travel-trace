@@ -206,8 +206,8 @@ def article_detail(request, article_pk):
 
 
 @api_view(['GET'])
-def comment_list(request):
-    comments = Comment.objects.filter(article__isnull=False)
+def comment_list(request, article_pk):
+    comments = Comment.objects.filter(article_id=article_pk)
     serializer = CommentSerializer(comments, many=True)
     return Response(serializer.data)
 
@@ -218,7 +218,7 @@ def comment_list(request):
 def comment_create(request, article_pk):
     article = Article.objects.get(pk=article_pk)
     data = request.data.copy()
-    data['user'] = request.user.id
+    data['user'] = request.user
 
     serializer = CommentSerializer(data=data)
 

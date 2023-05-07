@@ -8,9 +8,9 @@ urlpatterns = [
     path('', views.ArticleListView.as_view()),
     # path('', views.ArticleViewSet.as_view({'get': 'list', 'post': 'create'}), name='article-list'),
     path('<int:article_pk>/', views.article_detail),
-    path('comments/', views.comment_list),
+    path('<int:article_pk>/comments/', views.comment_list),
     path('<int:article_pk>/comments/<int:comment_pk>/', views.comment_detail),
-    path('<int:article_pk>/comments/', views.comment_create),
+    path('<int:article_pk>/comments/create/', views.comment_create),
 
     path('<int:article_pk>/likes/',views.like_article),
 

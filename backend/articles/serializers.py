@@ -35,14 +35,17 @@ class ArticleListSerializer(serializers.ModelSerializer):
         return obj.user.username
 
 
+
 class ArticleSerializer(serializers.ModelSerializer):
     images = ImageSerializer(many=True, required=False)
     views = serializers.IntegerField(read_only=True)
     username = serializers.SerializerMethodField()
     class CommentInArticleSerializer(serializers.ModelSerializer):
+        user = serializers.CharField(source='user.username')
+        created_at = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S')
         class Meta:
             model = Comment
-            fields = ('content',)
+            fields = ('id', 'user', 'content', 'created_at')
             read_only_fields = ('user',)
 
     comment_set = CommentInArticleSerializer(many=True, read_only=True)
@@ -122,6 +125,7 @@ class ArticleSerializer(serializers.ModelSerializer):
     
 class CommentSerializer(serializers.ModelSerializer):
     like_count = serializers.SerializerMethodField()
+    # user = serializers.CharField(source='user.username')
 
     class Meta:
         model = Comment
