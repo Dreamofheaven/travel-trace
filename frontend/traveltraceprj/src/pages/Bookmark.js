@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import "../styles/Bookmark.css";
 import { Link } from 'react-router-dom';
-import { Card, Col, Row, Button, ButtonGroup, Container, Badge } from "react-bootstrap";
+import { Card, Col, Row, Container } from "react-bootstrap";
 import { Trash3 } from "react-bootstrap-icons"
 import defaultImg from '../assets/default_img.png';
 
@@ -17,6 +17,7 @@ function Bookmark() {
     const fetchData = async () => {
       const result = await axios.get('http://127.0.0.1:8000/accounts/bookmark/my_bookmark/');
       setBookmarks(result.data);
+      console.log(result.data)
     };
 
     fetchData();
@@ -42,13 +43,10 @@ function Bookmark() {
             {bookmarks.map(bookmark => (
               <Col key={bookmark.id}>
                 <Card className='card_container2'>
-                  {bookmark.article.images.length > 0 ? <Card.Img variant="top" src={bookmark.article.images[0].image} style={{ objectFit: 'cover', height: '250px', padding: '3%' }} />
+                  {bookmark.article.images.length > 0 ? <Card.Img variant="top" src={bookmark.image} style={{ objectFit: 'cover', height: '250px', padding: '3%' }} />
                   :
                   <Card.Img variant="top" src={defaultImg} style={{ objectFit: 'contain', height: '250px', padding: '3%' }} />
                   }
-                  {/* <div style={{ position: 'absolute', top: 0, right: 0 }}>
-                    <Trash3 type="button" className="delete_btn" onClick={() => deleteBookmark(bookmark.article.id)} />
-                  </div> */}
                   <Card.Body className='p-2'>
                     <Card.Title>
                       <Link className='bookmark_link' to="/detail">{bookmark.article.title}</Link>

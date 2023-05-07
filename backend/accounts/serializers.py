@@ -51,6 +51,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 class BookmarkSerializer(serializers.ModelSerializer):
     article = ArticleSerializer()
     is_bookmarked = serializers.SerializerMethodField()
+    image = serializers.SerializerMethodField()
 
     def get_is_bookmarked(self, obj):
         request = self.context.get('request')
@@ -61,7 +62,11 @@ class BookmarkSerializer(serializers.ModelSerializer):
         model = Bookmark
         fields = '__all__'
 
-
+    def get_image(self, obj):
+        if obj.article.images.first():
+            return f"http://127.0.0.1:8000{obj.article.images.first().image.url}"
+        return None 
+    
 class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notification
