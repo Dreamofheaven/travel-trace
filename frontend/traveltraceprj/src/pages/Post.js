@@ -166,7 +166,7 @@ function Post() {
                     <option>---</option>
                     <option value="1">힐링</option>
                     <option value="2">관광</option>
-                    <option value="3">맛집/카페</option>
+                    <option value="3">맛집,카페</option>
                     <option value="4">액티비티</option>
                   </Form.Select>
                 </InputGroup>
