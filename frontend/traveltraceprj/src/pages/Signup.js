@@ -21,7 +21,8 @@ function SignUp() {
       setCookies('access', access, { secure: true, sameSite: 'strict' });
       setCookies('refresh', refresh, { secure: true, sameSite: 'strict' });
 
-      console.log('Successfully signed up!');
+      console.log('Successfully signed up and loged in!');
+      window.location.href = '/';
       // 리다이렉트 등 다른 작업 수행
     } catch (error) {
       console.error(error.response.data);

@@ -1,31 +1,51 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Button, Container, Stack, Image} from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import "../styles/Profile.css";
 import defaultProfilePic from '../assets/profile_logo.png';
-import { BookmarkHeartFill, PostcardHeartFill, PersonPlus, PlusSquareDotted } from 'react-bootstrap-icons'
-
-const BASE_URL = 'http://127.0.0.1:8000';
+import { BookmarkHeartFill, PostcardHeartFill, PersonPlus, PlusSquareDotted } from 'react-bootstrap-icons';
 
 function Profile() {
   const [user, setUser] = useState({});
-  console.log(localStorage.getItem('access'));
+  const { user_pk } = useParams(); // URL 파라미터에서 user_pk 가져오기
+  const [isFollowed, setIsFollowed] = useState(false);
 
   useEffect(() => {
-    axios.get('http://127.0.0.1:8000/accounts/profile/', {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('access')}`
-      }
-    })
-    .then(response => {
-      setUser(response.data);
+    const token = document.cookie.replace(/(?:(?:^|.*;\s*)access\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+    const fetchData = axios.get(`http://127.0.0.1:8000/accounts/profile/${user_pk}`);
+    const fetchFollow = axios.get(`http://127.0.0.1:8000/accounts/follow/${user_pk}/`);
+    
+    Promise.all([fetchData, fetchFollow])
+    .then(([data, follow]) => {
+      setUser(data.data);
+      setIsFollowed(follow.data.is_followed);
+      console.log(data.data);
+      console.log(follow.data);
     })
     .catch(error => {
-      console.log(error);
+      console.error(error);
     });
     }, []);
 
+    const handleFollow = () => {
+      // 팔로우 API 호출
+      axios.post(`http://127.0.0.1:8000/accounts/follow/${user_pk}/`)
+        .then(response => setIsFollowed(response.data.is_followed))
+        .catch(error => console.log(error));
+    };
+
+    const handleUnfollow = () => {
+      // 언팔로우 API 호출
+      axios.delete(`http://127.0.0.1:8000/accounts/follow/${user_pk}/`)
+        .then(response => setIsFollowed(response.data.is_followed))
+        .catch(error => console.log(error));
+    };
+
+
+  ///////////
   return (
     <Container className="my-5 text-align-center">
       <Stack gap={4} className='Profile col-md-5 mx-auto text-center'>
@@ -44,15 +64,15 @@ function Profile() {
 
         <div className='d-flex justify-content-center'>
           <span className='user_identification'>
-            닉네임(이메일)
             <>
-              <p>정보 뿌려주기</p>
               <h2>{user.username}</h2>
-              <p>Email: {user.email}</p>
+              <p>{user.email}</p>
+              <p>{user.id}</p>
             </>
           </span>
           <span className='ps-3 align-self-center'>
-            <PersonPlus className='follow_icon'/>
+            <PersonPlus className='follow_icon'onClick={isFollowed ? handleUnfollow : handleFollow} />
+            <span>{isFollowed ? '언팔로우' : '팔로우'}</span>
           </span>
         </div>
         <span className='user_follow'>

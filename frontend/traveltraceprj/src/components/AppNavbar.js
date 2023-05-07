@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Navbar, Nav, Form, Button, Stack, Container, Badge } from "react-bootstrap";
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import '../styles/AppNavbar.css'
 import logo from '../assets/logo.png'
 import { Person } from 'react-bootstrap-icons'
@@ -11,6 +11,7 @@ import { useCookies } from 'react-cookie';
 function AppNavbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate(); // useNavigate 훅 사용
+  const user_id = localStorage.getItem('user_id');
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -61,13 +62,12 @@ function AppNavbar() {
             </Button>
           </Link>
         </Nav.Item>
-
         <Nav.Item>
           <Navbar.Collapse id="basic-navbar-nav">
             {isLoggedIn ? (
               <div className='d-flex align-items-center'>
                 <div className='pe-3 d-flex align-items-center'>
-                  <Link className='my_profile' to="/profile">
+                  <Link className='my_profile' to={`/profile/${user_id}`}>
                     <Person className='person_icon' />
                     User님
                   </Link>
@@ -92,6 +92,7 @@ function AppNavbar() {
 
 export default AppNavbar;
 
+//  <Profile user_id={user_pk2} />
 
 // function AppNavbar() {
 //   const [isLoggedIn, setIsLoggedIn] = useState(false);

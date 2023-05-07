@@ -1,39 +1,52 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
-import "../styles/All.css";
+// import "../styles/All.css";
 import { Card, Col, Row, Button, ButtonGroup, Container, Badge } from "react-bootstrap";
 import { Bookmark, Heart, PinMap ,Search } from 'react-bootstrap-icons'
 import defaultImg from '../assets/default_img.png';
 import { Link } from 'react-router-dom';
 
 
-function All() {
+function Nearby() {
   const [articles, setArticles] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
 
   const handleSearch = event => {
     setSearchTerm(event.target.value);
   };
 
-  const filteredArticles = articles.filter(article => {
-    return article.title.toLowerCase().includes(searchTerm.toLowerCase());
-  });
-
   useEffect(() => {
     const token = document.cookie.replace(/(?:(?:^|.*;\s*)access\s*\=\s*([^;]*).*$)|^.*$/, "$1");
     console.log(token)
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
-    const fetchData = async () => {
-      const result = await axios.get('http://127.0.0.1:8000/articles/');
-      setArticles(result.data);
+    const fetchArticles = async () => {
+      try {
+        const response = await axios.get(`http://127.0.0.1:8000/articles/nearby/`);
+        setArticles(response.data);
+        setLoading(false);
+      } catch (error) {
+        setError('Failed to load nearby articles.');
+        setLoading(false);
+      }
     };
 
-    fetchData();
+    fetchArticles();
   }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   return (
     <Container>
+      <h1>Nearby Articles</h1>
       {/* 검색어창 */}
       <div className="d-flex justify-content-center align-items-center my-5">
         <Search className="me-2" />
@@ -51,7 +64,7 @@ function All() {
       {/* 본 게시물 */}
       <div className='my-5 mx-5'>
         <Row xs={1} sm={2} md={3} lg={4}className="g-4">
-          {filteredArticles.map(article => (
+          {articles.map(article => (
             <Col key={article.id}>
               <Card className='card_container'>
                 {article.images.length > 0 ? <Card.Img variant="top" src={article.images[0].image} style={{ objectFit: 'cover', height: '250px', padding: '3%' }} />
@@ -84,4 +97,4 @@ function All() {
   );
 }
 
-export default All;
+export default Nearby;

@@ -51,7 +51,7 @@ function Detail() {
     setContent('');
     console.log(content); // content 값 확인
     axios.post(
-      `http://127.0.0.1:8000/articles/${id}/comments/create/`,
+      `http://127.0.0.1:8000/articles/${id}/comments/`,
       { content },
       {
         headers: {
