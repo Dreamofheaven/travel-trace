@@ -1,13 +1,11 @@
-import jwt
-import os
-import requests
-from rest_framework import status
+import jwt, os, requests
+from rest_framework import status, generics
 from rest_framework.response import Response
-from rest_framework import generics
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer
 from django.contrib.auth import authenticate
+from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.shortcuts import get_object_or_404
 from accounts.serializers import *
 from accounts.models import Bookmark, Notification
@@ -15,39 +13,29 @@ from articles.models import Article
 from traveltrace.settings import SECRET_KEY
 from django.contrib.auth import get_user_model
 
+# TokenRefreshView 커스텀. / 해부할 필요 있음
 
+# JWTAuthentication.authenticate()
 User = get_user_model()
-
 class SignUpView(APIView):
+    permission_classes = [ AllowAny ]
     def post(self, request):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             user = serializer.save()
-            token = TokenObtainPairSerializer.get_token(user)
-            refresh_token = str(token)
-            access_token = str(token.access_token)
-            res = Response(
-                {
-                    'user': serializer.data,
-                    'message': 'register successs',
-                    'token': {
-                        "access": access_token,
-                        "refresh": refresh_token,
-                    },
-                },
-                status=status.HTTP_201_CREATED
-            )
-            # jwt 토큰을 쿠키에 저장
-            res.set_cookie('access', access_token, httponly=True)
-            res.set_cookie('refresh', refresh_token, httponly=True)
-            
-            return res
 
+            if user:   
+                return Response(
+                    {
+                        'user': serializer.data,
+                        'message': 'register successs',
+                    },
+                    status=status.HTTP_201_CREATED
+                )
 
 class UserView(APIView):
     # 유저 정보 확인
     def get(self, request):
-        # print(request)
         try:
             # access token을 decode 해서 유저 id 추출 => 유저 식별
             access = request.COOKIES['access']
@@ -84,37 +72,40 @@ class UserView(APIView):
             email=request.data.get('email'),
             password=request.data.get('password')
         )
-        if user is not None:
+        if user:
             serializer = UserSerializer(user)
-            # jwt 토큰 접근
             token = TokenObtainPairSerializer.get_token(user)
             refresh_token = str(token)
             access_token = str(token.access_token)
-            res = Response(
+
+            response = Response(
                 {
                     'user': serializer.data,
-                    'message': 'login success',
-                    'token': {
-                        'access': access_token,
-                        'refresh': refresh_token,
+                    'message': 'Login success',
+                    "token": {
+                        "access": access_token,
+                        "refresh": refresh_token,
                     },
                 },
+                status=status.HTTP_200_OK,
             )
-            # jwt 토큰 => 쿠키에 저장
-            res.set_cookie('access', access_token, httponly=True)
-            res.set_cookie('refresh', refresh_token, httponly=True)
-            return res
+
+            response.set_cookie("access", access_token, httponly=True)
+            response.set_cookie("refresh", refresh_token, httponly=True)
+
+            return response
         else:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            return Response({ 'message': 'Login failed' }, status=status.HTTP_400_BAD_REQUEST)
 
     # 로그아웃
     def delete(self, request):
-        # 쿠키에 저장된 토큰 삭제하여 로그아웃 처리
+        permission_classes = [ IsAuthenticated ]        
         response = Response({
             'message': 'Logout success'
             }, status=status.HTTP_204_NO_CONTENT)
         response.delete_cookie('access')
         response.delete_cookie('refresh')
+        
         return response
 
 
