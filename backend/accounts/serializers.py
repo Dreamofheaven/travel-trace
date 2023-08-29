@@ -16,17 +16,40 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'username', 'email', 'password', 'profile_img', 'info', 'location']
-
-    def create(self, validated_data):
-        user = User.objects.create_user(
-            username = validated_data.get('username'),
-            email = validated_data.get('email'),
-            password = validated_data.get('password'),
-            profile_img=validated_data.get('profile_img')
-        )   
-        user.save()
-        return user
     
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    followers = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    followings = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    articles = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    bookmarks = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email', 'profile_img', 'followings', 'followers', 'info', 'articles', 'bookmarks']
+        read_only_fields = ['id', 'email'] # 'username'
+
+
+class PasswordChangeView(serializers.ModelSerializer):
+    old_password = serializers.CharField(
+        required=True,
+        write_only=True,
+        style={'input_type': 'password'}
+    )
+    new_password = serializers.CharField(
+        required=True,
+        write_only=True,
+        style={'input_type': 'password'}
+    )
+    new_confirm_password = serializers.CharField(
+        required=True,
+        write_only=True,
+        style={'input_type': 'password'}
+    )
+
+    class Meta:
+        model = User
+        fields = ['old_password', 'new_password', 'new_confirm_password']
 
 class FollowSerializer(serializers.ModelSerializer):
     following = UserSerializer()
@@ -35,17 +58,6 @@ class FollowSerializer(serializers.ModelSerializer):
         model = User
         fields = ['id', 'username', 'email', 'profile_img', 'followings', 'following']
         read_only_fields = ['id']
-
-
-class UserProfileSerializer(serializers.ModelSerializer):
-    followers = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
-    followings = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
-    articles = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
-    bookmarks = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
-    class Meta:
-        model = User
-        fields = ['id', 'username', 'email', 'profile_img', 'followings', 'followers', 'info', 'articles', 'bookmarks']
-        read_only_fields = ['id', 'username', 'email']
 
 
 class BookmarkSerializer(serializers.ModelSerializer):

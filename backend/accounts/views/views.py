@@ -17,6 +17,7 @@ from django.contrib.auth import get_user_model
 
 # JWTAuthentication.authenticate()
 User = get_user_model()
+
 class SignUpView(APIView):
     permission_classes = [ AllowAny ]
     def post(self, request):
@@ -33,40 +34,8 @@ class SignUpView(APIView):
                     status=status.HTTP_201_CREATED
                 )
 
-class UserView(APIView):
-    # 유저 정보 확인
-    def get(self, request):
-        try:
-            # access token을 decode 해서 유저 id 추출 => 유저 식별
-            access = request.COOKIES['access']
-            payload = jwt.decode(access, SECRET_KEY, algorithms=['HS256'])
-            pk = payload.get('user_id')
-            user = get_object_or_404(User, pk=pk)
-            serializer = UserSerializer(instance=user)
-            return Response(serializer.data, status=status.HTTP_200_OK)
 
-        except(jwt.exceptions.ExpiredSignatureError):
-            # 토큰 만료 시 토큰 갱신
-            data = {'refresh': request.COOKIES.get('refresh', None)}
-            serializer = TokenRefreshSerializer(data=data)
-            if serializer.is_valid(raise_exception=True):
-                access = serializer.data.get('access', None)
-                refresh = serializer.data.get('refresh', None)
-                payload = jwt.decode(access, SECRET_KEY, algorithms=['HS256'])
-                pk = payload.get('user_id')
-                user = get_object_or_404(User, pk=pk)
-                serializer = UserSerializer(instance=user)
-                res = Response(serializer.data, status=status.HTTP_200_OK)
-                res.set_cookie('access', access)
-                res.set_cookie('refresh', refresh)
-                return res
-            raise jwt.exceptions.InvalidTokenError
-
-        except(jwt.exceptions.InvalidTokenError):
-            # 사용 불가능한 토큰일 때
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-        
-    # 로그인(원리는 회원가입과 거의 동일)
+class LoginView(APIView):
     def post(self, request):
         user = authenticate(
             email=request.data.get('email'),
@@ -96,8 +65,9 @@ class UserView(APIView):
             return response
         else:
             return Response({ 'message': 'Login failed' }, status=status.HTTP_400_BAD_REQUEST)
+        
 
-    # 로그아웃
+class LogoutView(APIView):
     def delete(self, request):
         permission_classes = [ IsAuthenticated ]        
         response = Response({
@@ -107,26 +77,70 @@ class UserView(APIView):
         response.delete_cookie('refresh')
         
         return response
-
+    
 
 class ProfileView(APIView):
     permission_classes = [IsAuthenticated]
     # 조회
-    def get(self, request, user_pk):
-        user = get_object_or_404(User, pk=user_pk)
+    def get(self, request, username):
+        user = get_object_or_404(User, username=username)
         serializer = UserProfileSerializer(user)
-        return Response(serializer.data)
+        return Response({
+            'data': serializer.data,
+            'message': '조회 완료',
+        }, status=status.HTTP_200_OK)
 
     # 수정
-    def put(self, request, user_pk):
-        user = get_object_or_404(User, pk=user_pk)
+    def patch(self, request, username):
+        user = get_object_or_404(User, username=username)
         if user != request.user:
             return Response({'detail': 'You do not have permission to perform this action.'}, status=status.HTTP_403_FORBIDDEN)
         serializer = UserProfileSerializer(user, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response(serializer.data)
+        return Response({
+            'data': serializer.data,
+            'message': '수정 완료',
+        }, status=status.HTTP_200_OK)
     
+    def delete(self, request, username):
+        user = get_object_or_404(User, username=username)
+        if user != request.user:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+        
+        confirm_message = "회원탈퇴를 진행하시려면 '확인완료'를 입력하세요."
+        if request.data.get('confirmation') != '확인완료':
+            return Response({'message': confirm_message}, status=status.HTTP_400_BAD_REQUEST)
+        
+        user.delete()
+
+        return Response({
+            'message': '회원탈퇴가 성공적으로 이뤄졌습니다.',
+        }, status=status.HTTP_204_NO_CONTENT) 
+
+    
+class ChangePasswordView(APIView):
+    def put(self, request, username):
+        user = get_object_or_404(User, username=username)
+        if user != request.user:
+            return Response({'detail': 'You do not have permission to perform this action.'}, status=status.HTTP_403_FORBIDDEN)
+        
+        old_password = request.data.get('old_password')
+        new_password = request.data.get('new_password')
+        new_confirm_password = request.data.get('new_confirm_password')
+
+        if not old_password or not new_password or not new_confirm_password:
+            return Response({
+                'error': '필수입력 누락',
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        # 기존 비밀번호가 db의 비밀번호와 맞는지 여부를 확인하려면?
+
+        if new_password != new_confirm_password:
+            return Response({
+                'error': '새 비밀번호가 서로 불일치합니다.',
+            }, status=status.HTTP_400_BAD_REQUEST)            
+
 
 class BookmarkListView(APIView):
     permission_classes = [IsAuthenticated]
@@ -338,6 +352,38 @@ class MyArticleListView(generics.ListAPIView):
         return queryset
 
 
+class UserView(APIView):
+    # 유저 정보 확인
+    def get(self, request):
+        try:
+            # access token을 decode 해서 유저 id 추출 => 유저 식별
+            access = request.COOKIES['access']
+            payload = jwt.decode(access, SECRET_KEY, algorithms=['HS256'])
+            pk = payload.get('user_id')
+            user = get_object_or_404(User, pk=pk)
+            serializer = UserSerializer(instance=user)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        except(jwt.exceptions.ExpiredSignatureError):
+            # 토큰 만료 시 토큰 갱신
+            data = {'refresh': request.COOKIES.get('refresh', None)}
+            serializer = TokenRefreshSerializer(data=data)
+            if serializer.is_valid(raise_exception=True):
+                access = serializer.data.get('access', None)
+                refresh = serializer.data.get('refresh', None)
+                payload = jwt.decode(access, SECRET_KEY, algorithms=['HS256'])
+                pk = payload.get('user_id')
+                user = get_object_or_404(User, pk=pk)
+                serializer = UserSerializer(instance=user)
+                res = Response(serializer.data, status=status.HTTP_200_OK)
+                res.set_cookie('access', access)
+                res.set_cookie('refresh', refresh)
+                return res
+            raise jwt.exceptions.InvalidTokenError
+
+        except(jwt.exceptions.InvalidTokenError):
+            # 사용 불가능한 토큰일 때
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 

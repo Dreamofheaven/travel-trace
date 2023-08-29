@@ -37,6 +37,7 @@ class CustomUserManager(BaseUserManager):
 
 class User(AbstractUser):
     username = models.CharField(max_length=25, unique=True)
+    password = models.CharField(max_length=256)
     email = models.EmailField(max_length=80, unique=True)
     profile_img = models.ImageField(upload_to='users/%Y/%m/%d/', null=True, blank=True)
     followings = models.ManyToManyField('self', symmetrical=False, related_name='followers', blank=True)
