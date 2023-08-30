@@ -10,12 +10,15 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(), name='logout'),
     path('', UserView.as_view()),    
 
-    # 프로필 및 북마크
-    path('profile/<str:username>/', ProfileView.as_view()),
-    path('bookmark/my_bookmark/', BookmarkListView.as_view()),
+    # 프로필
+    path('profile/<str:username>/', ProfileView.as_view(), name='profile'),
+    path('profile/<str:username>/password/', ChangePasswordView.as_view(), name='change_password'),
+    path('profile/<str:username>/my_article/', MyArticleListView.as_view()),
+    path('profile/<str:username>/my_bookmark/', BookmarkListView.as_view()),
+
+    # 북마크 및 팔로우
     path('bookmark/<int:article_pk>/', BookmarkView.as_view()),
-    path('follow/<int:user_pk>/', FollowView.as_view()),
-    path('my_article_list/', MyArticleListView.as_view()),
+    path('follow/<str:username>/', FollowView.as_view()),
 
     # 현위치 정보 저장
     path('current_location/', UserLocationView.as_view()),

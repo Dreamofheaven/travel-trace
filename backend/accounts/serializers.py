@@ -30,7 +30,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
         read_only_fields = ['id', 'email'] # 'username'
 
 
-class PasswordChangeView(serializers.ModelSerializer):
+class ChangePasswordSerializer(serializers.Serializer):
     old_password = serializers.CharField(
         required=True,
         write_only=True,
@@ -47,17 +47,14 @@ class PasswordChangeView(serializers.ModelSerializer):
         style={'input_type': 'password'}
     )
 
-    class Meta:
-        model = User
-        fields = ['old_password', 'new_password', 'new_confirm_password']
+    def validate(self, data):
+        new_password = data.get('new_password')
+        new_confirm_password = data.get('new_confirm_password')
 
-class FollowSerializer(serializers.ModelSerializer):
-    following = UserSerializer()
+        if new_password != new_confirm_password:
+            raise serializers.ValidationError("새 비밀번호와 새 비밀번호 확인이 일치하지 않습니다.")
 
-    class Meta:
-        model = User
-        fields = ['id', 'username', 'email', 'profile_img', 'followings', 'following']
-        read_only_fields = ['id']
+        return data
 
 
 class BookmarkSerializer(serializers.ModelSerializer):
@@ -79,6 +76,7 @@ class BookmarkSerializer(serializers.ModelSerializer):
             return f"http://127.0.0.1:8000{obj.article.images.first().image.url}"
         return None 
     
+    
 class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notification
@@ -99,3 +97,12 @@ class MyArticleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Article
         fields = '__all__'
+
+
+# class FollowSerializer(serializers.ModelSerializer):
+#     following = UserSerializer()
+
+#     class Meta:
+#         model = User
+#         fields = ['id', 'username', 'email', 'profile_img', 'followings', 'following']
+#         read_only_fields = ['id']
