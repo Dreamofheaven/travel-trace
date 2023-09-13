@@ -185,11 +185,6 @@ class UserView(APIView):
 
 
 
-
-
-
-
-
     # def post(self, request):
     #     client_id = os.environ.get('SOCIAL_AUTH_KAKAO_CLIENT_ID')
     #     user = request.user

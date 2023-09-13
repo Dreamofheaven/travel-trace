@@ -1,11 +1,11 @@
-from .serializers import ArticleSerializer, ArticleListSerializer, CommentSerializer, CommentInArticleSerializer
+from .serializers import *
 from .models import Article, Comment, Image
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view,permission_classes
 # from rest_framework.decorators import authentication_classes, permission_classes
 # from rest_framework.authentication import SessionAuthentication, BasicAuthentication
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAuthenticatedOrReadOnly
 from django.shortcuts import get_object_or_404
 
 from rest_framework import viewsets
@@ -38,50 +38,60 @@ from django.urls import path
 from django.utils import timezone
 from django.core.files.storage import default_storage
 
-@api_view(['POST'])
-def upload_image(request):
-    file_urls = []
-    for image in request.FILES.getlist('image'):
-        path = f'articles/{timezone.now().strftime("%Y/%m/%d/")}{image.name}'
-        default_storage.save(path, image)
-        file_urls.append(request.build_absolute_uri(default_storage.url(path)))
-    return Response({'fileUrls': file_urls})
 
-class NearbArticleListView(APIView):
-    permission_classes = [IsAuthenticated]
+
+class ArticleView(APIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     def get(self, request):
-        # 로그인한 사용자를 가져옵니다.
-        user = request.user
+        category_name = request.GET.get('category_name')
+        sort = request.GET.get('sort')
 
-        # 사용자가 위치 정보를 등록하지 않았을 경우 예외 처리합니다.
-        if not user.user_latitude or not user.user_longitude:
-            return Response({'detail': 'User location is not available.'}, status=status.HTTP_400_BAD_REQUEST)
-        
-        user_latitude = user.user_latitude
-        user_longitude = user.user_longitude
-        # 게시글 중 위도와 경도가 모두 null이 아닌 것을 필터링해서 가져옵니다.
-        articles = Article.objects.exclude(latitude=None).exclude(longitude=None)
-        
-        # 현재 유저의 위치를 기준으로 각 게시글과의 거리를 계산합니다.
-        # Cast() 함수는 첫 번째 인자인 식을 두 번째 인자인 output_field 타입으로 형변환해줍니다.
-        articles = articles.annotate(
-            distance=Cast(Sqrt(
-                (F('latitude') - float(user_latitude)) ** 2 +
-                (F('longitude') - float(user_longitude)) ** 2
-            ), output_field=models.DecimalField())
-        ).order_by('distance')
+        if category_name:
+            articles = Article.objects.filter(category=category_name)
+        else:
+            articles = Article.objects.all()
 
-        # 이미지 경로 앞에 'http://127.0.0.1:8000'를 추가합니다.
-        for article in articles:
-            images = article.images.all()
-            if images.exists():
-                article.image = f"http://127.0.0.1:8000{images[0].image.url}"
-        
+        if sort == 'likes':
+            articles = articles.annotate(like_count=Count('like_users')).order_by('-like_count')
+        elif sort == 'newest':
+            articles = articles.order_by('-created_at')
+        elif sort == 'views':
+            articles = articles.order_by('-views')
+
         serializer = ArticleListSerializer(articles, many=True)
         return Response(serializer.data)
+    
+    def post(self, request):
+        serializer = ArticleSerializer(data=request.data, context={'request': request,})
+        if serializer.is_valid(raise_exception=True):
 
+            article = serializer.save(user=request.user)
+            article.category = request.data.get('category')
+            images = request.FILES.getlist('images') 
+            for image in images:
+                Image.objects.create(article=article, image=image)
 
-class ArticleListView(generics.ListAPIView):
+            location = request.data.get('location')
+            client_id = os.environ.get('SOCIAL_AUTH_KAKAO_CLIENT_ID')
+            headers = {"Authorization": f"KakaoAK {client_id}"}
+            url = f'https://dapi.kakao.com/v2/local/search/address.json?query={location}'
+            response = requests.get(url, headers=headers)
+
+            if response.status_code != 200:
+                return Response({
+                    'error': '좌표를 가져오지 못했습니다.'
+                }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+            data = response.json().get('documents')
+            
+            if data:
+                article.latitude = data[0].get('y')
+                article.longitude = data[0].get('x')
+                article.save()
+
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+class ArticleListView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = ArticleListSerializer
     filter_backends = [filters.OrderingFilter]
@@ -276,6 +286,47 @@ def like_comment(request, article_pk, comment_pk):
     return Response({'is_liked': is_liked, 'comment': serializer.data})
 
 
+@api_view(['POST'])
+def upload_image(request):
+    file_urls = []
+    for image in request.FILES.getlist('image'):
+        path = f'articles/{timezone.now().strftime("%Y/%m/%d/")}{image.name}'
+        default_storage.save(path, image)
+        file_urls.append(request.build_absolute_uri(default_storage.url(path)))
+    return Response({'fileUrls': file_urls})
+
+class NearbArticleListView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        # 로그인한 사용자를 가져옵니다.
+        user = request.user
+
+        # 사용자가 위치 정보를 등록하지 않았을 경우 예외 처리합니다.
+        if not user.user_latitude or not user.user_longitude:
+            return Response({'detail': 'User location is not available.'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        user_latitude = user.user_latitude
+        user_longitude = user.user_longitude
+        # 게시글 중 위도와 경도가 모두 null이 아닌 것을 필터링해서 가져옵니다.
+        articles = Article.objects.exclude(latitude=None).exclude(longitude=None)
+        
+        # 현재 유저의 위치를 기준으로 각 게시글과의 거리를 계산합니다.
+        # Cast() 함수는 첫 번째 인자인 식을 두 번째 인자인 output_field 타입으로 형변환해줍니다.
+        articles = articles.annotate(
+            distance=Cast(Sqrt(
+                (F('latitude') - float(user_latitude)) ** 2 +
+                (F('longitude') - float(user_longitude)) ** 2
+            ), output_field=models.DecimalField())
+        ).order_by('distance')
+
+        # 이미지 경로 앞에 'http://127.0.0.1:8000'를 추가합니다.
+        for article in articles:
+            images = article.images.all()
+            if images.exists():
+                article.image = f"http://127.0.0.1:8000{images[0].image.url}"
+        
+        serializer = ArticleListSerializer(articles, many=True)
+        return Response(serializer.data)
 # # 정렬 ( 좋아요 순, 최신순, 조회순 )
 # class ArticleViewSet(viewsets.ModelViewSet):
 #     queryset = Article.objects.all()

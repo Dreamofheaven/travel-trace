@@ -17,7 +17,7 @@ User = get_user_model()
 
 class BookmarkListView(APIView):
     permission_classes = [IsAuthenticated]
-    # 북마크 리스트 조회
+
     def get(self, request):
         bookmarks = Bookmark.objects.filter(user=request.user)
         serializer = BookmarkSerializer(bookmarks, many=True)

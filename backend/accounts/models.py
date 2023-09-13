@@ -54,7 +54,7 @@ class User(AbstractUser):
     objects = CustomUserManager()
 
     def __str__(self):
-        return f'<User {self.email}>'
+        return self.username
     
 
 class Notification(models.Model):
