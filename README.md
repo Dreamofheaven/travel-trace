@@ -37,3 +37,10 @@
   - views 폴더 정리(가독성을 위해 파일 분리)
   - serializers.py 정리
 ```
+
+## 23.9.13.
+```
+- DRF serializer 공부
+- Article
+  - serializers.py 정리
+```
