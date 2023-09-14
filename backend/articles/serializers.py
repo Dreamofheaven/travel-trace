@@ -1,7 +1,6 @@
 import os, requests
-from rest_framework import serializers
+from rest_framework import serializers, status
 from .models import Comment, Article,Image
-from accounts.serializers import UserProfileSerializer
 from rest_framework.response import Response
 
 
@@ -13,20 +12,20 @@ class ImageSerializer(serializers.ModelSerializer):
 
 class CommentSerializer(serializers.ModelSerializer):
     like_count = serializers.SerializerMethodField()
-    class Meta:
-        model = Comment
-        fields = '__all__'
-        read_only_fields = ('article', 'like_users', 'like_count')
 
     # 댓글 좋아요 횟수 반환
     def get_like_count(self, instance):
         return instance.like_users.count()
 
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        representation['user'] = instance.user.username
-        return representation
+    # def to_representation(self, instance):
+    #     representation = super().to_representation(instance)
+    #     representation['user'] = instance.user.username
+    #     return representation
 
+    class Meta:
+        model = Comment
+        fields = '__all__'
+        read_only_fields = ('article', 'like_users', 'like_count')
 
 class ArticleListSerializer(serializers.ModelSerializer):
     '''
@@ -36,15 +35,14 @@ class ArticleListSerializer(serializers.ModelSerializer):
         - 대표 이미지
     - 카테코리 / 정렬 미리 넣어야 할까? def get
     '''
-    images = ImageSerializer(many=True, read_only=True)
-    user = UserProfileSerializer(read_only=True)
+    # images = ImageSerializer(many=True, read_only=True)
 
     image = serializers.SerializerMethodField()
     comment_count = serializers.SerializerMethodField()
     like_count = serializers.SerializerMethodField()
 
     def get_image(self, instance):
-        if instance.images.frist():
+        if instance.images.first():
             return f'http://127.0.0.1:8000{instance.images.first().image.url}'
         return None
     
@@ -78,18 +76,26 @@ class ArticleSerializer(serializers.ModelSerializer):
     '''
     images = ImageSerializer(many=True, required=False)
     comments = CommentInArticleSerializer(many=True, read_only=True)
+    like_users = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    
+    comment_count = comment_count = serializers.IntegerField(source='comments.count', read_only=True)
+    like_count = serializers.IntegerField(source='like_users.count', read_only=True)
 
-    comment_count = serializers.SerializerMethodField()
-    like_count = serializers.SerializerMethodField()
 
-    def get_comment_count(self, instance):
-        return instance.comment_set.count()
+    class Meta:
+        model = Article
+        fields = '__all__'
+        read_only_fields = ('like_users', 'latitude', 'longitude', 'user', 'views') 
+
+    # def get_comment_count(self, instance):
+    #     return instance.comment_set.count()
             
     def get_like_count(self, instance):
         return instance.like_users.count()
     
     def create(self, validated_data):
         images_data = validated_data.pop('images', [])
+        print(images_data)
         article = Article.objects.create(**validated_data)
 
         # 이미지 생성
@@ -98,7 +104,7 @@ class ArticleSerializer(serializers.ModelSerializer):
             image_url = image_data.get('image')
             if image_url not in existing_images:
                 existing_images.add(image_url)
-                Image.objects(article=article, image=image_url)
+                Image.objects.create(article=article, image=image_url)
 
         # 좌표 생성
         location = validated_data.get('location')
@@ -106,6 +112,9 @@ class ArticleSerializer(serializers.ModelSerializer):
         headers = {"Authorization": f"KakaoAK {client_id}"}
         url = f'https://dapi.kakao.com/v2/local/search/address.json?query={location}'
         response = requests.get(url, headers=headers)
+
+        if response.status_code != 200:
+            raise serializers.ValidationError({'error': '좌표를 가져오지 못했습니다.'})
 
         data = response.json().get('documents')
         
@@ -116,15 +125,44 @@ class ArticleSerializer(serializers.ModelSerializer):
         article.save()
 
         return article
-
+    
     def update(self, instance, validated_data):
-        pass
+        images_data = validated_data.pop('images', [])
 
-    class Meta:
-        model = Article
-        fields = '__all__'
-        read_only_fields = ('like_users', 'latitude', 'logitude', 'user',) 
+        # 이미지 처리
+        existing_images = set()
+        for image_data in images_data:
+            image_url = image_data.get('image')
+            if image_url not in existing_images:
+                existing_images.add(image_url)
+                Image.objects.create(article=instance, image=image_url)
 
+        instance.location = validated_data.get('location', instance.location)
+
+        location = validated_data.get('location')
+        client_id = os.environ.get('SOCIAL_AUTH_KAKAO_CLIENT_ID')
+        headers = {"Authorization": f"KakaoAK {client_id}"}
+        url = f'https://dapi.kakao.com/v2/local/search/address.json?query={location}'
+        response = requests.get(url, headers=headers)
+
+        if response.status_code != 200:
+            raise serializers.ValidationError({'error': '좌표를 가져오지 못했습니다.'})
+
+        data = response.json().get('documents')
+        
+        if data:
+            instance.latitude = data[0].get('y')
+            instance.longitude = data[0].get('x')
+
+        # 나머지 필드 업데이트
+        instance.title = validated_data.get('title', instance.title)
+        instance.content = validated_data.get('content', instance.content)
+        instance.rating = validated_data.get('rating', instance.rating)
+        instance.category = validated_data.get('category', instance.category)
+        instance.placename = validated_data.get('placename', instance.placename)
+        instance.save()
+
+        return instance
 
 # class ArticleListSerializer(serializers.ModelSerializer):
 #     views = serializers.IntegerField()
