@@ -44,3 +44,10 @@
 - Article
   - serializers.py 정리
 ```
+
+## 23.9.15.
+```
+- DRF serializer 공부
+- Article
+  - serializers.py 수정(CRD까지 완성)
+```
