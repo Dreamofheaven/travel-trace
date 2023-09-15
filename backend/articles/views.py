@@ -357,6 +357,14 @@ class ArticleViewSet(viewsets.ModelViewSet):
 
         return queryset
     
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if self.request.user.is_authenticated:
+            # 동시성을 고려하여 db의 원자성 보존위해 F함수 사용
+            # 추후에 세션을 이용해서 하루에 한 번만으로 수정해볼 예정
+            Article.objects.filter(pk=instance.pk).update(views=F('views') + 1)
+        serializer = self.get_serializer(instance)
+
+        return Response(serializer.data)
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
-

@@ -4,12 +4,6 @@ from .models import Comment, Article,Image
 from rest_framework.response import Response
 
 
-class ImageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Image
-        fields = ('image',)
-
-
 class CommentSerializer(serializers.ModelSerializer):
     like_count = serializers.SerializerMethodField()
 
@@ -26,6 +20,7 @@ class CommentSerializer(serializers.ModelSerializer):
         model = Comment
         fields = '__all__'
         read_only_fields = ('article', 'like_users', 'like_count')
+
 
 class ArticleListSerializer(serializers.ModelSerializer):
     '''
@@ -67,6 +62,13 @@ class CommentInArticleSerializer(serializers.ModelSerializer):
             fields = ('id', 'user', 'content', 'created_at')
             read_only_fields = ('user',)
 
+
+class ImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Image
+        fields = ('id', 'image')
+
+
 class ArticleSerializer(serializers.ModelSerializer):
     '''
     - def create
@@ -74,13 +76,12 @@ class ArticleSerializer(serializers.ModelSerializer):
         - location 구하기
     - 댓글 리스트
     '''
-    images = ImageSerializer(many=True, required=False)
+    images = ImageSerializer(many=True, read_only=True, required=False)
     comments = CommentInArticleSerializer(many=True, read_only=True)
     like_users = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     
     comment_count = comment_count = serializers.IntegerField(source='comments.count', read_only=True)
     like_count = serializers.IntegerField(source='like_users.count', read_only=True)
-
 
     class Meta:
         model = Article
@@ -89,22 +90,21 @@ class ArticleSerializer(serializers.ModelSerializer):
 
     # def get_comment_count(self, instance):
     #     return instance.comment_set.count()
-            
+    
     def get_like_count(self, instance):
         return instance.like_users.count()
     
     def create(self, validated_data):
-        images_data = validated_data.pop('images', [])
-        print(images_data)
         article = Article.objects.create(**validated_data)
+        images_data = self.context.get('request').FILES.getlist('images')
 
         # 이미지 생성
         existing_images = set()
         for image_data in images_data:
-            image_url = image_data.get('image')
-            if image_url not in existing_images:
-                existing_images.add(image_url)
-                Image.objects.create(article=article, image=image_url)
+            if image_data not in existing_images:
+                existing_images.add(image_data)
+            Image.objects.create(article=article, image=image_data)
+
 
         # 좌표 생성
         location = validated_data.get('location')
@@ -127,15 +127,13 @@ class ArticleSerializer(serializers.ModelSerializer):
         return article
     
     def update(self, instance, validated_data):
-        images_data = validated_data.pop('images', [])
-
-        # 이미지 처리
+        images_data = self.context.get('request').FILES.getlist('images')
+        # 이미지 불러오기 코드 작성해야 함
         existing_images = set()
         for image_data in images_data:
-            image_url = image_data.get('image')
-            if image_url not in existing_images:
-                existing_images.add(image_url)
-                Image.objects.create(article=instance, image=image_url)
+            if image_data not in existing_images:
+                existing_images.add(image_data)
+                Image.objects.create(article=instance, image=image_data)
 
         instance.location = validated_data.get('location', instance.location)
 
@@ -163,6 +161,7 @@ class ArticleSerializer(serializers.ModelSerializer):
         instance.save()
 
         return instance
+
 
 # class ArticleListSerializer(serializers.ModelSerializer):
 #     views = serializers.IntegerField()

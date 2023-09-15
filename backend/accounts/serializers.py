@@ -16,7 +16,16 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'username', 'email', 'password', 'profile_img', 'info', 'location']
-    
+        
+    def create(self, validated_data):
+        user = User.objects.create_user(
+            username = validated_data.get('username'),
+            email = validated_data.get('email'),
+            password = validated_data.get('password'),
+            profile_img=validated_data.get('profile_img')
+        )   
+        user.save()
+        return user
 
 class UserProfileSerializer(serializers.ModelSerializer):
     followers = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
