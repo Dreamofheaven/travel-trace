@@ -28,7 +28,7 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
     path('accounts/', include('dj_rest_auth.urls')),
 
-    path('', include('articles.urls')),
+    path('articles/',include('articles.urls')),
     path('', views.index),
     # 모든 주소를 우선 client 쪽으로 연결 시킴
     # url(r'^$', TemplateView.as_view(template_name='index.html'),name='index'),
