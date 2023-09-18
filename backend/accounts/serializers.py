@@ -16,7 +16,16 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'username', 'email', 'password', 'profile_img', 'info', 'location']
-    
+        
+    def create(self, validated_data):
+        user = User.objects.create_user(
+            username = validated_data.get('username'),
+            email = validated_data.get('email'),
+            password = validated_data.get('password'),
+            profile_img=validated_data.get('profile_img')
+        )   
+        user.save()
+        return user
 
 class UserProfileSerializer(serializers.ModelSerializer):
     followers = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
@@ -67,14 +76,16 @@ class BookmarkSerializer(serializers.ModelSerializer):
         if request is None or not request.user.is_authenticated:
             return False
         return Bookmark.objects.filter(user=request.user, article=obj.article).exists()
-    class Meta:
-        model = Bookmark
-        fields = '__all__'
-
+    
     def get_image(self, obj):
         if obj.article.images.first():
             return f"http://127.0.0.1:8000{obj.article.images.first().image.url}"
         return None 
+    
+    class Meta:
+        model = Bookmark
+        fields = '__all__'
+
     
     
 class NotificationSerializer(serializers.ModelSerializer):

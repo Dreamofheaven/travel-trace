@@ -3,9 +3,6 @@ from rest_framework import status, generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer
-from django.contrib.auth import authenticate
-from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.shortcuts import get_object_or_404
 from accounts.serializers import *
 from accounts.models import Bookmark, Notification
@@ -34,7 +31,6 @@ class UserLocationView(APIView):
                 'error': '좌표를 가져오지 못했습니다.'
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
-        # 좌표 정보 중에서 위도(latitude)와 경도(longitude)를 추출하여 게시글 모델에 저장
         data = response.json().get('documents')
         if data:
             latitude = data[0].get('y')

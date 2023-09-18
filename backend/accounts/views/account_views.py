@@ -14,9 +14,6 @@ from traveltrace.settings import SECRET_KEY
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import check_password
 
-# TokenRefreshView 커스텀. / 해부할 필요 있음
-
-# JWTAuthentication.authenticate()
 User = get_user_model()
 
 class SignUpView(APIView):
@@ -181,11 +178,6 @@ class UserView(APIView):
         except(jwt.exceptions.InvalidTokenError):
             # 사용 불가능한 토큰일 때
             return Response(status=status.HTTP_400_BAD_REQUEST)
-
-
-
-
-
 
 
 

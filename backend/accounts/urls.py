@@ -17,8 +17,8 @@ urlpatterns = [
     path('profile/<str:username>/my_bookmark/', BookmarkListView.as_view()),
 
     # 북마크 및 팔로우
-    path('bookmark/<int:article_pk>/', BookmarkView.as_view()),
-    path('follow/<str:username>/', FollowView.as_view()),
+    path('<int:article_pk>/bookmark/', BookmarkView.as_view()),
+    path('<str:username>/follow/', FollowView.as_view()),
 
     # 현위치 정보 저장
     path('current_location/', UserLocationView.as_view()),
