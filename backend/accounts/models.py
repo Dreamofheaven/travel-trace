@@ -13,7 +13,7 @@ class CustomUserManager(BaseUserManager):
         
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
-        # 15번 줄 동작하지 않는 것으로 보임
+
         if password:
             user.set_password(password)
         user.save()
@@ -53,7 +53,7 @@ class User(AbstractUser):
     objects = CustomUserManager()
 
     def __str__(self):
-        return f'<User {self.email}>'
+        return self.username
     
 
 class Notification(models.Model):
