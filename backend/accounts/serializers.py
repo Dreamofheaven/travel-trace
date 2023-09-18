@@ -76,14 +76,16 @@ class BookmarkSerializer(serializers.ModelSerializer):
         if request is None or not request.user.is_authenticated:
             return False
         return Bookmark.objects.filter(user=request.user, article=obj.article).exists()
-    class Meta:
-        model = Bookmark
-        fields = '__all__'
-
+    
     def get_image(self, obj):
         if obj.article.images.first():
             return f"http://127.0.0.1:8000{obj.article.images.first().image.url}"
         return None 
+    
+    class Meta:
+        model = Bookmark
+        fields = '__all__'
+
     
     
 class NotificationSerializer(serializers.ModelSerializer):

@@ -27,23 +27,18 @@ class BookmarkListView(APIView):
 class BookmarkView(APIView):
     permission_classes = [IsAuthenticated]
 
+    def get_is_bookmarked(self, request, article_pk):
+        if not request.user.is_authenticated:
+            return False
+        return Bookmark.objects.filter(user=request.user, article__pk=article_pk).exists()
+    
     def get(self, request, article_pk):
         is_bookmarked = self.get_is_bookmarked(request, article_pk)
         return Response({
             'is_bookmarked': is_bookmarked,
         }, status=status.HTTP_200_OK)
 
-    def get_is_bookmarked(self, request, article_pk):
-        if not request.user.is_authenticated:
-            return False
-        return Bookmark.objects.filter(user=request.user, article__pk=article_pk).exists()
-
     def post(self, request, article_pk):
-        '''
-        게시글에 해당 유저의 북마크가 있는지 없는지 확인한다.
-        get_or_create: 장고 쿼리셋 api 중 하나. 이미 있는 객체라면 가져오고 없으면 생성하라.
-        get_or_create()는 두 개의 값을 리턴합니다. 첫 번째 값은 해당 조건으로 필터링한 객체를 리턴하며, 두 번째 값은 객체가 새로 생성되었는지 아닌지를 나타내는 boolean 값입니다
-        '''
         article = get_object_or_404(Article, pk=article_pk)
         bookmark, created = Bookmark.objects.get_or_create(user=request.user, article=article)
 

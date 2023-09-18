@@ -7,22 +7,14 @@ from rest_framework import routers
 router = routers.SimpleRouter()
 router.register('articles', ArticleViewSet)
 
-urlpatterns = router.urls
-# + [
-#     # path('', views.ArticleListView.as_view()),
-#     # # path('', views.ArticleViewSet.as_view({'get': 'list', 'post': 'create'}), name='article-list'),
-#     # path('<int:article_pk>/', views.article_detail),
-#     # path('<int:article_pk>/comments/', views.comment_list),
-#     # path('<int:article_pk>/comments/<int:comment_pk>/', views.comment_detail),
-#     # path('<int:article_pk>/comments/create/', views.comment_create),
+urlpatterns = router.urls + [
+    path('articles/<int:article_pk>/likes/',ArticleLikeAPIView.as_view()),
+    path('articles/<int:article_pk>/comments/', CommentListCreateAPIView.as_view()),
+    path('articles/<int:article_pk>/comments/<int:comment_pk>/', CommentDetailAPIView.as_view()),
+    path('articles/<int:article_pk>/comments/<int:comment_pk>/likes/',like_comment),
 
-#     # path('<int:article_pk>/likes/',views.ArticleLikeAPIView.as_view()),
+    # path('<int:article_pk>/location/', ArticleLocationView.as_view()),
+    # path('nearby/', NearbArticleListView.as_view()), 
+    # path('upload_image/', upload_image),
 
-#     # path('<int:article_pk>/comments/<int:comment_pk>/likes/',views.like_comment),
-
-#     # # path('<int:article_pk>/location/', views.ArticleLocationView.as_view()),
-#     # path('nearby/', views.NearbArticleListView.as_view()), 
-#     # path('upload_image/', views.upload_image),
-#     # path('<str:category_name>/', views.ArticleListView.as_view()),
-
-# ]
+]
